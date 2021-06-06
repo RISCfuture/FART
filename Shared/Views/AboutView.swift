@@ -1,16 +1,10 @@
 import SwiftUI
 
 struct AboutView: View {
+    @Environment(\.openURL) var openURL
+    
     private var moreInfoURL = URL(string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf")!
     private var sourceURL = URL(string: "https://github.com/RISCfuture/FART")!
-    
-    private func openURL(_ url: URL) {
-        #if os(macOS)
-        NSWorkspace.shared.open(url)
-        #else
-        UIApplication.shared.open(moreInfoURL)
-        #endif
-    }
     
     var body: some View {
         HStack(alignment: .top) {
