@@ -18,7 +18,7 @@ struct ContentView: View {
                 .environmentObject(controller)
                 .padding(.top, 20)
                 .tabItem { Text("Results") }
-        }.navigationTitle("Flight Assessment of Risk Tool")
+        }
     }
     
     #else
