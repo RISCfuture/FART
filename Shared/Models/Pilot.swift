@@ -2,14 +2,32 @@ import Combine
 import Foundation
 import Defaults
 
+class EnumBridge<T: RawRepresentable>: DefaultsBridge {
+    typealias Value = T
+    typealias Serializable = T.RawValue
+    
+    func serialize(_ value: T?) -> T.RawValue? {
+        value?.rawValue
+    }
+    
+    func deserialize(_ object: T.RawValue?) -> T? {
+        guard let object = object else { return nil }
+        return T(rawValue: object)
+    }
+}
+
 enum Rating: String, DefaultsSerializable {
     case VFR
     case IFR
+    
+    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
 }
 
 enum Hours: String, DefaultsSerializable {
     case under100
     case over100
+    
+    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
 }
 
 enum Ceiling: Int, CaseIterable, DefaultsSerializable {
@@ -17,6 +35,8 @@ enum Ceiling: Int, CaseIterable, DefaultsSerializable {
     case oneThousandFeet = 1000
     case fiveHundredFeet = 500
     case twoHundredFeet = 200
+    
+    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
     
     var stringValue: String {
         return ceilingFormatter.string(for: rawValue)!
@@ -28,6 +48,8 @@ enum Visibility: Float, CaseIterable, DefaultsSerializable {
     case oneSM = 1.0
     case oneHalfSM = 0.5
     case oneQuarterSM = 0.25
+    
+    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
     
     var stringValue: String {
         switch self {
