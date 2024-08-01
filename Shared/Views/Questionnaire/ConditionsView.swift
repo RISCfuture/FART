@@ -1,28 +1,30 @@
 import SwiftUI
+import Defaults
 
 struct ConditionsView: View {
-    @EnvironmentObject var questions: Questionnaire
-    @ObservedObject var pilot: Pilot
-    
-    private var strongWinds: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: pilot.strongWinds))! }
-    private var strongCrosswinds: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: pilot.strongCrosswinds))! }
+    @Environment(Questionnaire.self) private var questionnaire
+    @Default(.strongCrosswinds) private var strongCrosswinds
+    @Default(.strongWinds) private var strongWinds
+
+    private var strongWindsStr: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: strongWinds))! }
+    private var strongCrosswindsStr: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: strongCrosswinds))! }
 
     var body: some View {
+        @Bindable var questionnaire = questionnaire
+        
         Section(header: Text("Flight Conditions")) {
-            Toggle("Twilight or night", isOn: $questions.night)
-            Toggle("Surface wind greater than \(strongWinds) knots", isOn: $questions.strongWinds)
-            Toggle("Crosswind greater than \(strongCrosswinds) knots", isOn: $questions.strongCrosswinds)
-            Toggle("Mountainous terrain", isOn: $questions.mountainous)
+            Toggle("Twilight or night", isOn: $questionnaire.night)
+            Toggle("Surface wind greater than \(strongWindsStr) knots", isOn: $questionnaire.strongWinds)
+            Toggle("Crosswind greater than \(strongCrosswindsStr) knots", isOn: $questionnaire.strongCrosswinds)
+            Toggle("Mountainous terrain", isOn: $questionnaire.mountainous)
         }
     }
 }
 
-struct ConditionsView_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            List {
-                ConditionsView(pilot: Pilot()).environmentObject(Questionnaire())
-            }
+#Preview {
+    Form {
+        List {
+            ConditionsView().environment(Questionnaire())
         }
     }
 }

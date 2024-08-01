@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,8 +18,6 @@
 		01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */; };
 		01BE9C62266AF6DB0026C4ED /* Scoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C61266AF6DB0026C4ED /* Scoring.swift */; };
 		01BE9C63266AF6DB0026C4ED /* Scoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C61266AF6DB0026C4ED /* Scoring.swift */; };
-		01BE9C65266AFE6D0026C4ED /* Categorizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C64266AFE6D0026C4ED /* Categorizing.swift */; };
-		01BE9C66266AFE6D0026C4ED /* Categorizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C64266AFE6D0026C4ED /* Categorizing.swift */; };
 		01BE9C68266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
 		01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
 		01CDECC9266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
@@ -28,8 +26,6 @@
 		01CDECCD266C0F95003051FD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCB266C0F95003051FD /* Constants.swift */; };
 		01CDECCF266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
 		01CDECD0266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
-		01D2505E266B05F4009BECAA /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2505D266B05F4009BECAA /* Controller.swift */; };
-		01D2505F266B05F4009BECAA /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2505D266B05F4009BECAA /* Controller.swift */; };
 		01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25064266B1B1C009BECAA /* PilotProfileView.swift */; };
 		01D25066266B1B1C009BECAA /* PilotProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25064266B1B1C009BECAA /* PilotProfileView.swift */; };
 		01D25068266B208F009BECAA /* PilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25067266B208F009BECAA /* PilotView.swift */; };
@@ -68,12 +64,10 @@
 		01BE9C49266AEBC00026C4ED /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		01BE9C61266AF6DB0026C4ED /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
-		01BE9C64266AFE6D0026C4ED /* Categorizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categorizing.swift; sourceTree = "<group>"; };
 		01BE9C67266AFE8A0026C4ED /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 		01CDECC8266C0F10003051FD /* Gauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gauge.swift; sourceTree = "<group>"; };
 		01CDECCB266C0F95003051FD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		01CDECCE266C1FEC003051FD /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		01D2505D266B05F4009BECAA /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		01D25064266B1B1C009BECAA /* PilotProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfileView.swift; sourceTree = "<group>"; };
 		01D25067266B208F009BECAA /* PilotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotView.swift; sourceTree = "<group>"; };
 		01D2506A266B2351009BECAA /* ConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsView.swift; sourceTree = "<group>"; };
@@ -123,7 +117,6 @@
 			children = (
 				01BE9C39266AEBC00026C4ED /* Assets.xcassets */,
 				01D25062266B1AC5009BECAA /* Behaivor */,
-				01D25061266B1ABB009BECAA /* Controllers */,
 				01D25080266B438C009BECAA /* Defaults.swift */,
 				01D25086266B4EE2009BECAA /* Extensions */,
 				01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */,
@@ -187,18 +180,9 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		01D25061266B1ABB009BECAA /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				01D2505D266B05F4009BECAA /* Controller.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
 		01D25062266B1AC5009BECAA /* Behaivor */ = {
 			isa = PBXGroup;
 			children = (
-				01BE9C64266AFE6D0026C4ED /* Categorizing.swift */,
 				01BE9C61266AF6DB0026C4ED /* Scoring.swift */,
 			);
 			path = Behaivor;
@@ -294,8 +278,9 @@
 		01BE9C32266AEBBE0026C4ED /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					01BE9C3D266AEBC00026C4ED = {
 						CreatedOnToolsVersion = 12.5;
@@ -357,7 +342,6 @@
 				01D2508B266B5290009BECAA /* ResultsView.swift in Sources */,
 				01BE9C62266AF6DB0026C4ED /* Scoring.swift in Sources */,
 				01BE9C68266AFE8A0026C4ED /* Pilot.swift in Sources */,
-				01BE9C65266AFE6D0026C4ED /* Categorizing.swift in Sources */,
 				01BE9C4A266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */,
 				01D25075266B2D36009BECAA /* WeatherView.swift in Sources */,
 				01D25078266B3F0E009BECAA /* Formatters.swift in Sources */,
@@ -372,7 +356,6 @@
 				01CDECC9266C0F10003051FD /* Gauge.swift in Sources */,
 				01D25088266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
-				01D2505E266B05F4009BECAA /* Controller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +368,6 @@
 				01D2508C266B5290009BECAA /* ResultsView.swift in Sources */,
 				01BE9C63266AF6DB0026C4ED /* Scoring.swift in Sources */,
 				01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */,
-				01BE9C66266AFE6D0026C4ED /* Categorizing.swift in Sources */,
 				01BE9C4B266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */,
 				01D25076266B2D36009BECAA /* WeatherView.swift in Sources */,
 				01D25079266B3F0E009BECAA /* Formatters.swift in Sources */,
@@ -400,7 +382,6 @@
 				01CDECCA266C0F10003051FD /* Gauge.swift in Sources */,
 				01D25089266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
-				01D2505F266B05F4009BECAA /* Controller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +392,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -441,9 +423,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -458,6 +442,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -470,6 +456,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -500,9 +487,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -511,6 +500,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -528,7 +519,7 @@
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -552,7 +543,7 @@
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,6 +568,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -585,7 +577,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -604,6 +596,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -612,7 +605,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -659,7 +652,7 @@
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
+				minimumVersion = 8.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -22,7 +22,7 @@ struct Gauge<Content: View>: View {
                 dial(geometry)
                 contentView()
             }.frame(width: width(geometry))
-            .offset(x: thickness(geometry)/2, y: 0)
+                .offset(x: thickness(geometry)/2, y: 0)
         }
     }
     
@@ -49,18 +49,16 @@ struct Gauge<Content: View>: View {
     }
 }
 
-struct Gauge_Previews: PreviewProvider {
-    static var previews: some View {
-        Gauge(value: 0.5) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("24")
-                    .font(.system(size: 75))
-                    .bold()
-                    .foregroundColor(moderateRiskColor)
-                Text("PTS.")
-                    .bold()
-                    .foregroundColor(moderateRiskColor)
-            }.offset(x: 0, y: -30)
-        }
+#Preview {
+    Gauge(value: 0.5) {
+        HStack(alignment: .firstTextBaseline) {
+            Text("24")
+                .font(.system(size: 75))
+                .bold()
+                .foregroundColor(moderateRiskColor)
+            Text("PTS.")
+                .bold()
+                .foregroundColor(moderateRiskColor)
+        }.offset(x: 0, y: -30)
     }
 }

@@ -6,7 +6,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     #if os(macOS)
     var body: some Scene {
         WindowGroup("Flight Assessment of Risk Tool") {
-            ContentView().environmentObject(Controller())
+            ContentView()
                 .frame(minWidth: 600, minHeight: 600)
         }
     }
@@ -14,7 +14,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     #else
     var body: some Scene {
         WindowGroup("Flight Assessment of Risk Tool") {
-            ContentView().environmentObject(Controller())
+            ContentView()
         }
     }
     #endif

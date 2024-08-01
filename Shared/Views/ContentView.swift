@@ -1,62 +1,60 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var controller: Controller
-    
-    #if os(macOS)
+    @State private var questionnaire = Questionnaire()
+
+#if os(macOS)
     var body: some View {
         HStack {
             TabView {
                 PilotProfileView()
-                    .environmentObject(controller.pilot)
+                    .environment(questionnaire)
                     .tabItem { Text("Pilot") }
-                QuestionnaireView(pilot: controller.pilot)
-                    .environmentObject(controller.questionnaire)
+                QuestionnaireView()
+                    .environment(questionnaire)
                     .tabItem { Text("Questions") }
             }.padding()
             ResultsView()
-                .environmentObject(controller)
+                .environment(questionnaire)
                 .padding(.top, 20)
                 .tabItem { Text("Results") }
         }
     }
-    
-    #else
+
+#else
     var body: some View {
         TabView {
             NavigationView {
                 PilotProfileView()
-                    .environmentObject(controller.pilot)
+                    .environment(questionnaire)
                     .navigationTitle("Pilot Profile")
             }.tabItem { Label("Pilot", image: "Pilot") }
-            .navigationViewStyle(StackNavigationViewStyle())
-            
+                .navigationViewStyle(StackNavigationViewStyle())
+
             NavigationView {
-                QuestionnaireView(pilot: controller.pilot)
-                    .environmentObject(controller.questionnaire)
+                QuestionnaireView()
+                    .environment(questionnaire)
                     .navigationTitle("Questionnaire")
             }.tabItem { Label("Questions", image: "Questionnaire") }
-            .navigationViewStyle(StackNavigationViewStyle())
-            
+                .navigationViewStyle(StackNavigationViewStyle())
+
             NavigationView {
                 ResultsView()
-                    .environmentObject(controller)
+                    .environment(questionnaire)
                     .navigationTitle("Results")
             }.tabItem { Label("Results", image: "Results") }
-            .navigationViewStyle(StackNavigationViewStyle())
+                .navigationViewStyle(StackNavigationViewStyle())
 
-            
+
             NavigationView {
                 AboutView().navigationTitle("About")
             }.tabItem { Label("About", systemImage: "info.circle") }
-            .navigationViewStyle(StackNavigationViewStyle())
+                .navigationViewStyle(StackNavigationViewStyle())
         }
     }
-    #endif
+#endif
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environmentObject(Controller())
-    }
+#Preview {
+    ContentView()
 }

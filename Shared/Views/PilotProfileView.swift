@@ -1,64 +1,71 @@
 import SwiftUI
+import Defaults
 
 struct PilotProfileView: View {
-    @EnvironmentObject var pilot: Pilot
-    
+    @Default(.rating) private var rating
+    @Default(.hours) private var hours
+    @Default(.shortRunway) private var shortRunway
+    @Default(.strongWinds) private var strongWinds
+    @Default(.strongCrosswinds) private var strongCrosswinds
+    @Default(.lowCeiling) private var lowCeiling
+    @Default(.lowVisibility) private var lowVisibility
+
     var body: some View {
         Form {
             List {
                 Section {
                     HStack {
                         Text("Rating")
-                        Picker("", selection: $pilot.rating) {
+                        Picker("", selection: $rating) {
                             Text("VFR").tag(Rating.VFR)
                             Text("IFR").tag(Rating.IFR)
                         }
                     }
                     HStack {
                         Text("Hours")
-                        Picker("", selection: $pilot.hours) {
+                        Picker("", selection: $hours) {
                             Text("< 100").tag(Hours.under100)
                             Text("> 100").tag(Hours.over100)
                         }
                     }
                 }
-                
+
                 Section {
                     HStack {
                         Text("Short runway")
-                        IntegerField("", value: $pilot.shortRunway, formatter: runwayLengthFormatter)
+                        IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
                             .multilineTextAlignment(.trailing)
                         Text("ft. or less").foregroundColor(.secondary)
                     }
                 }
-                
+
                 Section {
                     HStack {
                         Text("Strong winds")
-                        IntegerField("", value: $pilot.strongWinds, formatter: windSpeedFormatter)
+                        IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
                             .multilineTextAlignment(.trailing)
                         Text("kts. or more").foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Strong crosswinds")
-                        IntegerField("", value: $pilot.strongCrosswinds, formatter: windSpeedFormatter)
+                        IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
                             .multilineTextAlignment(.trailing)
                         Text("kts. or more").foregroundColor(.secondary)
                     }
-                    
-                    if pilot.rating == .IFR {
+
+                    if rating == .IFR {
                         HStack {
                             Text("Low ceiling")
-                            Picker("", selection: $pilot.lowCeiling) {
+                            Picker("", selection: $lowCeiling) {
                                 ForEach(Ceiling.allCases, id: \.rawValue) { value in
                                     Text("\(value.stringValue)′").tag(value)
                                 }
                             }
                         }
-                        
+
                         HStack {
                             Text("Low visibility")
-                            Picker("", selection: $pilot.lowVisibility) {
+                            Picker("", selection: $lowVisibility) {
                                 ForEach(Visibility.allCases, id: \.rawValue) { value in
                                     Text("\(value.stringValue) SM").tag(value)
                                 }
@@ -71,12 +78,10 @@ struct PilotProfileView: View {
     }
 }
 
-struct PilotProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            List {
-                PilotProfileView().environmentObject(Pilot())
-            }
+#Preview {
+    Form {
+        List {
+            PilotProfileView()
         }
     }
 }

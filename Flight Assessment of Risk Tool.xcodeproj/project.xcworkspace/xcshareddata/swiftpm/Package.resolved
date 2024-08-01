@@ -1,16 +1,15 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Defaults",
-        "repositoryURL": "https://github.com/sindresorhus/Defaults",
-        "state": {
-          "branch": null,
-          "revision": "63d93f97ad545c8bceb125a8a36175ea705f7cf5",
-          "version": "5.0.0"
-        }
+  "originHash" : "2bfde059353be8ccc64922449a9c017e6e8a78958e9d4aac1f2e50f391c2b137",
+  "pins" : [
+    {
+      "identity" : "defaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Defaults",
+      "state" : {
+        "revision" : "38925e3cfacf3fb89a81a35b1cd44fd5a5b7e0fa",
+        "version" : "8.2.0"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 3
 }

@@ -1,5 +1,11 @@
-import Combine
 import Foundation
+import Defaults
+
+enum Risk {
+    case low
+    case moderate
+    case high
+}
 
 enum ApproachType: String {
     case precision
@@ -9,138 +15,150 @@ enum ApproachType: String {
     case notApplicable // for VFR flights
 }
 
-class Questionnaire: ObservableObject {
-    @Published var lessThan50InType = false
-    @Published var lessThan15InLast90 = false
-    @Published var afterWork = false
-    @Published var lessThan8HrSleep = false
-    @Published var dualInLast90 = false
-    @Published var wingsInLast6Mo = false
-    @Published var IFRCurrent = false
-    
-    @Published var night = false
-    @Published var strongWinds = false
-    @Published var strongCrosswinds = false
-    @Published var mountainous = false
-    
-    @Published var nontowered = false
-    @Published var shortRunway = false
-    @Published var wetOrSoftFieldRunway = false
-    @Published var runwayObstacles = false
-    
-    @Published var vfrCeilingUnder3000 = false
-    @Published var vfrVisibilityUnder5 = false
-    @Published var noDestWx = false
-    @Published var vfrFlightPlan = false
-    @Published var vfrFlightFollowing = false
-    @Published var ifrLowCeiling = false
-    @Published var ifrLowVisibility = false
-    @Published var ifrApproachType = ApproachType.notApplicable
-    
-    @Published var score = 0
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        $lessThan50InType.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $lessThan15InLast90.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $afterWork.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $lessThan8HrSleep.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $dualInLast90.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $wingsInLast6Mo.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $IFRCurrent.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $night.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $strongWinds.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $strongCrosswinds.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $mountainous.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $nontowered.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $shortRunway.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $wetOrSoftFieldRunway.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $runwayObstacles.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $vfrCeilingUnder3000.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $vfrVisibilityUnder5.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $noDestWx.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $vfrFlightPlan.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $vfrFlightFollowing.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $ifrLowCeiling.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $ifrLowVisibility.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
-        $ifrApproachType.receive(on: RunLoop.main)
-            .sink { _ in self.score = self.calculateScore() }
-            .store(in: &cancellables)
+@Observable class Questionnaire {
+    // MARK: Inputs
+    var lessThan50InType = false {
+        didSet { update() }
     }
-    
-    deinit {
-        for cancellable in cancellables { cancellable.cancel() }
+    var lessThan15InLast90 = false {
+        didSet { update() }
     }
-    
-    func calculateScore() -> Int {
+    var afterWork = false {
+        didSet { update() }
+    }
+    var lessThan8HrSleep = false {
+        didSet { update() }
+    }
+    var dualInLast90 = false {
+        didSet { update() }
+    }
+    var wingsInLast6Mo = false {
+        didSet { update() }
+    }
+    var IFRCurrent = false {
+        didSet { update() }
+    }
+
+    var night = false {
+        didSet { update() }
+    }
+    var strongWinds = false {
+        didSet { update() }
+    }
+    var strongCrosswinds = false {
+        didSet { update() }
+    }
+    var mountainous = false {
+        didSet { update() }
+    }
+
+    var nontowered = false {
+        didSet { update() }
+    }
+    var shortRunway = false {
+        didSet { update() }
+    }
+    var wetOrSoftFieldRunway = false {
+        didSet { update() }
+    }
+    var runwayObstacles = false {
+        didSet { update() }
+    }
+
+    var vfrCeilingUnder3000 = false {
+        didSet { update() }
+    }
+    var vfrVisibilityUnder5 = false {
+        didSet { update() }
+    }
+    var noDestWx = false {
+        didSet { update() }
+    }
+    var vfrFlightPlan = false {
+        didSet { update() }
+    }
+    var vfrFlightFollowing = false {
+        didSet { update() }
+    }
+    var ifrLowCeiling = false {
+        didSet { update() }
+    }
+    var ifrLowVisibility = false {
+        didSet { update() }
+    }
+    var ifrApproachType = ApproachType.notApplicable {
+        didSet { update() }
+    }
+
+    // MARK: Outputs
+    var score = 0
+    var risk = Risk.low
+
+    func update() {
+        score = calculateScore()
+        risk = categorize()
+    }
+
+    private func calculateScore() -> Int {
         let score = questionScorer(for: \.lessThan50InType).score(lessThan50InType) +
-            questionScorer(for: \.lessThan15InLast90).score(lessThan15InLast90) +
-            questionScorer(for: \.afterWork).score(afterWork) +
-            questionScorer(for: \.lessThan8HrSleep).score(lessThan8HrSleep) +
-            questionScorer(for: \.dualInLast90).score(dualInLast90) +
-            questionScorer(for: \.wingsInLast6Mo).score(wingsInLast6Mo) +
-            questionScorer(for: \.IFRCurrent).score(IFRCurrent) +
-            questionScorer(for: \.night).score(night) +
-            questionScorer(for: \.strongWinds).score(strongWinds) +
-            questionScorer(for: \.strongCrosswinds).score(strongCrosswinds) +
-            questionScorer(for: \.mountainous).score(mountainous) +
-            questionScorer(for: \.nontowered).score(nontowered) +
-            questionScorer(for: \.shortRunway).score(shortRunway) +
-            questionScorer(for: \.wetOrSoftFieldRunway).score(wetOrSoftFieldRunway) +
-            questionScorer(for: \.runwayObstacles).score(runwayObstacles) +
-            questionScorer(for: \.vfrCeilingUnder3000).score(vfrCeilingUnder3000) +
-            questionScorer(for: \.vfrVisibilityUnder5).score(vfrVisibilityUnder5) +
-            questionScorer(for: \.noDestWx).score(noDestWx) +
-            questionScorer(for: \.vfrFlightPlan).score(vfrFlightPlan) +
-            questionScorer(for: \.vfrFlightFollowing).score(vfrFlightFollowing) +
-            questionScorer(for: \.ifrLowCeiling).score(ifrLowCeiling) +
-            questionScorer(for: \.ifrLowVisibility).score(ifrLowVisibility) +
-            questionScorer(for: \.ifrApproachType).score(ifrApproachType)
+        questionScorer(for: \.lessThan15InLast90).score(lessThan15InLast90) +
+        questionScorer(for: \.afterWork).score(afterWork) +
+        questionScorer(for: \.lessThan8HrSleep).score(lessThan8HrSleep) +
+        questionScorer(for: \.dualInLast90).score(dualInLast90) +
+        questionScorer(for: \.wingsInLast6Mo).score(wingsInLast6Mo) +
+        questionScorer(for: \.IFRCurrent).score(IFRCurrent) +
+        questionScorer(for: \.night).score(night) +
+        questionScorer(for: \.strongWinds).score(strongWinds) +
+        questionScorer(for: \.strongCrosswinds).score(strongCrosswinds) +
+        questionScorer(for: \.mountainous).score(mountainous) +
+        questionScorer(for: \.nontowered).score(nontowered) +
+        questionScorer(for: \.shortRunway).score(shortRunway) +
+        questionScorer(for: \.wetOrSoftFieldRunway).score(wetOrSoftFieldRunway) +
+        questionScorer(for: \.runwayObstacles).score(runwayObstacles) +
+        questionScorer(for: \.vfrCeilingUnder3000).score(vfrCeilingUnder3000) +
+        questionScorer(for: \.vfrVisibilityUnder5).score(vfrVisibilityUnder5) +
+        questionScorer(for: \.noDestWx).score(noDestWx) +
+        questionScorer(for: \.vfrFlightPlan).score(vfrFlightPlan) +
+        questionScorer(for: \.vfrFlightFollowing).score(vfrFlightFollowing) +
+        questionScorer(for: \.ifrLowCeiling).score(ifrLowCeiling) +
+        questionScorer(for: \.ifrLowVisibility).score(ifrLowVisibility) +
+        questionScorer(for: \.ifrApproachType).score(ifrApproachType)
         return max(0, score)
     }
+
+    init() {
+        Task {
+            for await _ in Defaults.updates([.hours, .rating]) {
+                update()
+            }
+        }
+    }
+
+    private func categorize() -> Risk {
+        switch Defaults[.rating] {
+            case .VFR:
+                switch Defaults[.hours] {
+                    case .under100:
+                        if score > 20 { return .high }
+                        if score > 14 { return .moderate }
+                        return .low
+                    case .over100:
+                        if score > 25 { return .high }
+                        if score > 20 { return .moderate }
+                        return .low
+                }
+            case .IFR:
+                switch Defaults[.hours] {
+                    case .under100:
+                        if score > 30 { return .high }
+                        if score > 20 { return .moderate }
+                        return .low
+                    case .over100:
+                        if score > 35 { return .high }
+                        if score > 30 { return .moderate }
+                        return .low
+                }
+        }
+    }
+
 }

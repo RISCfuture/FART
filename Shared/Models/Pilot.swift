@@ -1,106 +1,39 @@
-import Combine
 import Foundation
 import Defaults
 
-class EnumBridge<T: RawRepresentable>: DefaultsBridge {
-    typealias Value = T
-    typealias Serializable = T.RawValue
-    
-    func serialize(_ value: T?) -> T.RawValue? {
-        value?.rawValue
-    }
-    
-    func deserialize(_ object: T.RawValue?) -> T? {
-        guard let object = object else { return nil }
-        return T(rawValue: object)
-    }
-}
-
-enum Rating: String, DefaultsSerializable {
+enum Rating: String, Defaults.Serializable {
     case VFR
     case IFR
-    
-    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
 }
 
-enum Hours: String, DefaultsSerializable {
+enum Hours: String, Defaults.Serializable {
     case under100
     case over100
-    
-    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
 }
 
-enum Ceiling: Int, CaseIterable, DefaultsSerializable {
+enum Ceiling: Int, CaseIterable, Defaults.Serializable {
     case threeThousandFeet = 3000
     case oneThousandFeet = 1000
     case fiveHundredFeet = 500
     case twoHundredFeet = 200
-    
-    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
-    
+
     var stringValue: String {
         return ceilingFormatter.string(for: rawValue)!
     }
 }
 
-enum Visibility: Float, CaseIterable, DefaultsSerializable {
+enum Visibility: Float, CaseIterable, Defaults.Serializable {
     case threeSM = 3.0
     case oneSM = 1.0
     case oneHalfSM = 0.5
     case oneQuarterSM = 0.25
-    
-    static var bridge: some DefaultsBridge { EnumBridge<Self>() }
-    
+
     var stringValue: String {
         switch self {
-        case .threeSM: return "3"
-        case .oneSM: return "1"
-        case .oneHalfSM: return "½"
-        case .oneQuarterSM: return "¼"
+            case .threeSM: return "3"
+            case .oneSM: return "1"
+            case .oneHalfSM: return "½"
+            case .oneQuarterSM: return "¼"
         }
-    }
-}
-
-class Pilot: ObservableObject {
-    @Published var rating = Rating.VFR
-    @Published var hours = Hours.under100
-    
-    @Published var shortRunway = 3000 // feet
-    
-    @Published var strongWinds = 15 // knots
-    @Published var strongCrosswinds = 7 // knots
-    @Published var lowCeiling = Ceiling.oneThousandFeet
-    @Published var lowVisibility = Visibility.threeSM
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        rating = Defaults[.rating]
-        hours = Defaults[.hours]
-        shortRunway = Defaults[.shortRunway]
-        strongWinds = Defaults[.strongWinds]
-        strongCrosswinds = Defaults[.strongCrosswinds]
-        lowCeiling = Defaults[.lowCeiling]
-        lowVisibility = Defaults[.lowVisibility]
-        
-        $rating.sink { Defaults[.rating] = $0 }.store(in: &cancellables)
-        $hours.sink { Defaults[.hours] = $0 }.store(in: &cancellables)
-        $shortRunway.sink { Defaults[.shortRunway] = $0 }.store(in: &cancellables)
-        $strongWinds.sink { Defaults[.strongWinds] = $0 }.store(in: &cancellables)
-        $strongCrosswinds.sink { Defaults[.strongCrosswinds] = $0 }.store(in: &cancellables)
-        $lowCeiling.sink { Defaults[.lowCeiling] = $0 }.store(in: &cancellables)
-        $lowVisibility.sink { Defaults[.lowVisibility] = $0 }.store(in: &cancellables)
-        
-        $rating.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $hours.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $shortRunway.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $strongWinds.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $strongCrosswinds.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $lowCeiling.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-        $lowVisibility.sink { _ in self.objectWillChange.send() }.store(in: &cancellables)
-    }
-    
-    deinit {
-        for cancellable in cancellables { cancellable.cancel() }
     }
 }

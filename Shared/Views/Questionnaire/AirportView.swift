@@ -1,27 +1,29 @@
 import SwiftUI
+import Defaults
 
 struct AirportView: View {
-    @EnvironmentObject var questions: Questionnaire
-    @ObservedObject var pilot: Pilot
+    @Environment(Questionnaire.self) private var questionnaire
+    @Default(.shortRunway) private var shortRunway
     
-    private var shortRunway: String { runwayLengthFormatter.string(from: NSNumber(integerLiteral: pilot.shortRunway))! }
+    private var shortRunwayStr: String { runwayLengthFormatter.string(from: NSNumber(integerLiteral: shortRunway))! }
     
     var body: some View {
+        @Bindable var questionnaire = questionnaire
+        
         Section(header: Text("Departure and Destination Airport")) {
-            Toggle("Nontowered airport (or tower closed)", isOn: $questions.nontowered)
-            Toggle("Runway length less than \(shortRunway)′", isOn: $questions.shortRunway)
-            Toggle("Wet or soft-field runway", isOn: $questions.wetOrSoftFieldRunway)
-            Toggle("Obstacles on departure/approach", isOn: $questions.runwayObstacles)
+            Toggle("Nontowered airport (or tower closed)", isOn: $questionnaire.nontowered)
+            Toggle("Runway length less than \(shortRunwayStr)′", isOn: $questionnaire.shortRunway)
+            Toggle("Wet or soft-field runway", isOn: $questionnaire.wetOrSoftFieldRunway)
+            Toggle("Obstacles on departure/approach", isOn: $questionnaire.runwayObstacles)
         }
     }
 }
 
-struct AirportView_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            List {
-                AirportView(pilot: Pilot()).environmentObject(Questionnaire())
-            }
+#Preview {
+    Form {
+        List {
+            AirportView().environment(Questionnaire())
         }
     }
 }
+

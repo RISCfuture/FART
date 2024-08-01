@@ -3,16 +3,16 @@ import SwiftUI
 struct IntegerField: View {
     @Binding var value: Int
     @State var lastValidValue = 0
-    
+
     var formatter: NumberFormatter
     var titleKey = ""
-    
+
     init(_ titleKey: String, value: Binding<Int>, formatter: NumberFormatter) {
         self._value = value
         self.formatter = formatter
         lastValidValue = value.wrappedValue
     }
-    
+
     private var stringValue: Binding<String> {
         Binding<String>(get: {
             self.formatter.string(from: NSNumber(integerLiteral: self.value))!
@@ -26,22 +26,20 @@ struct IntegerField: View {
             }
         })
     }
-    
+
     var body: some View {
-        #if os(iOS)
+#if os(iOS)
         TextField(titleKey, text: stringValue)
             .keyboardType(.numberPad)
-        #else
+#else
         TextField(titleKey, text: stringValue)
             .textFieldStyle(PlainTextFieldStyle())
-        #endif
+#endif
     }
 }
 
-struct IntegerField_Previews: PreviewProvider {
-    @State static var value = 0
-    
-    static var previews: some View {
-        IntegerField("Value", value: $value, formatter: windSpeedFormatter)
-    }
+#Preview {
+    @State var value = 0
+
+    return IntegerField("Value", value: $value, formatter: windSpeedFormatter)
 }
