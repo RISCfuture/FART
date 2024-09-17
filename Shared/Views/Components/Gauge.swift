@@ -50,7 +50,9 @@ struct Gauge<Content: View>: View {
 }
 
 #Preview {
-    Gauge(value: 0.5) {
+    @Previewable @State var value: Float = 0.5
+
+    Gauge(value: value) {
         HStack(alignment: .firstTextBaseline) {
             Text("24")
                 .font(.system(size: 75))

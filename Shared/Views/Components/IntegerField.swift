@@ -39,7 +39,9 @@ struct IntegerField: View {
 }
 
 #Preview {
-    @State var value = 0
+    @Previewable @State var value = 0
 
-    return IntegerField("Value", value: $value, formatter: windSpeedFormatter)
+    return Form {
+        IntegerField("Value", value: $value, formatter: windSpeedFormatter)
+    }
 }
