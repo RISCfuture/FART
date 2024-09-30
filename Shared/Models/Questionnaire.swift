@@ -15,7 +15,7 @@ enum ApproachType: String {
     case notApplicable // for VFR flights
 }
 
-@Observable class Questionnaire {
+@MainActor @Observable class Questionnaire {
     // MARK: Inputs
     var lessThan50InType = false {
         didSet { update() }
