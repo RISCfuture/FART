@@ -27,7 +27,7 @@ class ApproachScorer: QuestionScorer {
     }
 }
 
-func questionScorer(for keyPath: KeyPath<Questionnaire, Bool>) -> BoolScorer {
+@MainActor func questionScorer(for keyPath: KeyPath<Questionnaire, Bool>) -> BoolScorer {
     if keyPath == \.lessThan50InType { return BoolScorer(5) }
     if keyPath == \.lessThan15InLast90 { return BoolScorer(3) }
     if keyPath == \.afterWork { return BoolScorer(4) }
