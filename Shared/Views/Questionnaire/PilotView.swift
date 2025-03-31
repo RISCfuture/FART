@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct PilotView: View {
-    @Environment(Questionnaire.self) private var questionnaire
-    
+    @Environment(Questionnaire.self)
+    private var questionnaire
+
     var body: some View {
         @Bindable var questionnaire = questionnaire
-        
+
         Section(header: Text("Pilot")) {
             Toggle("Fewer than 50 hours in aircraft or avionics type", isOn: $questionnaire.lessThan50InType)
             Toggle("Fewer than 15 hours in last 90 days", isOn: $questionnaire.lessThan15InLast90)

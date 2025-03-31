@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct AboutView: View {
-    @Environment(\.openURL) private var openURL
+    @Environment(\.openURL)
+    private var openURL
 
     private var moreInfoURL = URL(string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf")!
     private var sourceURL = URL(string: "https://github.com/RISCfuture/FART")!

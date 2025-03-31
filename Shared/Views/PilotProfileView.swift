@@ -1,14 +1,27 @@
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct PilotProfileView: View {
-    @Default(.rating) private var rating
-    @Default(.hours) private var hours
-    @Default(.shortRunway) private var shortRunway
-    @Default(.strongWinds) private var strongWinds
-    @Default(.strongCrosswinds) private var strongCrosswinds
-    @Default(.lowCeiling) private var lowCeiling
-    @Default(.lowVisibility) private var lowVisibility
+    @Default(.rating)
+    private var rating
+
+    @Default(.hours)
+    private var hours
+
+    @Default(.shortRunway)
+    private var shortRunway
+
+    @Default(.strongWinds)
+    private var strongWinds
+
+    @Default(.strongCrosswinds)
+    private var strongCrosswinds
+
+    @Default(.lowCeiling)
+    private var lowCeiling
+
+    @Default(.lowVisibility)
+    private var lowVisibility
 
     var body: some View {
         Form {

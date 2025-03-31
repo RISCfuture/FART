@@ -1,13 +1,19 @@
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct WeatherView: View {
-    @Environment(Questionnaire.self) private var questionnaire
-    @State private var flightType = Rating.VFR
-    @Default(.lowCeiling) private var lowCeiling
-    @Default(.lowVisibility) private var lowVisibility
+    @Environment(Questionnaire.self)
+    private var questionnaire
 
-    private var lowCeilingStr: String { ceilingFormatter.string(from: NSNumber(integerLiteral: lowCeiling.rawValue))! }
+    @State private var flightType = Rating.VFR
+
+    @Default(.lowCeiling)
+    private var lowCeiling
+
+    @Default(.lowVisibility)
+    private var lowVisibility
+
+    private var lowCeilingStr: String { ceilingFormatter.string(from: NSNumber(value: lowCeiling.rawValue))! }
 
     var body: some View {
         @Bindable var questionnaire = questionnaire

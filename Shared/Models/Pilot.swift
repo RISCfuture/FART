@@ -1,5 +1,5 @@
-import Foundation
 import Defaults
+import Foundation
 
 enum Rating: String, Defaults.Serializable {
     case VFR

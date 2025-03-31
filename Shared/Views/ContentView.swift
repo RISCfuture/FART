@@ -45,7 +45,6 @@ struct ContentView: View {
             }.tabItem { Label("Results", image: "Results") }
                 .navigationViewStyle(StackNavigationViewStyle())
 
-
             NavigationView {
                 AboutView().navigationTitle("About")
             }.tabItem { Label("About", systemImage: "info.circle") }

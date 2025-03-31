@@ -1,17 +1,22 @@
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct ConditionsView: View {
-    @Environment(Questionnaire.self) private var questionnaire
-    @Default(.strongCrosswinds) private var strongCrosswinds
-    @Default(.strongWinds) private var strongWinds
+    @Environment(Questionnaire.self)
+    private var questionnaire
 
-    private var strongWindsStr: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: strongWinds))! }
-    private var strongCrosswindsStr: String { windSpeedFormatter.string(from: NSNumber(integerLiteral: strongCrosswinds))! }
+    @Default(.strongCrosswinds)
+    private var strongCrosswinds
+
+    @Default(.strongWinds)
+    private var strongWinds
+
+    private var strongWindsStr: String { windSpeedFormatter.string(from: NSNumber(value: strongWinds))! }
+    private var strongCrosswindsStr: String { windSpeedFormatter.string(from: NSNumber(value: strongCrosswinds))! }
 
     var body: some View {
         @Bindable var questionnaire = questionnaire
-        
+
         Section(header: Text("Flight Conditions")) {
             Toggle("Twilight or night", isOn: $questionnaire.night)
             Toggle("Surface wind greater than \(strongWindsStr) knots", isOn: $questionnaire.strongWinds)

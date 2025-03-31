@@ -1,14 +1,15 @@
 import SwiftUI
 
 struct ResultsView: View {
-    @Environment(Questionnaire.self) private var questionnaire
+    @Environment(Questionnaire.self)
+    private var questionnaire
 
     private var score: String {
-        scoreFormatter.string(from: NSNumber(integerLiteral: questionnaire.score))!
+        scoreFormatter.string(from: NSNumber(value: questionnaire.score))!
     }
 
     private var normalizedScore: Float {
-        Float(questionnaire.score)/64.0
+        Float(questionnaire.score) / 64.0
     }
 
     private var riskColor: Color {

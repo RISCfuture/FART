@@ -1,5 +1,5 @@
-import Foundation
 import Defaults
+import Foundation
 
 enum Risk {
     case low
@@ -15,7 +15,9 @@ enum ApproachType: String {
     case notApplicable // for VFR flights
 }
 
-@MainActor @Observable class Questionnaire {
+@MainActor
+@Observable
+class Questionnaire {
     // MARK: Inputs
     var lessThan50InType = false {
         didSet { update() }
@@ -94,6 +96,14 @@ enum ApproachType: String {
     var score = 0
     var risk = Risk.low
 
+    init() {
+        Task {
+            for await _ in Defaults.updates([.hours, .rating]) {
+                update()
+            }
+        }
+    }
+
     func update() {
         score = calculateScore()
         risk = categorize()
@@ -126,14 +136,6 @@ enum ApproachType: String {
         return max(0, score)
     }
 
-    init() {
-        Task {
-            for await _ in Defaults.updates([.hours, .rating]) {
-                update()
-            }
-        }
-    }
-
     private func categorize() -> Risk {
         switch Defaults[.rating] {
             case .VFR:
@@ -160,5 +162,4 @@ enum ApproachType: String {
                 }
         }
     }
-
 }
