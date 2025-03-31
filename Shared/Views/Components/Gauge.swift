@@ -23,6 +23,7 @@ struct Gauge<Content: View>: View {
                 contentView()
             }.frame(width: width(geometry))
                 .offset(x: thickness(geometry) / 2, y: 0)
+                .animation(.easeInOut(duration: 0.5), value: value)
         }
     }
 

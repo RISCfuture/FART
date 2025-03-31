@@ -43,6 +43,7 @@ struct ResultsView: View {
                     .font(.system(size: 75))
                     .bold()
                     .foregroundColor(riskColor)
+                    .contentTransition(.numericText())
                 Text("PTS.")
                     .bold()
                     .foregroundColor(riskColor)
