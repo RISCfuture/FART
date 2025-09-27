@@ -32,8 +32,6 @@
 		01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
 		01CDECC9266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
 		01CDECCA266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
-		01CDECCC266C0F95003051FD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCB266C0F95003051FD /* Constants.swift */; };
-		01CDECCD266C0F95003051FD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCB266C0F95003051FD /* Constants.swift */; };
 		01CDECCF266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
 		01CDECD0266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
 		01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25064266B1B1C009BECAA /* PilotProfileView.swift */; };
@@ -109,7 +107,6 @@
 		01BE9C61266AF6DB0026C4ED /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
 		01BE9C67266AFE8A0026C4ED /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 		01CDECC8266C0F10003051FD /* Gauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gauge.swift; sourceTree = "<group>"; };
-		01CDECCB266C0F95003051FD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		01CDECCE266C1FEC003051FD /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		01D25064266B1B1C009BECAA /* PilotProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfileView.swift; sourceTree = "<group>"; };
 		01D25067266B208F009BECAA /* PilotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotView.swift; sourceTree = "<group>"; };
@@ -246,7 +243,6 @@
 		01CDECC6266C0EEF003051FD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				01CDECCB266C0F95003051FD /* Constants.swift */,
 				01D25077266B3F0E009BECAA /* Formatters.swift */,
 			);
 			path = Helpers;
@@ -576,7 +572,6 @@
 				01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
 				01D25081266B438C009BECAA /* Defaults.swift in Sources */,
 				019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
-				01CDECCC266C0F95003051FD /* Constants.swift in Sources */,
 				01CDECC9266C0F10003051FD /* Gauge.swift in Sources */,
 				019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
 				019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
@@ -605,7 +600,6 @@
 				01D25066266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
 				01D25082266B438C009BECAA /* Defaults.swift in Sources */,
 				019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
-				01CDECCD266C0F95003051FD /* Constants.swift in Sources */,
 				01CDECCA266C0F10003051FD /* Gauge.swift in Sources */,
 				019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
 				019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */,

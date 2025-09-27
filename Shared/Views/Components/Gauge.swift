@@ -2,7 +2,10 @@ import SwiftUI
 
 struct Gauge<Content: View>: View {
   private var gradient: Gradient {
-    .init(colors: [lowRiskColor, moderateRiskColor, highRiskColor, moderateRiskColor, lowRiskColor])
+    .init(colors: [
+      Color("LowRisk"), Color("ModerateRisk"), Color("HighRisk"), Color("ModerateRisk"),
+      Color("LowRisk")
+    ])
   }
 
   private var angularGradient: AngularGradient {
@@ -58,10 +61,10 @@ struct Gauge<Content: View>: View {
       Text("24")
         .font(.system(size: 75))
         .bold()
-        .foregroundColor(moderateRiskColor)
+        .foregroundColor(Color("ModerateRisk"))
       Text("PTS.")
         .bold()
-        .foregroundColor(moderateRiskColor)
+        .foregroundColor(Color("ModerateRisk"))
     }.offset(x: 0, y: -30)
   }
 }

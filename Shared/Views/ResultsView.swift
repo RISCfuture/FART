@@ -14,9 +14,9 @@ struct ResultsView: View {
 
   private var riskColor: Color {
     switch questionnaire.risk {
-      case .low: return lowRiskColor
-      case .moderate: return moderateRiskColor
-      case .high: return highRiskColor
+      case .low: return Color("LowRisk")
+      case .moderate: return Color("ModerateRisk")
+      case .high: return Color("HighRisk")
     }
   }
 
