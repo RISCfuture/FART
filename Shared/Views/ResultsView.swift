@@ -61,7 +61,6 @@ struct ResultsView: View {
 
   private var riskTitle: some View {
     VStack {
-      Text("Your flight is").font(.title2)
       Text(riskText.uppercased())
         .bold()
         .font(.title)
@@ -71,15 +70,14 @@ struct ResultsView: View {
 
   var body: some View {
     VStack {
-      VStack(alignment: .center) {
-        gauge
-
-        Spacer().layoutPriority(0).frame(maxHeight: 100)
-        riskTitle
-        Spacer().layoutPriority(0).frame(maxHeight: 100)
-      }.foregroundColor(riskColor)
+      Spacer()
+      gauge
+      Spacer()
+      riskTitle
+        .foregroundColor(riskColor)
       Text(riskDescription).font(.caption)
         .accessibilityIdentifier("riskDescriptionText")
+      Spacer()
     }.padding()
   }
 }
