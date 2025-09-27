@@ -3,59 +3,74 @@ import SwiftUI
 struct ContentView: View {
   @State private var questionnaire = Questionnaire()
 
-  #if os(macOS)
-    var body: some View {
-      HStack {
-        TabView {
-          PilotProfileView()
-            .environment(questionnaire)
-            .tabItem { Text("Pilot") }
-          QuestionnaireView()
-            .environment(questionnaire)
-            .tabItem { Text("Questions") }
-        }.padding()
+  @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+  var body: some View {
+    switch horizontalSizeClass {
+      case .regular: twoColumnLayout
+      default: oneColumnLayout
+    }
+  }
+
+  private var oneColumnLayout: some View {
+    TabView {
+      NavigationView {
+        PilotProfileView()
+          .environment(questionnaire)
+          .navigationTitle("Pilot Profile")
+      }.tabItem { Label("Pilot", image: "Pilot") }
+        #if !os(macOS)
+          .navigationViewStyle(StackNavigationViewStyle())
+        #endif
+        .accessibilityIdentifier("pilotTab")
+
+      NavigationView {
+        QuestionnaireView()
+          .environment(questionnaire)
+          .navigationTitle("Questionnaire")
+      }.tabItem { Label("Questions", systemImage: "checklist.checked") }
+        #if !os(macOS)
+          .navigationViewStyle(StackNavigationViewStyle())
+        #endif
+        .accessibilityIdentifier("questionsTab")
+
+      NavigationView {
         ResultsView()
           .environment(questionnaire)
-          .padding(.top, 20)
-          .tabItem { Text("Results") }
-      }
-    }
+          .navigationTitle("Results")
+      }.tabItem { Label("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") }
+        #if !os(macOS)
+          .navigationViewStyle(StackNavigationViewStyle())
+        #endif
+        .accessibilityIdentifier("resultsTab")
 
-  #else
-    var body: some View {
+      NavigationView {
+        AboutView().navigationTitle("About")
+      }.tabItem { Label("About", systemImage: "info.circle") }
+        #if !os(macOS)
+          .navigationViewStyle(StackNavigationViewStyle())
+        #endif
+        .accessibilityIdentifier("aboutTab")
+    }
+  }
+
+  private var twoColumnLayout: some View {
+    NavigationSplitView(preferredCompactColumn: .constant(.detail)) {
       TabView {
-        NavigationView {
-          PilotProfileView()
-            .environment(questionnaire)
-            .navigationTitle("Pilot Profile")
-        }.tabItem { Label("Pilot", image: "Pilot") }
-          .navigationViewStyle(StackNavigationViewStyle())
+        PilotProfileView()
+          .environment(questionnaire)
+          .tabItem { Label("Pilot", image: "Pilot") }
           .accessibilityIdentifier("pilotTab")
-
-        NavigationView {
-          QuestionnaireView()
-            .environment(questionnaire)
-            .navigationTitle("Questionnaire")
-        }.tabItem { Label("Questions", systemImage: "checklist.checked") }
-          .navigationViewStyle(StackNavigationViewStyle())
+        QuestiosnnaireView()
+          .environment(questionnaire)
+          .tabItem { Label("Questions", systemImage: "checklist.checked") }
           .accessibilityIdentifier("questionsTab")
-
-        NavigationView {
-          ResultsView()
-            .environment(questionnaire)
-            .navigationTitle("Results")
-        }.tabItem { Label("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("resultsTab")
-
-        NavigationView {
-          AboutView().navigationTitle("About")
-        }.tabItem { Label("About", systemImage: "info.circle") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("aboutTab")
       }
+    } detail: {
+      ResultsView()
+        .environment(questionnaire)
     }
-  #endif
+  }
 }
 
 #Preview {
