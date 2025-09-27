@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "55E2FCAB-8872-42C6-9C11-E2105604CD88",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Flight Assessment of Risk Tool.xcodeproj",
+        "identifier" : "019A35BD2E861E4C00F14F8C",
+        "name" : "Generate Screenshots"
+      }
+    }
+  ],
+  "version" : 1
+}

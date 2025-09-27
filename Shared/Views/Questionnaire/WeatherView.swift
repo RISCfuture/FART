@@ -23,8 +23,10 @@ struct WeatherView: View {
     Section(header: Text("Weather")) {
       Picker("Flight Type", selection: $flightType) {
         Text("VFR").tag(Rating.VFR)
+          .accessibilityIdentifier("flightTypeVFR")
         Text("IFR").tag(Rating.IFR)
-      }.onChange(of: flightType) {
+      }
+      .accessibilityIdentifier("flightTypePicker").onChange(of: flightType) {
         switch flightType {
           case .VFR:
             questionnaire.ifrLowCeiling = false
@@ -41,23 +43,31 @@ struct WeatherView: View {
 
       if flightType == .VFR {
         Toggle("Ceiling less than 3,000′ AGL", isOn: $questionnaire.vfrCeilingUnder3000)
+          .accessibilityIdentifier("vfrCeilingUnder3000Toggle")
         Toggle("Visibility less than 5 SM", isOn: $questionnaire.vfrVisibilityUnder5)
+          .accessibilityIdentifier("vfrVisibilityUnder5Toggle")
         Toggle("Flight plan filed and activated", isOn: $questionnaire.vfrFlightPlan)
+          .accessibilityIdentifier("vfrFlightPlanToggle")
         Toggle("ATC flight following used", isOn: $questionnaire.vfrFlightFollowing)
+          .accessibilityIdentifier("vfrFlightFollowingToggle")
       } else {
         Toggle("Ceiling less than \(lowCeilingStr)′ AGL", isOn: $questionnaire.ifrLowCeiling)
+          .accessibilityIdentifier("ifrLowCeilingToggle")
         Toggle(
           "Visibility less than \(lowVisibility.stringValue) SM",
           isOn: $questionnaire.ifrLowVisibility
         )
+        .accessibilityIdentifier("ifrLowVisibilityToggle")
         Picker("Best available approach", selection: $questionnaire.ifrApproachType) {
           Text("Precision").tag(ApproachType.precision)
           Text("Non-precision").tag(ApproachType.nonprecision)
           Text("Circling only").tag(ApproachType.circling)
           Text("No IFR approaches").tag(ApproachType.none)
         }
+        .accessibilityIdentifier("ifrApproachTypePicker")
       }
       Toggle("No weather reporting at destination ", isOn: $questionnaire.noDestWx)
+        .accessibilityIdentifier("noDestWxToggle")
     }
   }
 }

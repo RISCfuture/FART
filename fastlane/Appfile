@@ -1,0 +1,5 @@
+app_identifier "codes.tim.FART"
+apple_id "apple@timothymorgan.info"
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

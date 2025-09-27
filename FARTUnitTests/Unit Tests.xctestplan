@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "C51A3B5F-FAF5-4E2D-BE2E-36106848638F",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Flight Assessment of Risk Tool.xcodeproj",
+        "identifier" : "019A358E2E85FAE100F14F8C",
+        "name" : "FARTUnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

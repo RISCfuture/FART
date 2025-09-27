@@ -17,9 +17,13 @@ struct AirportView: View {
 
     Section(header: Text("Departure and Destination Airport")) {
       Toggle("Nontowered airport (or tower closed)", isOn: $questionnaire.nontowered)
+        .accessibilityIdentifier("nontoweredToggle")
       Toggle("Runway length less than \(shortRunwayStr)′", isOn: $questionnaire.shortRunway)
+        .accessibilityIdentifier("shortRunwayToggle")
       Toggle("Wet or soft-field runway", isOn: $questionnaire.wetOrSoftFieldRunway)
+        .accessibilityIdentifier("wetOrSoftFieldToggle")
       Toggle("Obstacles on departure/approach", isOn: $questionnaire.runwayObstacles)
+        .accessibilityIdentifier("runwayObstaclesToggle")
     }
   }
 }

@@ -3,10 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
+		019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
+		019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
+		019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
+		019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
+		019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
+		019A35B32E861AFE00F14F8C /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35B22E861AFE00F14F8C /* Unit Tests.xctestplan */; };
+		019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35B62E861B4500F14F8C /* UI Tests.xctestplan */; };
+		019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */; };
+		019DB8472E8780D8002E7411 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 019DB8462E8780D8002E7411 /* Defaults */; };
 		01A849FA266D8B5600D845CB /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 01A849F9266D8B5600D845CB /* Credits.rtf */; };
 		01BE9C4A266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
 		01BE9C4B266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
@@ -52,7 +62,40 @@
 		01D2508C266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		019A35932E85FAE100F14F8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01BE9C32266AEBBE0026C4ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01BE9C3D266AEBC00026C4ED;
+			remoteInfo = "FART (iOS)";
+		};
+		019A35A22E85FAF100F14F8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01BE9C32266AEBBE0026C4ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01BE9C3D266AEBC00026C4ED;
+			remoteInfo = "FART (iOS)";
+		};
+		019A35C42E861E4C00F14F8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01BE9C32266AEBBE0026C4ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01BE9C3D266AEBC00026C4ED;
+			remoteInfo = "FART (iOS)";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		019A358F2E85FAE100F14F8C /* FARTUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FARTUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		019A359C2E85FAF100F14F8C /* FARTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FARTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		019A35A92E860AD500F14F8C /* QuestionnaireData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireData.swift; sourceTree = "<group>"; };
+		019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FARTScoreCalculator.swift; sourceTree = "<group>"; };
+		019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiskCategorizer.swift; sourceTree = "<group>"; };
+		019A35B22E861AFE00F14F8C /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Unit Tests.xctestplan"; path = "FARTUnitTests/Unit Tests.xctestplan"; sourceTree = "<group>"; };
+		019A35B62E861B4500F14F8C /* UI Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "UI Tests.xctestplan"; path = "FARTUITests/UI Tests.xctestplan"; sourceTree = "<group>"; };
+		019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Generate Screenshots.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Generate Screenshots.xctestplan"; path = "Generate Screenshots/Generate Screenshots.xctestplan"; sourceTree = "<group>"; };
 		01A849F9266D8B5600D845CB /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight_Assessment_of_Risk_ToolApp.swift; sourceTree = "<group>"; };
 		01BE9C38266AEBBE0026C4ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,7 +124,45 @@
 		01D2508A266B5290009BECAA /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0136708E2E8759D30098F3D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Extensions.swift,
+			);
+			target = 019A35BD2E861E4C00F14F8C /* Generate Screenshots */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		019A35902E85FAE100F14F8C /* FARTUnitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FARTUnitTests; sourceTree = "<group>"; };
+		019A359D2E85FAF100F14F8C /* FARTUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0136708E2E8759D30098F3D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = FARTUITests; sourceTree = "<group>"; };
+		019A35BF2E861E4C00F14F8C /* Generate Screenshots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Generate Screenshots"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		019A358C2E85FAE100F14F8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				019DB8472E8780D8002E7411 /* Defaults in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A35992E85FAF100F14F8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A35BB2E861E4C00F14F8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01BE9C3B266AEBC00026C4ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -104,9 +185,15 @@
 		01BE9C31266AEBBE0026C4ED = {
 			isa = PBXGroup;
 			children = (
+				019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */,
+				019A35B62E861B4500F14F8C /* UI Tests.xctestplan */,
+				019A35B22E861AFE00F14F8C /* Unit Tests.xctestplan */,
 				01BE9C36266AEBBE0026C4ED /* Shared */,
 				01BE9C40266AEBC00026C4ED /* iOS */,
 				01BE9C47266AEBC00026C4ED /* macOS */,
+				019A35902E85FAE100F14F8C /* FARTUnitTests */,
+				019A359D2E85FAF100F14F8C /* FARTUITests */,
+				019A35BF2E861E4C00F14F8C /* Generate Screenshots */,
 				01BE9C3F266AEBC00026C4ED /* Products */,
 				01D2507D266B437B009BECAA /* Frameworks */,
 			);
@@ -131,6 +218,9 @@
 			children = (
 				01BE9C3E266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */,
 				01BE9C46266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */,
+				019A358F2E85FAE100F14F8C /* FARTUnitTests.xctest */,
+				019A359C2E85FAF100F14F8C /* FARTUITests.xctest */,
+				019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -175,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				01BE9C67266AFE8A0026C4ED /* Pilot.swift */,
+				019A35A92E860AD500F14F8C /* QuestionnaireData.swift */,
 				01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */,
 			);
 			path = Models;
@@ -184,6 +275,8 @@
 			isa = PBXGroup;
 			children = (
 				01BE9C61266AF6DB0026C4ED /* Scoring.swift */,
+				019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */,
+				019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */,
 			);
 			path = Behaivor;
 			sourceTree = "<group>";
@@ -232,6 +325,76 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		019A358E2E85FAE100F14F8C /* FARTUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 019A35952E85FAE100F14F8C /* Build configuration list for PBXNativeTarget "FARTUnitTests" */;
+			buildPhases = (
+				019A358B2E85FAE100F14F8C /* Sources */,
+				019A358C2E85FAE100F14F8C /* Frameworks */,
+				019A358D2E85FAE100F14F8C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				019A35942E85FAE100F14F8C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				019A35902E85FAE100F14F8C /* FARTUnitTests */,
+			);
+			name = FARTUnitTests;
+			packageProductDependencies = (
+				019DB8462E8780D8002E7411 /* Defaults */,
+			);
+			productName = FARTUnitTests;
+			productReference = 019A358F2E85FAE100F14F8C /* FARTUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		019A359B2E85FAF100F14F8C /* FARTUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 019A35A42E85FAF100F14F8C /* Build configuration list for PBXNativeTarget "FARTUITests" */;
+			buildPhases = (
+				019A35982E85FAF100F14F8C /* Sources */,
+				019A35992E85FAF100F14F8C /* Frameworks */,
+				019A359A2E85FAF100F14F8C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				019A35A32E85FAF100F14F8C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				019A359D2E85FAF100F14F8C /* FARTUITests */,
+			);
+			name = FARTUITests;
+			packageProductDependencies = (
+			);
+			productName = FARTUITests;
+			productReference = 019A359C2E85FAF100F14F8C /* FARTUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		019A35BD2E861E4C00F14F8C /* Generate Screenshots */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 019A35C62E861E4C00F14F8C /* Build configuration list for PBXNativeTarget "Generate Screenshots" */;
+			buildPhases = (
+				019A35BA2E861E4C00F14F8C /* Sources */,
+				019A35BB2E861E4C00F14F8C /* Frameworks */,
+				019A35BC2E861E4C00F14F8C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				019A35C52E861E4C00F14F8C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				019A35BF2E861E4C00F14F8C /* Generate Screenshots */,
+			);
+			name = "Generate Screenshots";
+			packageProductDependencies = (
+			);
+			productName = "Generate Screenshots";
+			productReference = 019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		01BE9C3D266AEBC00026C4ED /* FART (iOS) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01BE9C52266AEBC00026C4ED /* Build configuration list for PBXNativeTarget "FART (iOS)" */;
@@ -279,9 +442,21 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					019A358E2E85FAE100F14F8C = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 01BE9C3D266AEBC00026C4ED;
+					};
+					019A359B2E85FAF100F14F8C = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 01BE9C3D266AEBC00026C4ED;
+					};
+					019A35BD2E861E4C00F14F8C = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 01BE9C3D266AEBC00026C4ED;
+					};
 					01BE9C3D266AEBC00026C4ED = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -308,11 +483,38 @@
 			targets = (
 				01BE9C3D266AEBC00026C4ED /* FART (iOS) */,
 				01BE9C45266AEBC00026C4ED /* FART (macOS) */,
+				019A358E2E85FAE100F14F8C /* FARTUnitTests */,
+				019A359B2E85FAF100F14F8C /* FARTUITests */,
+				019A35BD2E861E4C00F14F8C /* Generate Screenshots */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		019A358D2E85FAE100F14F8C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A359A2E85FAF100F14F8C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */,
+				019A35B32E861AFE00F14F8C /* Unit Tests.xctestplan in Resources */,
+				019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A35BC2E861E4C00F14F8C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01BE9C3C266AEBC00026C4ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -333,6 +535,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		019A358B2E85FAE100F14F8C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A35982E85FAF100F14F8C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		019A35BA2E861E4C00F14F8C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01BE9C3A266AEBC00026C4ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,8 +575,11 @@
 				01D25071266B29A2009BECAA /* QuestionnaireView.swift in Sources */,
 				01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
 				01D25081266B438C009BECAA /* Defaults.swift in Sources */,
+				019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
 				01CDECCC266C0F95003051FD /* Constants.swift in Sources */,
 				01CDECC9266C0F10003051FD /* Gauge.swift in Sources */,
+				019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
+				019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
 				01D25088266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
@@ -378,8 +604,11 @@
 				01D25072266B29A2009BECAA /* QuestionnaireView.swift in Sources */,
 				01D25066266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
 				01D25082266B438C009BECAA /* Defaults.swift in Sources */,
+				019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
 				01CDECCD266C0F95003051FD /* Constants.swift in Sources */,
 				01CDECCA266C0F10003051FD /* Gauge.swift in Sources */,
+				019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
+				019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
 				01D25089266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
@@ -387,7 +616,191 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		019A35942E85FAE100F14F8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01BE9C3D266AEBC00026C4ED /* FART (iOS) */;
+			targetProxy = 019A35932E85FAE100F14F8C /* PBXContainerItemProxy */;
+		};
+		019A35A32E85FAF100F14F8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01BE9C3D266AEBC00026C4ED /* FART (iOS) */;
+			targetProxy = 019A35A22E85FAF100F14F8C /* PBXContainerItemProxy */;
+		};
+		019A35C52E861E4C00F14F8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01BE9C3D266AEBC00026C4ED /* FART (iOS) */;
+			targetProxy = 019A35C42E861E4C00F14F8C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		019A35962E85FAE100F14F8C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FARTUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flight Assessment of Risk Tool.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Flight Assessment of Risk Tool";
+			};
+			name = Debug;
+		};
+		019A35972E85FAE100F14F8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FARTUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flight Assessment of Risk Tool.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Flight Assessment of Risk Tool";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		019A35A52E85FAF100F14F8C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FARTUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FART (iOS)";
+			};
+			name = Debug;
+		};
+		019A35A62E85FAF100F14F8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FARTUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FART (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		019A35C72E861E4C00F14F8C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "codes.tim.Generate-Screenshots";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FART (iOS)";
+			};
+			name = Debug;
+		};
+		019A35C82E861E4C00F14F8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NFSK2WB24;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "codes.tim.Generate-Screenshots";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "FART (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		01BE9C50266AEBC00026C4ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -629,6 +1042,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		019A35952E85FAE100F14F8C /* Build configuration list for PBXNativeTarget "FARTUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				019A35962E85FAE100F14F8C /* Debug */,
+				019A35972E85FAE100F14F8C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		019A35A42E85FAF100F14F8C /* Build configuration list for PBXNativeTarget "FARTUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				019A35A52E85FAF100F14F8C /* Debug */,
+				019A35A62E85FAF100F14F8C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		019A35C62E861E4C00F14F8C /* Build configuration list for PBXNativeTarget "Generate Screenshots" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				019A35C72E861E4C00F14F8C /* Debug */,
+				019A35C82E861E4C00F14F8C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		01BE9C35266AEBBE0026C4ED /* Build configuration list for PBXProject "Flight Assessment of Risk Tool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -670,6 +1110,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		019DB8462E8780D8002E7411 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
 		01D2507B266B436F009BECAA /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */;

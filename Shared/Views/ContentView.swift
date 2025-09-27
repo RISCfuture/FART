@@ -30,6 +30,7 @@ struct ContentView: View {
             .navigationTitle("Pilot Profile")
         }.tabItem { Label("Pilot", image: "Pilot") }
           .navigationViewStyle(StackNavigationViewStyle())
+          .accessibilityIdentifier("pilotTab")
 
         NavigationView {
           QuestionnaireView()
@@ -37,6 +38,7 @@ struct ContentView: View {
             .navigationTitle("Questionnaire")
         }.tabItem { Label("Questions", image: "Questionnaire") }
           .navigationViewStyle(StackNavigationViewStyle())
+          .accessibilityIdentifier("questionsTab")
 
         NavigationView {
           ResultsView()
@@ -44,11 +46,13 @@ struct ContentView: View {
             .navigationTitle("Results")
         }.tabItem { Label("Results", image: "Results") }
           .navigationViewStyle(StackNavigationViewStyle())
+          .accessibilityIdentifier("resultsTab")
 
         NavigationView {
           AboutView().navigationTitle("About")
         }.tabItem { Label("About", systemImage: "info.circle") }
           .navigationViewStyle(StackNavigationViewStyle())
+          .accessibilityIdentifier("aboutTab")
       }
     }
   #endif

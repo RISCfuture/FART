@@ -1,8 +1,10 @@
+// Pure scorer protocol with no dependencies
 protocol QuestionScorer {
   associatedtype AnswerType
   func score(_ answer: AnswerType) -> Int
 }
 
+// Pure bool scorer implementation
 class BoolScorer: QuestionScorer {
   let value: Int
 
@@ -15,6 +17,7 @@ class BoolScorer: QuestionScorer {
   }
 }
 
+// Pure approach scorer implementation
 class ApproachScorer: QuestionScorer {
   func score(_ answer: ApproachType) -> Int {
     switch answer {
@@ -27,6 +30,7 @@ class ApproachScorer: QuestionScorer {
   }
 }
 
+// Helper functions for mapping Questionnaire keypaths to scorers
 @MainActor
 func questionScorer(for keyPath: KeyPath<Questionnaire, Bool>) -> BoolScorer {
   if keyPath == \.lessThan50InType { return BoolScorer(5) }

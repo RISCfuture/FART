@@ -50,6 +50,7 @@ struct ResultsView: View {
           .bold()
           .foregroundColor(riskColor)
           .contentTransition(.numericText())
+          .accessibilityIdentifier("scoreText")
         Text("PTS.")
           .bold()
           .foregroundColor(riskColor)
@@ -64,6 +65,7 @@ struct ResultsView: View {
       Text(riskText.uppercased())
         .bold()
         .font(.title)
+        .accessibilityIdentifier("riskLevelText")
     }
   }
 
@@ -77,6 +79,7 @@ struct ResultsView: View {
         Spacer().layoutPriority(0).frame(maxHeight: 100)
       }.foregroundColor(riskColor)
       Text(riskDescription).font(.caption)
+        .accessibilityIdentifier("riskDescriptionText")
     }.padding()
   }
 }

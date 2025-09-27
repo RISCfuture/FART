@@ -31,15 +31,19 @@ struct PilotProfileView: View {
             Text("Rating")
             Picker("", selection: $rating) {
               Text("VFR").tag(Rating.VFR)
+                .accessibilityIdentifier("ratingVFR")
               Text("IFR").tag(Rating.IFR)
             }
+            .accessibilityIdentifier("ratingPicker")
           }
           HStack {
             Text("Hours")
             Picker("", selection: $hours) {
               Text("< 100").tag(Hours.under100)
               Text("> 100").tag(Hours.over100)
+                .accessibilityIdentifier("hoursOver100")
             }
+            .accessibilityIdentifier("hoursPicker")
           }
         }
 
@@ -48,6 +52,7 @@ struct PilotProfileView: View {
             Text("Short runway")
             IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
               .multilineTextAlignment(.trailing)
+              .accessibilityIdentifier("shortRunwayField")
             Text("ft. or less").foregroundColor(.secondary)
           }
         }
@@ -57,12 +62,14 @@ struct PilotProfileView: View {
             Text("Strong winds")
             IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
               .multilineTextAlignment(.trailing)
+              .accessibilityIdentifier("strongWindsField")
             Text("kts. or more").foregroundColor(.secondary)
           }
           HStack {
             Text("Strong crosswinds")
             IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
               .multilineTextAlignment(.trailing)
+              .accessibilityIdentifier("strongCrosswindsField")
             Text("kts. or more").foregroundColor(.secondary)
           }
 
@@ -74,6 +81,7 @@ struct PilotProfileView: View {
                   Text("\(value.stringValue)′").tag(value)
                 }
               }
+              .accessibilityIdentifier("lowCeilingPicker")
             }
 
             HStack {
@@ -83,6 +91,7 @@ struct PilotProfileView: View {
                   Text("\(value.stringValue) SM").tag(value)
                 }
               }
+              .accessibilityIdentifier("lowVisibilityPicker")
             }
           }
         }

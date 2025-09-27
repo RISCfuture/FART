@@ -23,12 +23,16 @@ struct ConditionsView: View {
 
     Section(header: Text("Flight Conditions")) {
       Toggle("Twilight or night", isOn: $questionnaire.night)
+        .accessibilityIdentifier("nightToggle")
       Toggle("Surface wind greater than \(strongWindsStr) knots", isOn: $questionnaire.strongWinds)
+        .accessibilityIdentifier("strongWindsToggle")
       Toggle(
         "Crosswind greater than \(strongCrosswindsStr) knots",
         isOn: $questionnaire.strongCrosswinds
       )
+      .accessibilityIdentifier("strongCrosswindsToggle")
       Toggle("Mountainous terrain", isOn: $questionnaire.mountainous)
+        .accessibilityIdentifier("mountainousToggle")
     }
   }
 }

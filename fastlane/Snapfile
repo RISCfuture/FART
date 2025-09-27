@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+# A list of devices you want to take the screenshots from
+# Using only devices that produce App Store Connect-compatible dimensions
+devices([
+    # iPhone categories - Required sizes for App Store Connect
+    "iPhone 15 Pro Max",              # 6.9" display - 1290x2796 (Required)
+    "iPhone 14 Plus",                 # 6.5" display - 1284x2778 (Optional but recommended)
+
+    # iPad categories - Required sizes for App Store Connect
+    "iPad Pro (12.9-inch) (6th generation)", # 12.9" display - 2048x2732 (Required)
+    "iPad Pro 13-inch (M4)"                  # 13" display - 2064x2752 (New requirement)
+])
+
+languages %w[
+    en-US
+]
+
+# The name of the scheme which contains the UI Tests
+scheme "Generate Screenshots"
+
+# Where should the resulting screenshots be stored?
+output_directory "./fastlane/screenshots"
+
+# Clear all previously generated screenshots before creating new ones
+clear_previous_screenshots true
+
+# Reinstall the app before running tests
+reinstall_app true
+
+# Erase simulator before running tests
+erase_simulator true
+
+# Set the status bar to 9:41 AM, and show full battery and reception
+override_status_bar false
+
+# Stop after first error
+stop_after_first_error false
+
+# Number of retries
+number_of_retries 1
+
+# Don't test without building
+test_without_building false
+
+# Dark mode setting (will be overridden by lane)
+dark_mode false
+
+# Launch arguments
+launch_arguments [
+    "-UITestsEnabled YES"
+]
+
+# App identifier
+app_identifier "codes.tim.FART"
+
+# Concurrent simulators
+concurrent_simulators false
+
+# Output simulator logs
+output_simulator_logs true
+
+# Result bundle
+result_bundle true
+
+# For more information about all available options run
+# fastlane action snapshot

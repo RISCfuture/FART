@@ -105,62 +105,43 @@ class Questionnaire {
   }
 
   func update() {
-    score = calculateScore()
-    risk = categorize()
+    // Create data structure from current state
+    let data = createQuestionnaireData()
+
+    // Use pure calculators
+    score = FARTScoreCalculator.calculateScore(from: data)
+    risk = RiskCategorizer.categorizeRisk(
+      score: score,
+      rating: Defaults[.rating],
+      hours: Defaults[.hours]
+    )
   }
 
-  private func calculateScore() -> Int {
-    let score =
-      questionScorer(for: \.lessThan50InType).score(lessThan50InType)
-      + questionScorer(for: \.lessThan15InLast90).score(lessThan15InLast90)
-      + questionScorer(for: \.afterWork).score(afterWork)
-      + questionScorer(for: \.lessThan8HrSleep).score(lessThan8HrSleep)
-      + questionScorer(for: \.dualInLast90).score(dualInLast90)
-      + questionScorer(for: \.wingsInLast6Mo).score(wingsInLast6Mo)
-      + questionScorer(for: \.IFRCurrent).score(IFRCurrent)
-      + questionScorer(for: \.night).score(night)
-      + questionScorer(for: \.strongWinds).score(strongWinds)
-      + questionScorer(for: \.strongCrosswinds).score(strongCrosswinds)
-      + questionScorer(for: \.mountainous).score(mountainous)
-      + questionScorer(for: \.nontowered).score(nontowered)
-      + questionScorer(for: \.shortRunway).score(shortRunway)
-      + questionScorer(for: \.wetOrSoftFieldRunway).score(wetOrSoftFieldRunway)
-      + questionScorer(for: \.runwayObstacles).score(runwayObstacles)
-      + questionScorer(for: \.vfrCeilingUnder3000).score(vfrCeilingUnder3000)
-      + questionScorer(for: \.vfrVisibilityUnder5).score(vfrVisibilityUnder5)
-      + questionScorer(for: \.noDestWx).score(noDestWx)
-      + questionScorer(for: \.vfrFlightPlan).score(vfrFlightPlan)
-      + questionScorer(for: \.vfrFlightFollowing).score(vfrFlightFollowing)
-      + questionScorer(for: \.ifrLowCeiling).score(ifrLowCeiling)
-      + questionScorer(for: \.ifrLowVisibility).score(ifrLowVisibility)
-      + questionScorer(for: \.ifrApproachType).score(ifrApproachType)
-    return max(0, score)
-  }
-
-  private func categorize() -> Risk {
-    switch Defaults[.rating] {
-      case .VFR:
-        switch Defaults[.hours] {
-          case .under100:
-            if score > 20 { return .high }
-            if score > 14 { return .moderate }
-            return .low
-          case .over100:
-            if score > 25 { return .high }
-            if score > 20 { return .moderate }
-            return .low
-        }
-      case .IFR:
-        switch Defaults[.hours] {
-          case .under100:
-            if score > 30 { return .high }
-            if score > 20 { return .moderate }
-            return .low
-          case .over100:
-            if score > 35 { return .high }
-            if score > 30 { return .moderate }
-            return .low
-        }
-    }
+  private func createQuestionnaireData() -> QuestionnaireData {
+    QuestionnaireData(
+      lessThan50InType: lessThan50InType,
+      lessThan15InLast90: lessThan15InLast90,
+      afterWork: afterWork,
+      lessThan8HrSleep: lessThan8HrSleep,
+      dualInLast90: dualInLast90,
+      wingsInLast6Mo: wingsInLast6Mo,
+      ifrCurrent: IFRCurrent,
+      night: night,
+      strongWinds: strongWinds,
+      strongCrosswinds: strongCrosswinds,
+      mountainous: mountainous,
+      nontowered: nontowered,
+      shortRunway: shortRunway,
+      wetOrSoftFieldRunway: wetOrSoftFieldRunway,
+      runwayObstacles: runwayObstacles,
+      vfrCeilingUnder3000: vfrCeilingUnder3000,
+      vfrVisibilityUnder5: vfrVisibilityUnder5,
+      noDestWx: noDestWx,
+      vfrFlightPlan: vfrFlightPlan,
+      vfrFlightFollowing: vfrFlightFollowing,
+      ifrLowCeiling: ifrLowCeiling,
+      ifrLowVisibility: ifrLowVisibility,
+      ifrApproachType: ifrApproachType
+    )
   }
 }

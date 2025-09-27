@@ -43,7 +43,7 @@ struct AboutView: View {
         }
         Spacer()
       }
-    }.padding(.top, 10)
+    }.padding()
   }
 }
 
