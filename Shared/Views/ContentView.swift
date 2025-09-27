@@ -36,7 +36,7 @@ struct ContentView: View {
           QuestionnaireView()
             .environment(questionnaire)
             .navigationTitle("Questionnaire")
-        }.tabItem { Label("Questions", image: "Questionnaire") }
+        }.tabItem { Label("Questions", systemImage: "checklist.checked") }
           .navigationViewStyle(StackNavigationViewStyle())
           .accessibilityIdentifier("questionsTab")
 
@@ -44,7 +44,7 @@ struct ContentView: View {
           ResultsView()
             .environment(questionnaire)
             .navigationTitle("Results")
-        }.tabItem { Label("Results", image: "Results") }
+        }.tabItem { Label("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") }
           .navigationViewStyle(StackNavigationViewStyle())
           .accessibilityIdentifier("resultsTab")
 

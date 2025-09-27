@@ -34,12 +34,6 @@ struct AboutView: View {
           Text("• Captain’s Hat by David Brossard")
             .font(.caption)
             .multilineTextAlignment(.leading)
-          Text("• Checklist by The Icon Z")
-            .font(.caption)
-            .multilineTextAlignment(.leading)
-          Text("• Speedometer by Yash Gohel")
-            .font(.caption)
-            .multilineTextAlignment(.leading)
         }
         Spacer()
       }
