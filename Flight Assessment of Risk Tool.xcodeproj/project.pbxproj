@@ -17,6 +17,8 @@
 		019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35B62E861B4500F14F8C /* UI Tests.xctestplan */; };
 		019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */; };
 		019DB8472E8780D8002E7411 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 019DB8462E8780D8002E7411 /* Defaults */; };
+		019DB8492E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
+		019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
 		01A849FA266D8B5600D845CB /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 01A849F9266D8B5600D845CB /* Credits.rtf */; };
 		01BE9C4A266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
 		01BE9C4B266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
@@ -94,6 +96,7 @@
 		019A35B62E861B4500F14F8C /* UI Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "UI Tests.xctestplan"; path = "FARTUITests/UI Tests.xctestplan"; sourceTree = "<group>"; };
 		019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Generate Screenshots.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Generate Screenshots.xctestplan"; path = "Generate Screenshots/Generate Screenshots.xctestplan"; sourceTree = "<group>"; };
+		019DB8482E88ECEE002E7411 /* Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon.icon; sourceTree = "<group>"; };
 		01A849F9266D8B5600D845CB /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight_Assessment_of_Risk_ToolApp.swift; sourceTree = "<group>"; };
 		01BE9C38266AEBBE0026C4ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -199,6 +202,7 @@
 		01BE9C36266AEBBE0026C4ED /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				019DB8482E88ECEE002E7411 /* Icon.icon */,
 				01BE9C39266AEBC00026C4ED /* Assets.xcassets */,
 				01D25062266B1AC5009BECAA /* Behaivor */,
 				01D25080266B438C009BECAA /* Defaults.swift */,
@@ -516,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01BE9C4E266AEBC00026C4ED /* Assets.xcassets in Resources */,
+				019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,6 +528,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				019DB8492E88ECEE002E7411 /* Icon.icon in Resources */,
 				01BE9C4F266AEBC00026C4ED /* Assets.xcassets in Resources */,
 				01A849FA266D8B5600D845CB /* Credits.rtf in Resources */,
 			);
@@ -925,7 +931,7 @@
 		01BE9C53266AEBC00026C4ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -951,7 +957,7 @@
 		01BE9C54266AEBC00026C4ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -978,7 +984,7 @@
 		01BE9C56266AEBC00026C4ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1007,7 +1013,7 @@
 		01BE9C57266AEBC00026C4ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";

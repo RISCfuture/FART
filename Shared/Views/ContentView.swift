@@ -61,7 +61,7 @@ struct ContentView: View {
           .environment(questionnaire)
           .tabItem { Label("Pilot", image: "Pilot") }
           .accessibilityIdentifier("pilotTab")
-        QuestiosnnaireView()
+        QuestionnaireView()
           .environment(questionnaire)
           .tabItem { Label("Questions", systemImage: "checklist.checked") }
           .accessibilityIdentifier("questionsTab")
