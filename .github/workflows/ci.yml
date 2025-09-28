@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Unit Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        macos: [macos-latest]
+        ios: ["26.0"]
+        xcode: ["26"]
+    runs-on: ${{ matrix.macos }}
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode }}
+      - uses: actions/checkout@v4
+      - name: Enable macros
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Run unit tests
+        run: xcodebuild test -scheme "FART (iOS)" -testPlan "Unit Tests" -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=${{ matrix.ios }}" | xcpretty && exit ${PIPESTATUS[0]}
+
+  ui:
+    name: UI Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        macos: [macos-latest]
+        ios: ["26.0"]
+        xcode: ["26"]
+    runs-on: ${{ matrix.macos }}
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode }}
+      - uses: actions/checkout@v4
+      - name: Enable macros
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Configure simulator
+        run: |
+          # Boot simulator with workaround for iOS 16+ status bar issues
+          SIMCTL_CHILD_SIMULATOR_RUNTIME_VERSION=16.4 xcrun simctl boot "iPhone 17 Pro" || true
+          # Wait for simulator to boot
+          xcrun simctl bootstatus "iPhone 17 Pro" || true
+          # Set locale to US for consistent 12-hour time format
+          xcrun simctl spawn booted defaults write -g AppleLocale en_US
+          # Override status bar (may not work on iOS 16+ but worth trying)
+          xcrun simctl status_bar "iPhone 17 Pro" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 --batteryState charged --batteryLevel 100 || true
+      - name: Run UI tests
+        run: xcodebuild test -scheme "FART (iOS)" -testPlan "UI Tests" -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=${{ matrix.ios }}" | xcpretty && exit ${PIPESTATUS[0]}

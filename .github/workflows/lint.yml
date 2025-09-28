@@ -1,0 +1,34 @@
+name: Linters
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swiftlint:
+    name: Run SwiftLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: norio-nomura/action-swiftlint@3.2.1
+
+  swift-format:
+    name: Run swift-format
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download .swift-format configuration
+        run: curl -L https://gist.githubusercontent.com/RISCfuture/e0c21afb7bd80a88d128a42bf40d2ecd/raw/7c4af5558f34e9deefc70701f7f7e289d0934187/.swift-format -o .swift-format
+
+      - name: Install swift-format
+        run: brew install swift-format
+
+      - name: Run swift-format lint
+        run: swift-format lint --recursive "Flight Assessment of Risk Tool" --configuration .swift-format
