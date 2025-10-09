@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		011232D02E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		011232D22E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		011232D32E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		017F9F5F2EB145E800789538 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 017F9F5E2EB145E800789538 /* Sentry */; };
 		019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
 		019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
 		019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
@@ -60,6 +64,7 @@
 		01D25089266B4EED009BECAA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25087266B4EED009BECAA /* String.swift */; };
 		01D2508B266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
 		01D2508C266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
+		6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 9373A74ADA3745F38306B8B8 /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				019DB8472E8780D8002E7411 /* Defaults in Frameworks */,
+				011232D22E98376800B92C62 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				011232D32E98376800B92C62 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				011232D02E98376800B92C62 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01D2507C266B436F009BECAA /* Defaults in Frameworks */,
+				6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01D2507F266B437B009BECAA /* Defaults in Frameworks */,
+				017F9F5F2EB145E800789538 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +412,8 @@
 				01BE9C3A266AEBC00026C4ED /* Sources */,
 				01BE9C3B266AEBC00026C4ED /* Frameworks */,
 				01BE9C3C266AEBC00026C4ED /* Resources */,
+				F1E2D3C4B5A6978012345678 /* Generate Sentry Framework dSYM */,
+				116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -410,6 +422,7 @@
 			name = "FART (iOS)";
 			packageProductDependencies = (
 				01D2507B266B436F009BECAA /* Defaults */,
+				9373A74ADA3745F38306B8B8 /* Sentry */,
 			);
 			productName = "Flight Assessment of Risk Tool (iOS)";
 			productReference = 01BE9C3E266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */;
@@ -430,6 +443,7 @@
 			name = "FART (macOS)";
 			packageProductDependencies = (
 				01D2507E266B437B009BECAA /* Defaults */,
+				017F9F5E2EB145E800789538 /* Sentry */,
 			);
 			productName = "Flight Assessment of Risk Tool (macOS)";
 			productReference = 01BE9C46266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */;
@@ -476,6 +490,7 @@
 			mainGroup = 01BE9C31266AEBBE0026C4ED;
 			packageReferences = (
 				01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */,
+				A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = 01BE9C3F266AEBC00026C4ED /* Products */;
 			projectDirPath = "";
@@ -535,6 +550,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=timcodes\n  export SENTRY_PROJECT=fart\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+		};
+		F1E2D3C4B5A6978012345678 /* Generate Sentry Framework dSYM */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Sentry Framework dSYM";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Generate dSYM for Sentry framework after it's been embedded and stripped\nif [ \"$CONFIGURATION\" = \"Release\" ] || [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphoneos\" ]; then\n    SENTRY_FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework/Sentry\"\n    \n    if [ -f \"$SENTRY_FRAMEWORK\" ]; then\n        echo \"Generating dSYM for Sentry.framework...\"\n        echo \"Framework path: $SENTRY_FRAMEWORK\"\n        \n        # Generate dSYM from the embedded framework binary\n        dsymutil \"$SENTRY_FRAMEWORK\" -o \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\"\n        \n        if [ -d \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" ]; then\n            echo \"Successfully generated Sentry.framework.dSYM\"\n            dwarfdump --uuid \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" || true\n        else\n            echo \"warning: Failed to generate Sentry.framework.dSYM\"\n        fi\n    else\n        echo \"warning: Sentry.framework not found at $SENTRY_FRAMEWORK\"\n    fi\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		019A358B2E85FAE100F14F8C /* Sources */ = {
@@ -936,7 +984,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flight ART";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -962,7 +1012,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flight ART";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1107,9 +1159,22 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		017F9F5E2EB145E800789538 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 		019DB8462E8780D8002E7411 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */;
@@ -1124,6 +1189,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		9373A74ADA3745F38306B8B8 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
