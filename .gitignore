@@ -1,3 +1,5 @@
 # SwiftLint Remote Config Cache
 .swiftlint/RemoteConfigCache
 .swift-format
+
+.sentryclirc
