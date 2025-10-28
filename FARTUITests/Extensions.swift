@@ -31,8 +31,8 @@ extension XCUIElement {
     var attempts = 0
 
     while !element.isVisible && attempts < 10 {
-      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
-      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2))
+      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
       startCoordinate.press(forDuration: 0.01, thenDragTo: endCoordinate)
       attempts += 1
     }

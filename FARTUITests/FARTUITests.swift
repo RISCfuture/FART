@@ -1,185 +1,233 @@
 import XCTest
 
+// swiftlint:disable prefer_nimble
 final class FARTUITests: XCTestCase {
 
   override func setUpWithError() throws {
     continueAfterFailure = false
   }
 
-  override func tearDownWithError() throws {
-  }
-
   @MainActor
   func testGreenRiskQuestionnaireFlow() throws {
-    let app = XCUIApplication()
-    app.launch()
+    let app = launchApp()
+    setupInitialRatingAndHours(app: app)
+    navigateToQuestions(app: app)
 
-    XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
-    app.buttons["ratingPicker"].tap()
-    app.buttons["ratingVFR"].tap()
-    app.buttons["hoursPicker"].tap()
-    app.buttons["hoursOver100"].tap()
-
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
-    scrollToTop()
-    set(app: app, name: "lessThan50InTypeToggle", value: true)
-    set(app: app, name: "lessThan15InLast90Toggle", value: false)
-    set(app: app, name: "afterWorkToggle", value: true)
-    set(app: app, name: "lessThan8HrSleepToggle", value: true)
-    set(app: app, name: "dualInLast90Toggle", value: false)
-    set(app: app, name: "wingsInLast6MoToggle", value: true)
-
-    set(app: app, name: "ifrCurrentToggle", value: false)
-    set(app: app, name: "nightToggle", value: false)
-    set(app: app, name: "strongWindsToggle", value: false)
-    set(app: app, name: "strongCrosswindsToggle", value: false)
-    set(app: app, name: "mountainousToggle", value: false)
-
-    set(app: app, name: "nontoweredToggle", value: false)
-    set(app: app, name: "shortRunwayToggle", value: false)
-    set(app: app, name: "wetOrSoftFieldToggle", value: false)
-    set(app: app, name: "runwayObstaclesToggle", value: false)
-
-    let flightTypePicker = app.collectionViews.firstMatch.makeVisible(
-      element: app.buttons["flightTypePicker"]
+    // Pilot experience toggles
+    setToggles(
+      app: app,
+      values: [
+        ("lessThan50InTypeToggle", true),
+        ("lessThan15InLast90Toggle", false),
+        ("afterWorkToggle", true),
+        ("lessThan8HrSleepToggle", true),
+        ("dualInLast90Toggle", false),
+        ("wingsInLast6MoToggle", true),
+        ("ifrCurrentToggle", false)
+      ]
     )
-    XCTAssertNotNil(flightTypePicker)
-    flightTypePicker!.tap()
-    app.buttons["flightTypeVFR"].tap()
 
-    set(app: app, name: "vfrCeilingUnder3000Toggle", value: false)
-    set(app: app, name: "vfrVisibilityUnder5Toggle", value: false)
-    set(app: app, name: "vfrFlightPlanToggle", value: false)
-    set(app: app, name: "vfrFlightFollowingToggle", value: false)
-    set(app: app, name: "noDestWxToggle", value: false)
+    // Environment condition toggles
+    setToggles(
+      app: app,
+      values: [
+        ("nightToggle", false),
+        ("strongWindsToggle", false),
+        ("strongCrosswindsToggle", false),
+        ("mountainousToggle", false)
+      ]
+    )
 
-    if app.buttons["Results"].exists {
-      app.buttons["Results"].firstMatch.tap()
-    }
-    let riskLevel = app.staticTexts["riskLevelText"]
-    XCTAssertTrue(riskLevel.waitForExistence(timeout: 5))
-    XCTAssertEqual(riskLevel.label, "LOW RISK")
+    // Airport condition toggles
+    setToggles(
+      app: app,
+      values: [
+        ("nontoweredToggle", false),
+        ("shortRunwayToggle", false),
+        ("wetOrSoftFieldToggle", false),
+        ("runwayObstaclesToggle", false)
+      ]
+    )
+
+    selectFlightType(app: app, type: "flightTypeVFR")
+
+    // VFR-specific toggles
+    setToggles(
+      app: app,
+      values: [
+        ("vfrCeilingUnder3000Toggle", false),
+        ("vfrVisibilityUnder5Toggle", false),
+        ("vfrFlightPlanToggle", false),
+        ("vfrFlightFollowingToggle", false),
+        ("noDestWxToggle", false)
+      ]
+    )
+
+    assertRiskLevel(app: app, expectedRisk: "LOW RISK")
   }
 
   @MainActor
   func testYellowRiskQuestionnaireFlow() throws {
-    let app = XCUIApplication()
-    app.launch()
+    let app = launchApp()
+    setupInitialRatingAndHours(app: app)
+    navigateToQuestions(app: app)
 
-    XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
-    app.buttons["ratingPicker"].tap()
-    app.buttons["ratingVFR"].tap()
-    app.buttons["hoursPicker"].tap()
-    app.buttons["hoursOver100"].tap()
-
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
-    scrollToTop()
-    set(app: app, name: "lessThan50InTypeToggle", value: true)
-    set(app: app, name: "lessThan15InLast90Toggle", value: false)
-    set(app: app, name: "afterWorkToggle", value: true)
-    set(app: app, name: "lessThan8HrSleepToggle", value: true)
-    set(app: app, name: "dualInLast90Toggle", value: false)
-    set(app: app, name: "wingsInLast6MoToggle", value: true)
-
-    set(app: app, name: "ifrCurrentToggle", value: true)
-    set(app: app, name: "nightToggle", value: true)
-    set(app: app, name: "strongWindsToggle", value: true)
-    set(app: app, name: "strongCrosswindsToggle", value: true)
-    set(app: app, name: "mountainousToggle", value: false)
-
-    set(app: app, name: "nontoweredToggle", value: false)
-    set(app: app, name: "shortRunwayToggle", value: false)
-    set(app: app, name: "wetOrSoftFieldToggle", value: false)
-    set(app: app, name: "runwayObstaclesToggle", value: false)
-
-    let flightTypePicker = app.collectionViews.firstMatch.makeVisible(
-      element: app.buttons["flightTypePicker"]
+    // Pilot experience toggles
+    setToggles(
+      app: app,
+      values: [
+        ("lessThan50InTypeToggle", true),
+        ("lessThan15InLast90Toggle", false),
+        ("afterWorkToggle", true),
+        ("lessThan8HrSleepToggle", true),
+        ("dualInLast90Toggle", false),
+        ("wingsInLast6MoToggle", true),
+        ("ifrCurrentToggle", true)
+      ]
     )
-    XCTAssertNotNil(flightTypePicker)
-    flightTypePicker!.tap()
-    app.buttons["flightTypeVFR"].tap()
 
-    set(app: app, name: "vfrCeilingUnder3000Toggle", value: false)
-    set(app: app, name: "vfrVisibilityUnder5Toggle", value: false)
-    set(app: app, name: "vfrFlightPlanToggle", value: false)
-    set(app: app, name: "vfrFlightFollowingToggle", value: false)
-    set(app: app, name: "noDestWxToggle", value: false)
+    // Environment condition toggles (moderate risk)
+    setToggles(
+      app: app,
+      values: [
+        ("nightToggle", true),
+        ("strongWindsToggle", true),
+        ("strongCrosswindsToggle", true),
+        ("mountainousToggle", false)
+      ]
+    )
 
-    if app.buttons["Results"].exists {
-      app.buttons["Results"].firstMatch.tap()
-    }
-    let riskLevel = app.staticTexts["riskLevelText"]
-    XCTAssertTrue(riskLevel.waitForExistence(timeout: 5))
-    XCTAssertEqual(riskLevel.label, "MODERATE RISK")
+    // Airport condition toggles
+    setToggles(
+      app: app,
+      values: [
+        ("nontoweredToggle", false),
+        ("shortRunwayToggle", false),
+        ("wetOrSoftFieldToggle", false),
+        ("runwayObstaclesToggle", false)
+      ]
+    )
+
+    selectFlightType(app: app, type: "flightTypeVFR")
+
+    // VFR-specific toggles
+    setToggles(
+      app: app,
+      values: [
+        ("vfrCeilingUnder3000Toggle", false),
+        ("vfrVisibilityUnder5Toggle", false),
+        ("vfrFlightPlanToggle", false),
+        ("vfrFlightFollowingToggle", false),
+        ("noDestWxToggle", false)
+      ]
+    )
+
+    assertRiskLevel(app: app, expectedRisk: "MODERATE RISK")
   }
 
   @MainActor
   func testRedRiskQuestionnaireFlow() throws {
-    let app = XCUIApplication()
-    app.launch()
+    let app = launchApp()
+    setupInitialRatingAndHours(app: app)
+    navigateToQuestions(app: app)
 
+    // Pilot experience toggles
+    setToggles(
+      app: app,
+      values: [
+        ("lessThan50InTypeToggle", true),
+        ("lessThan15InLast90Toggle", false),
+        ("afterWorkToggle", true),
+        ("lessThan8HrSleepToggle", true),
+        ("dualInLast90Toggle", false),
+        ("wingsInLast6MoToggle", true),
+        ("ifrCurrentToggle", true)
+      ]
+    )
+
+    // Environment condition toggles (moderate risk)
+    setToggles(
+      app: app,
+      values: [
+        ("nightToggle", true),
+        ("strongWindsToggle", true),
+        ("strongCrosswindsToggle", true),
+        ("mountainousToggle", false)
+      ]
+    )
+
+    // Airport condition toggles (high risk)
+    setToggles(
+      app: app,
+      values: [
+        ("nontoweredToggle", true),
+        ("shortRunwayToggle", true),
+        ("wetOrSoftFieldToggle", true),
+        ("runwayObstaclesToggle", true)
+      ]
+    )
+
+    selectFlightType(app: app, type: "flightTypeVFR")
+
+    // VFR-specific toggles
+    setToggles(
+      app: app,
+      values: [
+        ("vfrCeilingUnder3000Toggle", false),
+        ("vfrVisibilityUnder5Toggle", false),
+        ("vfrFlightPlanToggle", false),
+        ("vfrFlightFollowingToggle", false),
+        ("noDestWxToggle", false)
+      ]
+    )
+
+    assertRiskLevel(app: app, expectedRisk: "HIGH RISK")
+  }
+
+  // MARK: - Helper Functions
+
+  private func launchApp() -> XCUIApplication {
+    let app = XCUIApplication()
+    app.launchArguments = ["UI-TESTING"]
+    app.launch()
+    return app
+  }
+
+  private func setupInitialRatingAndHours(app: XCUIApplication) {
     XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
     app.buttons["ratingPicker"].tap()
     app.buttons["ratingVFR"].tap()
     app.buttons["hoursPicker"].tap()
     app.buttons["hoursOver100"].tap()
+  }
 
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
-    scrollToTop()
-    set(app: app, name: "lessThan50InTypeToggle", value: true)
-    set(app: app, name: "lessThan15InLast90Toggle", value: false)
-    set(app: app, name: "afterWorkToggle", value: true)
-    set(app: app, name: "lessThan8HrSleepToggle", value: true)
-    set(app: app, name: "dualInLast90Toggle", value: false)
-    set(app: app, name: "wingsInLast6MoToggle", value: true)
+  private func navigateToQuestions(app: XCUIApplication) {
+    app.buttons["Questions"].tap()
+    scrollToTop(app: app)
+  }
 
-    set(app: app, name: "ifrCurrentToggle", value: true)
-    set(app: app, name: "nightToggle", value: true)
-    set(app: app, name: "strongWindsToggle", value: true)
-    set(app: app, name: "strongCrosswindsToggle", value: true)
-    set(app: app, name: "mountainousToggle", value: false)
+  private func setToggles(app: XCUIApplication, values: [(String, Bool)]) {
+    for (name, value) in values {
+      set(app: app, name: name, value: value)
+    }
+  }
 
-    set(app: app, name: "nontoweredToggle", value: true)
-    set(app: app, name: "shortRunwayToggle", value: true)
-    set(app: app, name: "wetOrSoftFieldToggle", value: true)
-    set(app: app, name: "runwayObstaclesToggle", value: true)
-
+  private func selectFlightType(app: XCUIApplication, type: String) {
     let flightTypePicker = app.collectionViews.firstMatch.makeVisible(
       element: app.buttons["flightTypePicker"]
     )
     XCTAssertNotNil(flightTypePicker)
     flightTypePicker!.tap()
-    app.buttons["flightTypeVFR"].tap()
+    app.buttons[type].tap()
+  }
 
-    set(app: app, name: "vfrCeilingUnder3000Toggle", value: false)
-    set(app: app, name: "vfrVisibilityUnder5Toggle", value: false)
-    set(app: app, name: "vfrFlightPlanToggle", value: false)
-    set(app: app, name: "vfrFlightFollowingToggle", value: false)
-    set(app: app, name: "noDestWxToggle", value: false)
-
+  private func assertRiskLevel(app: XCUIApplication, expectedRisk: String) {
     if app.buttons["Results"].exists {
       app.buttons["Results"].firstMatch.tap()
     }
     let riskLevel = app.staticTexts["riskLevelText"]
     XCTAssertTrue(riskLevel.waitForExistence(timeout: 5))
-    XCTAssertEqual(riskLevel.label, "HIGH RISK")
-  }
-
-  @MainActor
-  func testLaunchPerformance() throws {
-    // This measures how long it takes to launch your application.
-    measure(metrics: [XCTApplicationLaunchMetric()]) {
-      XCUIApplication().launch()
-    }
+    XCTAssertEqual(riskLevel.label, expectedRisk)
   }
 
   private func set(app: XCUIApplication, name: String, value: Bool) {
@@ -188,8 +236,26 @@ final class FARTUITests: XCTestCase {
     value ? control!.toggleOn() : control!.toggleOff()
   }
 
-  private func scrollToTop() {
+  private func scrollToTop(app: XCUIApplication) {
+    // First try tapping status bar
     let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")
     for bar in springboardApp.statusBars.allElementsBoundByIndex { bar.tap() }
+
+    // Give it time to scroll and wait for app to idle
+    Thread.sleep(forTimeInterval: 0.5)
+
+    // Ensure we're at the top by scrolling down from top of collection view
+    let collectionView = app.collectionViews.firstMatch
+    if collectionView.exists {
+      let topCoordinate = collectionView.coordinate(
+        withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)
+      )
+      let bottomCoordinate = collectionView.coordinate(
+        withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)
+      )
+      bottomCoordinate.press(forDuration: 0.1, thenDragTo: topCoordinate)
+      Thread.sleep(forTimeInterval: 0.3)
+    }
   }
 }
+// swiftlint:enable prefer_nimble
