@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -130,7 +130,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0136708E2E8759D30098F3D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		0136708E2E8759D30098F3D1 /* Exceptions for "FARTUITests" folder in "Generate Screenshots" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Extensions.swift,
@@ -140,54 +140,59 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		019A35902E85FAE100F14F8C /* FARTUnitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = FARTUnitTests; sourceTree = "<group>"; };
-		019A359D2E85FAF100F14F8C /* FARTUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0136708E2E8759D30098F3D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = FARTUITests; sourceTree = "<group>"; };
-		019A35BF2E861E4C00F14F8C /* Generate Screenshots */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Generate Screenshots"; sourceTree = "<group>"; };
+		019A35902E85FAE100F14F8C /* FARTUnitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FARTUnitTests;
+			sourceTree = "<group>";
+		};
+		019A359D2E85FAF100F14F8C /* FARTUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0136708E2E8759D30098F3D1 /* Exceptions for "FARTUITests" folder in "Generate Screenshots" target */,
+			);
+			path = FARTUITests;
+			sourceTree = "<group>";
+		};
+		019A35BF2E861E4C00F14F8C /* Generate Screenshots */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Generate Screenshots";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		019A358C2E85FAE100F14F8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				019DB8472E8780D8002E7411 /* Defaults in Frameworks */,
 				011232D22E98376800B92C62 /* (null) in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A35992E85FAF100F14F8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				011232D32E98376800B92C62 /* (null) in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A35BB2E861E4C00F14F8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				011232D02E98376800B92C62 /* (null) in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C3B266AEBC00026C4ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				01D2507C266B436F009BECAA /* Defaults in Frameworks */,
 				6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C43266AEBC00026C4ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				01D2507F266B437B009BECAA /* Defaults in Frameworks */,
 				017F9F5F2EB145E800789538 /* Sentry in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -376,8 +381,6 @@
 				019A359D2E85FAF100F14F8C /* FARTUITests */,
 			);
 			name = FARTUITests;
-			packageProductDependencies = (
-			);
 			productName = FARTUITests;
 			productReference = 019A359C2E85FAF100F14F8C /* FARTUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -399,8 +402,6 @@
 				019A35BF2E861E4C00F14F8C /* Generate Screenshots */,
 			);
 			name = "Generate Screenshots";
-			packageProductDependencies = (
-			);
 			productName = "Generate Screenshots";
 			productReference = 019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -416,8 +417,6 @@
 				116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			name = "FART (iOS)";
 			packageProductDependencies = (
@@ -437,8 +436,6 @@
 				01BE9C44266AEBC00026C4ED /* Resources */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			name = "FART (macOS)";
 			packageProductDependencies = (
@@ -480,7 +477,6 @@
 				};
 			};
 			buildConfigurationList = 01BE9C35266AEBBE0026C4ED /* Build configuration list for PBXProject "Flight Assessment of Risk Tool" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -492,6 +488,7 @@
 				01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */,
 				A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 01BE9C3F266AEBC00026C4ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -508,107 +505,114 @@
 /* Begin PBXResourcesBuildPhase section */
 		019A358D2E85FAE100F14F8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A359A2E85FAF100F14F8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */,
 				019A35B32E861AFE00F14F8C /* Unit Tests.xctestplan in Resources */,
 				019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A35BC2E861E4C00F14F8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C3C266AEBC00026C4ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				01BE9C4E266AEBC00026C4ED /* Assets.xcassets in Resources */,
 				019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C44266AEBC00026C4ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				019DB8492E88ECEE002E7411 /* Icon.icon in Resources */,
 				01BE9C4F266AEBC00026C4ED /* Assets.xcassets in Resources */,
 				01A849FA266D8B5600D845CB /* Credits.rtf in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
 			);
 			name = "Upload Debug Symbols to Sentry";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=timcodes\n  export SENTRY_PROJECT=fart\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+			shellScript = (
+				"# This script is responsible for uploading debug symbols and source context for Sentry.",
+				"if which sentry-cli >/dev/null; then",
+				"  export SENTRY_ORG=timcodes",
+				"  export SENTRY_PROJECT=fart",
+				"  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)",
+				"  if [ ! $? -eq 0 ]; then",
+				"    echo \"warning: sentry-cli - $ERROR\"",
+				"  fi",
+				"else",
+				"  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"",
+				"fi",
+				"",
+				"",
+			);
 		};
 		F1E2D3C4B5A6978012345678 /* Generate Sentry Framework dSYM */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Generate Sentry Framework dSYM";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Generate dSYM for Sentry framework after it's been embedded and stripped\nif [ \"$CONFIGURATION\" = \"Release\" ] || [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphoneos\" ]; then\n    SENTRY_FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework/Sentry\"\n    \n    if [ -f \"$SENTRY_FRAMEWORK\" ]; then\n        echo \"Generating dSYM for Sentry.framework...\"\n        echo \"Framework path: $SENTRY_FRAMEWORK\"\n        \n        # Generate dSYM from the embedded framework binary\n        dsymutil \"$SENTRY_FRAMEWORK\" -o \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\"\n        \n        if [ -d \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" ]; then\n            echo \"Successfully generated Sentry.framework.dSYM\"\n            dwarfdump --uuid \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" || true\n        else\n            echo \"warning: Failed to generate Sentry.framework.dSYM\"\n        fi\n    else\n        echo \"warning: Sentry.framework not found at $SENTRY_FRAMEWORK\"\n    fi\nfi\n";
+			shellScript = (
+				"# Generate dSYM for Sentry framework after it's been embedded and stripped",
+				"if [ \"$CONFIGURATION\" = \"Release\" ] || [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphoneos\" ]; then",
+				"    SENTRY_FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework/Sentry\"",
+				"    ",
+				"    if [ -f \"$SENTRY_FRAMEWORK\" ]; then",
+				"        echo \"Generating dSYM for Sentry.framework...\"",
+				"        echo \"Framework path: $SENTRY_FRAMEWORK\"",
+				"        ",
+				"        # Generate dSYM from the embedded framework binary",
+				"        dsymutil \"$SENTRY_FRAMEWORK\" -o \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\"",
+				"        ",
+				"        if [ -d \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" ]; then",
+				"            echo \"Successfully generated Sentry.framework.dSYM\"",
+				"            dwarfdump --uuid \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" || true",
+				"        else",
+				"            echo \"warning: Failed to generate Sentry.framework.dSYM\"",
+				"        fi",
+				"    else",
+				"        echo \"warning: Sentry.framework not found at $SENTRY_FRAMEWORK\"",
+				"    fi",
+				"fi",
+				"",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		019A358B2E85FAE100F14F8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A35982E85FAF100F14F8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		019A35BA2E861E4C00F14F8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C3A266AEBC00026C4ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				01BE9C4C266AEBC00026C4ED /* ContentView.swift in Sources */,
 				01CDECCF266C1FEC003051FD /* AboutView.swift in Sources */,
@@ -632,11 +636,9 @@
 				01D25088266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01BE9C42266AEBC00026C4ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				01BE9C4D266AEBC00026C4ED /* ContentView.swift in Sources */,
 				01CDECD0266C1FEC003051FD /* AboutView.swift in Sources */,
@@ -660,7 +662,6 @@
 				01D25089266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -683,7 +684,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		019A35962E85FAE100F14F8C /* Debug */ = {
+		019A35962E85FAE100F14F8C /* Debug configuration for PBXNativeTarget "FARTUnitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -710,7 +711,7 @@
 			};
 			name = Debug;
 		};
-		019A35972E85FAE100F14F8C /* Release */ = {
+		019A35972E85FAE100F14F8C /* Release configuration for PBXNativeTarget "FARTUnitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -737,7 +738,7 @@
 			};
 			name = Release;
 		};
-		019A35A52E85FAF100F14F8C /* Debug */ = {
+		019A35A52E85FAF100F14F8C /* Debug configuration for PBXNativeTarget "FARTUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -763,7 +764,7 @@
 			};
 			name = Debug;
 		};
-		019A35A62E85FAF100F14F8C /* Release */ = {
+		019A35A62E85FAF100F14F8C /* Release configuration for PBXNativeTarget "FARTUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -789,7 +790,7 @@
 			};
 			name = Release;
 		};
-		019A35C72E861E4C00F14F8C /* Debug */ = {
+		019A35C72E861E4C00F14F8C /* Debug configuration for PBXNativeTarget "Generate Screenshots" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -819,7 +820,7 @@
 			};
 			name = Debug;
 		};
-		019A35C82E861E4C00F14F8C /* Release */ = {
+		019A35C82E861E4C00F14F8C /* Release configuration for PBXNativeTarget "Generate Screenshots" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -849,7 +850,7 @@
 			};
 			name = Release;
 		};
-		01BE9C50266AEBC00026C4ED /* Debug */ = {
+		01BE9C50266AEBC00026C4ED /* Debug configuration for PBXProject "Flight Assessment of Risk Tool" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -916,7 +917,7 @@
 			};
 			name = Debug;
 		};
-		01BE9C51266AEBC00026C4ED /* Release */ = {
+		01BE9C51266AEBC00026C4ED /* Release configuration for PBXProject "Flight Assessment of Risk Tool" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -976,14 +977,14 @@
 			};
 			name = Release;
 		};
-		01BE9C53266AEBC00026C4ED /* Debug */ = {
+		01BE9C53266AEBC00026C4ED /* Debug configuration for PBXNativeTarget "FART (iOS)" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -995,7 +996,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1004,14 +1005,14 @@
 			};
 			name = Debug;
 		};
-		01BE9C54266AEBC00026C4ED /* Release */ = {
+		01BE9C54266AEBC00026C4ED /* Release configuration for PBXNativeTarget "FART (iOS)" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -1023,7 +1024,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1033,7 +1034,7 @@
 			};
 			name = Release;
 		};
-		01BE9C56266AEBC00026C4ED /* Debug */ = {
+		01BE9C56266AEBC00026C4ED /* Debug configuration for PBXNativeTarget "FART (macOS)" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
@@ -1042,7 +1043,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1054,7 +1055,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1062,7 +1063,7 @@
 			};
 			name = Debug;
 		};
-		01BE9C57266AEBC00026C4ED /* Release */ = {
+		01BE9C57266AEBC00026C4ED /* Release configuration for PBXNativeTarget "FART (macOS)" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
@@ -1071,7 +1072,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1083,7 +1084,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = codes.tim.FART;
 				PRODUCT_NAME = "Flight Assessment of Risk Tool";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1097,55 +1098,49 @@
 		019A35952E85FAE100F14F8C /* Build configuration list for PBXNativeTarget "FARTUnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				019A35962E85FAE100F14F8C /* Debug */,
-				019A35972E85FAE100F14F8C /* Release */,
+				019A35962E85FAE100F14F8C /* Debug configuration for PBXNativeTarget "FARTUnitTests" */,
+				019A35972E85FAE100F14F8C /* Release configuration for PBXNativeTarget "FARTUnitTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		019A35A42E85FAF100F14F8C /* Build configuration list for PBXNativeTarget "FARTUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				019A35A52E85FAF100F14F8C /* Debug */,
-				019A35A62E85FAF100F14F8C /* Release */,
+				019A35A52E85FAF100F14F8C /* Debug configuration for PBXNativeTarget "FARTUITests" */,
+				019A35A62E85FAF100F14F8C /* Release configuration for PBXNativeTarget "FARTUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		019A35C62E861E4C00F14F8C /* Build configuration list for PBXNativeTarget "Generate Screenshots" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				019A35C72E861E4C00F14F8C /* Debug */,
-				019A35C82E861E4C00F14F8C /* Release */,
+				019A35C72E861E4C00F14F8C /* Debug configuration for PBXNativeTarget "Generate Screenshots" */,
+				019A35C82E861E4C00F14F8C /* Release configuration for PBXNativeTarget "Generate Screenshots" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		01BE9C35266AEBBE0026C4ED /* Build configuration list for PBXProject "Flight Assessment of Risk Tool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01BE9C50266AEBC00026C4ED /* Debug */,
-				01BE9C51266AEBC00026C4ED /* Release */,
+				01BE9C50266AEBC00026C4ED /* Debug configuration for PBXProject "Flight Assessment of Risk Tool" */,
+				01BE9C51266AEBC00026C4ED /* Release configuration for PBXProject "Flight Assessment of Risk Tool" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		01BE9C52266AEBC00026C4ED /* Build configuration list for PBXNativeTarget "FART (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01BE9C53266AEBC00026C4ED /* Debug */,
-				01BE9C54266AEBC00026C4ED /* Release */,
+				01BE9C53266AEBC00026C4ED /* Debug configuration for PBXNativeTarget "FART (iOS)" */,
+				01BE9C54266AEBC00026C4ED /* Release configuration for PBXNativeTarget "FART (iOS)" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		01BE9C55266AEBC00026C4ED /* Build configuration list for PBXNativeTarget "FART (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01BE9C56266AEBC00026C4ED /* Debug */,
-				01BE9C57266AEBC00026C4ED /* Release */,
+				01BE9C56266AEBC00026C4ED /* Debug configuration for PBXNativeTarget "FART (macOS)" */,
+				01BE9C57266AEBC00026C4ED /* Release configuration for PBXNativeTarget "FART (macOS)" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
