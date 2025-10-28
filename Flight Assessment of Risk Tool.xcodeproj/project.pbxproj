@@ -17,9 +17,6 @@
 		019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
 		019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
 		019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
-		019A35B32E861AFE00F14F8C /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35B22E861AFE00F14F8C /* Unit Tests.xctestplan */; };
-		019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35B62E861B4500F14F8C /* UI Tests.xctestplan */; };
-		019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 019A35CB2E861FAC00F14F8C /* Generate Screenshots.xctestplan */; };
 		019DB8472E8780D8002E7411 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 019DB8462E8780D8002E7411 /* Defaults */; };
 		019DB8492E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
 		019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
@@ -413,7 +410,6 @@
 				01BE9C3A266AEBC00026C4ED /* Sources */,
 				01BE9C3B266AEBC00026C4ED /* Frameworks */,
 				01BE9C3C266AEBC00026C4ED /* Resources */,
-				F1E2D3C4B5A6978012345678 /* Generate Sentry Framework dSYM */,
 				116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
@@ -434,6 +430,7 @@
 				01BE9C42266AEBC00026C4ED /* Sources */,
 				01BE9C43266AEBC00026C4ED /* Frameworks */,
 				01BE9C44266AEBC00026C4ED /* Resources */,
+				0140E8A42EB16BD70059C230 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -511,9 +508,6 @@
 		019A359A2E85FAF100F14F8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
-				019A35B72E861B4500F14F8C /* UI Tests.xctestplan in Resources */,
-				019A35B32E861AFE00F14F8C /* Unit Tests.xctestplan in Resources */,
-				019A35CC2E861FAC00F14F8C /* Generate Screenshots.xctestplan in Resources */,
 			);
 		};
 		019A35BC2E861E4C00F14F8C /* Resources */ = {
@@ -539,15 +533,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */ = {
+		0140E8A42EB16BD70059C230 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
 			);
 			name = "Upload Debug Symbols to Sentry";
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = (
 				"# This script is responsible for uploading debug symbols and source context for Sentry.",
+				"if [[ \"$(uname -m)\" == arm64 ]]; then",
+				"  export PATH=\"/opt/homebrew/bin:$PATH\"",
+				"fi",
+				"",
 				"if which sentry-cli >/dev/null; then",
 				"  export SENTRY_ORG=timcodes",
 				"  export SENTRY_PROJECT=fart",
@@ -562,32 +562,30 @@
 				"",
 			);
 		};
-		F1E2D3C4B5A6978012345678 /* Generate Sentry Framework dSYM */ = {
+		116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			name = "Generate Sentry Framework dSYM";
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			name = "Upload Debug Symbols to Sentry";
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = (
-				"# Generate dSYM for Sentry framework after it's been embedded and stripped",
-				"if [ \"$CONFIGURATION\" = \"Release\" ] || [ \"$EFFECTIVE_PLATFORM_NAME\" = \"-iphoneos\" ]; then",
-				"    SENTRY_FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sentry.framework/Sentry\"",
-				"    ",
-				"    if [ -f \"$SENTRY_FRAMEWORK\" ]; then",
-				"        echo \"Generating dSYM for Sentry.framework...\"",
-				"        echo \"Framework path: $SENTRY_FRAMEWORK\"",
-				"        ",
-				"        # Generate dSYM from the embedded framework binary",
-				"        dsymutil \"$SENTRY_FRAMEWORK\" -o \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\"",
-				"        ",
-				"        if [ -d \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" ]; then",
-				"            echo \"Successfully generated Sentry.framework.dSYM\"",
-				"            dwarfdump --uuid \"${DWARF_DSYM_FOLDER_PATH}/Sentry.framework.dSYM\" || true",
-				"        else",
-				"            echo \"warning: Failed to generate Sentry.framework.dSYM\"",
-				"        fi",
-				"    else",
-				"        echo \"warning: Sentry.framework not found at $SENTRY_FRAMEWORK\"",
-				"    fi",
+				"# This script is responsible for uploading debug symbols and source context for Sentry.",
+				"if [[ \"$(uname -m)\" == arm64 ]]; then",
+				"  export PATH=\"/opt/homebrew/bin:$PATH\"",
+				"fi",
+				"",
+				"if which sentry-cli >/dev/null; then",
+				"  export SENTRY_ORG=timcodes",
+				"  export SENTRY_PROJECT=fart",
+				"  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)",
+				"  if [ ! $? -eq 0 ]; then",
+				"    echo \"warning: sentry-cli - $ERROR\"",
+				"  fi",
+				"else",
+				"  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"",
 				"fi",
 				"",
 				"",
@@ -890,7 +888,7 @@
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -957,7 +955,7 @@
 				DEVELOPMENT_TEAM = 2NFSK2WB24;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
