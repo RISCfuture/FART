@@ -1,13 +1,11 @@
 import XCTest
 
+// swiftlint:disable prefer_nimble
 final class Generate_Screenshots: XCTestCase {
 
   override func setUpWithError() throws {
     // In UI tests it is usually best to stop immediately when a failure occurs.
     continueAfterFailure = false
-  }
-
-  override func tearDownWithError() throws {
   }
 
   @MainActor
@@ -112,3 +110,4 @@ final class Generate_Screenshots: XCTestCase {
     for bar in springboardApp.statusBars.allElementsBoundByIndex { bar.tap() }
   }
 }
+// swiftlint:enable prefer_nimble

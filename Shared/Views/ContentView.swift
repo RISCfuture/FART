@@ -3,7 +3,8 @@ import SwiftUI
 struct ContentView: View {
   @State private var questionnaire = Questionnaire()
 
-  @Environment(\.horizontalSizeClass) var horizontalSizeClass
+  @Environment(\.horizontalSizeClass)
+  var horizontalSizeClass
 
   var body: some View {
     switch horizontalSizeClass {

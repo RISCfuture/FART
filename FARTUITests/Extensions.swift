@@ -1,6 +1,11 @@
 import XCTest
 
 extension XCUIElement {
+  var isVisible: Bool {
+    guard self.exists && !self.frame.isEmpty else { return false }
+    return XCUIApplication().windows.element(boundBy: 0).frame.contains(self.frame)
+  }
+
   func toggleOn() {
     guard switches["0"].exists else { return }
     switches["0"].firstMatch.tap()
@@ -9,11 +14,6 @@ extension XCUIElement {
   func toggleOff() {
     guard switches["1"].exists else { return }
     switches["1"].firstMatch.tap()
-  }
-
-  var isVisible: Bool {
-    guard self.exists && !self.frame.isEmpty else { return false }
-    return XCUIApplication().windows.element(boundBy: 0).frame.contains(self.frame)
   }
 
   func makeVisible(element: XCUIElement) -> XCUIElement? {

@@ -2,6 +2,7 @@ import Testing
 
 @testable import Flight_Assessment_of_Risk_Tool
 
+// swiftlint:disable convenience_type
 @Suite("FART Score and Risk Tests")
 struct FARTUnitTests {
 
@@ -286,3 +287,4 @@ struct FARTUnitTests {
     }
   }
 }
+// swiftlint:enable convenience_type

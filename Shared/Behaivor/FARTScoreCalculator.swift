@@ -1,53 +1,7 @@
 import Foundation
 
 /// Pure calculator for FART scores with no external dependencies
-struct FARTScoreCalculator {
-
-  /// Score values for each risk factor
-  struct ScoreValues {
-    // Pilot Experience & Condition
-    static let lessThan50InType = 5
-    static let lessThan15InLast90 = 3
-    static let afterWork = 4
-    static let lessThan8HrSleep = 5
-    static let dualInLast90 = -1
-    static let wingsInLast6Mo = -3
-    static let ifrCurrent = -3
-
-    // Flight Environment
-    static let night = 5
-    static let strongWinds = 4
-    static let strongCrosswinds = 4
-    static let mountainous = 4
-
-    // Airport Environment
-    static let nontowered = 5
-    static let shortRunway = 3
-    static let wetOrSoftFieldRunway = 3
-    static let runwayObstacles = 3
-
-    // VFR Weather
-    static let vfrCeilingUnder3000 = 2
-    static let vfrVisibilityUnder5 = 2
-    static let noDestWx = 4
-    static let vfrFlightPlan = -2
-    static let vfrFlightFollowing = -3
-
-    // IFR Weather
-    static let ifrLowCeiling = 2
-    static let ifrLowVisibility = 2
-
-    // Approach Types
-    static func approachTypeScore(_ type: ApproachType) -> Int {
-      switch type {
-        case .precision: return -2
-        case .nonprecision: return 3
-        case .none: return 4
-        case .circling: return 7
-        case .notApplicable: return 0
-      }
-    }
-  }
+enum FARTScoreCalculator {
 
   /// Calculate the total FART score from questionnaire data
   /// - Parameter data: The questionnaire input data
@@ -91,5 +45,51 @@ struct FARTScoreCalculator {
     score += ScoreValues.approachTypeScore(data.ifrApproachType)
 
     return max(0, score)
+  }
+
+  /// Score values for each risk factor
+  enum ScoreValues {
+    // Pilot Experience & Condition
+    static let lessThan50InType = 5
+    static let lessThan15InLast90 = 3
+    static let afterWork = 4
+    static let lessThan8HrSleep = 5
+    static let dualInLast90 = -1
+    static let wingsInLast6Mo = -3
+    static let ifrCurrent = -3
+
+    // Flight Environment
+    static let night = 5
+    static let strongWinds = 4
+    static let strongCrosswinds = 4
+    static let mountainous = 4
+
+    // Airport Environment
+    static let nontowered = 5
+    static let shortRunway = 3
+    static let wetOrSoftFieldRunway = 3
+    static let runwayObstacles = 3
+
+    // VFR Weather
+    static let vfrCeilingUnder3000 = 2
+    static let vfrVisibilityUnder5 = 2
+    static let noDestWx = 4
+    static let vfrFlightPlan = -2
+    static let vfrFlightFollowing = -3
+
+    // IFR Weather
+    static let ifrLowCeiling = 2
+    static let ifrLowVisibility = 2
+
+    // Approach Types
+    static func approachTypeScore(_ type: ApproachType) -> Int {
+      switch type {
+        case .precision: return -2
+        case .nonprecision: return 3
+        case .none: return 4
+        case .circling: return 7
+        case .notApplicable: return 0
+      }
+    }
   }
 }

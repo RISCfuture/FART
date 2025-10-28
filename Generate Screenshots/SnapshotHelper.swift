@@ -143,7 +143,7 @@ open class Snapshot: NSObject {
         range: NSRange(location: 0, length: launchArguments.count)
       )
       let results = matches.map { result -> String in
-        (launchArguments as NSString).substring(with: result.range)
+        String(launchArguments[Range(result.range, in: launchArguments)!])
       }
       app.launchArguments += results
     } catch {
@@ -302,8 +302,7 @@ extension XCUIElementQuery {
     return self.containing(isNetworkLoadingIndicator)
   }
 
-  @MainActor
-  fileprivate var deviceStatusBars: XCUIElementQuery {
+  @MainActor fileprivate var deviceStatusBars: XCUIElementQuery {
     guard let app = Snapshot.app else {
       fatalError("XCUIApplication is not set. Please call setupSnapshot(app) before snapshot().")
     }

@@ -1,32 +1,7 @@
 import Foundation
 
 /// Pure risk categorizer with no external dependencies
-struct RiskCategorizer {
-
-  /// Risk thresholds for different pilot qualifications
-  struct RiskThresholds {
-    struct VFR {
-      struct Under100Hours {
-        static let moderateThreshold = 14
-        static let highThreshold = 20
-      }
-      struct Over100Hours {
-        static let moderateThreshold = 20
-        static let highThreshold = 25
-      }
-    }
-
-    struct IFR {
-      struct Under100Hours {
-        static let moderateThreshold = 20
-        static let highThreshold = 30
-      }
-      struct Over100Hours {
-        static let moderateThreshold = 30
-        static let highThreshold = 35
-      }
-    }
-  }
+enum RiskCategorizer {
 
   /// Categorize risk level based on score, rating, and hours
   /// - Parameters:
@@ -74,6 +49,31 @@ struct RiskCategorizer {
             }
             return .low
         }
+    }
+  }
+
+  /// Risk thresholds for different pilot qualifications
+  enum RiskThresholds {
+    enum VFR {
+      enum Under100Hours {
+        static let moderateThreshold = 14
+        static let highThreshold = 20
+      }
+      enum Over100Hours {
+        static let moderateThreshold = 20
+        static let highThreshold = 25
+      }
+    }
+
+    enum IFR {
+      enum Under100Hours {
+        static let moderateThreshold = 20
+        static let highThreshold = 30
+      }
+      enum Over100Hours {
+        static let moderateThreshold = 30
+        static let highThreshold = 35
+      }
     }
   }
 }
