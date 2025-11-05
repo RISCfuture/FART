@@ -1,4 +1,3 @@
-import Defaults
 import Foundation
 
 enum Risk {
@@ -18,6 +17,9 @@ enum ApproachType: String {
 @MainActor
 @Observable
 class Questionnaire {
+  // MARK: Profile
+  private(set) var profile: PilotProfile?
+
   // MARK: Inputs
   private var updatesPaused = false
 
@@ -99,11 +101,13 @@ class Questionnaire {
   var risk = Risk.low
 
   init() {
-    Task {
-      for await _ in Defaults.updates([.hours, .rating]) {
-        update()
-      }
-    }
+    // No longer observing UserDefaults
+  }
+
+  /// Sets the pilot profile and triggers an update
+  func setProfile(_ profile: PilotProfile) {
+    self.profile = profile
+    update()
   }
 
   private func scheduleUpdate() {
@@ -119,6 +123,8 @@ class Questionnaire {
   }
 
   func update() {
+    guard let profile = profile else { return }
+
     // Create data structure from current state
     let data = createQuestionnaireData()
 
@@ -126,8 +132,8 @@ class Questionnaire {
     score = FARTScoreCalculator.calculateScore(from: data)
     risk = RiskCategorizer.categorizeRisk(
       score: score,
-      rating: Defaults[.rating],
-      hours: Defaults[.hours]
+      rating: profile.rating,
+      hours: profile.hours
     )
   }
 

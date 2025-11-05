@@ -1,21 +1,17 @@
-import Defaults
 import SwiftUI
 
 struct ConditionsView: View {
   @Environment(Questionnaire.self)
   private var questionnaire
 
-  @Default(.strongCrosswinds)
-  private var strongCrosswinds
-
-  @Default(.strongWinds)
-  private var strongWinds
-
   private var strongWindsStr: String {
-    windSpeedFormatter.string(from: NSNumber(value: strongWinds))!
+    guard let strongWinds = questionnaire.profile?.strongWinds else { return "0" }
+    return windSpeedFormatter.string(from: NSNumber(value: strongWinds))!
   }
+
   private var strongCrosswindsStr: String {
-    windSpeedFormatter.string(from: NSNumber(value: strongCrosswinds))!
+    guard let strongCrosswinds = questionnaire.profile?.strongCrosswinds else { return "0" }
+    return windSpeedFormatter.string(from: NSNumber(value: strongCrosswinds))!
   }
 
   var body: some View {

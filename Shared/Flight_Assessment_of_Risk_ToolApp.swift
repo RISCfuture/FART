@@ -1,4 +1,5 @@
 import Sentry
+import SwiftData
 import SwiftUI
 
 #if os(iOS)
@@ -7,6 +8,12 @@ import SwiftUI
 
 @main
 struct Flight_Assessment_of_Risk_ToolApp: App {
+  // MARK: - SwiftData Container
+
+  let modelContainer: ModelContainer
+
+  // MARK: - Body
+
   #if os(macOS)
     var body: some Scene {
       WindowGroup("Flight Assessment of Risk Tool") {
@@ -18,6 +25,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       }
       .windowStyle(.titleBar)
       .windowToolbarStyle(.unified)
+      .modelContainer(modelContainer)
     }
 
   #else
@@ -25,14 +33,40 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       WindowGroup("Flight Assessment of Risk Tool") {
         ContentView()
       }
+      .modelContainer(modelContainer)
     }
   #endif
 
   init() {
-    // Skip Sentry initialization during UI testing or unit testing
     let isUITesting = ProcessInfo.processInfo.arguments.contains("UI-TESTING")
     let isUnitTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
+    // MARK: - SwiftData Setup
+
+    let schema = Schema([
+      PilotProfile.self
+    ])
+
+    // Use an in-memory store while testing so each run starts from a clean slate
+    // and never touches the user's data; CloudKit can't back an in-memory store,
+    // so disable it there too.
+    let isTesting = isUITesting || isUnitTesting
+    let modelConfiguration = ModelConfiguration(
+      schema: schema,
+      isStoredInMemoryOnly: isTesting,
+      cloudKitDatabase: isTesting ? .none : .automatic
+    )
+
+    do {
+      modelContainer = try ModelContainer(
+        for: schema,
+        configurations: [modelConfiguration]
+      )
+    } catch {
+      fatalError("Could not create ModelContainer: \(error)")
+    }
+
+    // Skip Sentry initialization during UI testing or unit testing
     if isUITesting {
       if let bundleID = Bundle.main.bundleIdentifier {
         UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -46,6 +80,8 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     if isUnitTesting {
       return
     }
+
+    // MARK: - Sentry Setup
 
     SentrySDK.start { options in
       options.dsn =

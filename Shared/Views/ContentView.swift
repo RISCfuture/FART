@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 #if os(macOS)
@@ -35,17 +36,42 @@ struct ContentView: View {
   #endif
 
   @State private var questionnaire = Questionnaire()
+  @State private var profileManager: PilotProfileManager?
 
   #if !os(macOS)
     @State private var showingAbout = false
   #endif
 
+  @Environment(\.modelContext) private var modelContext
+
   var body: some View {
-    #if os(macOS)
-      macOSLayout
-    #else
-      iOSLayout
-    #endif
+    Group {
+      #if os(macOS)
+        macOSLayout
+      #else
+        iOSLayout
+      #endif
+    }
+    .task {
+      await initializeData()
+    }
+  }
+
+  /// Initializes SwiftData migration and profile manager
+  private func initializeData() async {
+    // Perform migration from UserDefaults
+    let migration = PilotProfileMigration(modelContext: modelContext)
+    migration.migrateIfNeeded()
+
+    // Initialize profile manager
+    let manager = PilotProfileManager(modelContext: modelContext)
+    manager.loadActiveProfile()
+    profileManager = manager
+
+    // Pass the profile to the questionnaire
+    if let profile = manager.activeProfile {
+      questionnaire.setProfile(profile)
+    }
   }
 
   #if os(macOS)

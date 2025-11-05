@@ -27,6 +27,12 @@
 		01BE9C4F266AEBC00026C4ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01BE9C39266AEBC00026C4ED /* Assets.xcassets */; };
 		01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */; };
 		01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */; };
+		37AF8762D9724225A525D122 /* PilotProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1BEFB89B4E588B943EB5 /* PilotProfile.swift */; };
+		8F9555176420490FA687D697 /* PilotProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1BEFB89B4E588B943EB5 /* PilotProfile.swift */; };
+		86E407A79F194DEF81473149 /* PilotProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DC8CD8FE6C4104AF5E1A6D /* PilotProfileManager.swift */; };
+		F056974369174BA88651D85A /* PilotProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DC8CD8FE6C4104AF5E1A6D /* PilotProfileManager.swift */; };
+		B3417E131421422EAE4CE589 /* PilotProfileMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85D2CDE30B45D19DBB8D72 /* PilotProfileMigration.swift */; };
+		0AC3B4DAB428412E87785362 /* PilotProfileMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85D2CDE30B45D19DBB8D72 /* PilotProfileMigration.swift */; };
 		01BE9C68266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
 		01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
 		01CDECC9266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
@@ -103,6 +109,9 @@
 		01BE9C48266AEBC00026C4ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01BE9C49266AEBC00026C4ED /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
+		E37F1BEFB89B4E588B943EB5 /* PilotProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfile.swift; sourceTree = "<group>"; };
+		38DC8CD8FE6C4104AF5E1A6D /* PilotProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfileManager.swift; sourceTree = "<group>"; };
+		CD85D2CDE30B45D19DBB8D72 /* PilotProfileMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfileMigration.swift; sourceTree = "<group>"; };
 		01BE9C67266AFE8A0026C4ED /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 		01CDECC8266C0F10003051FD /* Gauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gauge.swift; sourceTree = "<group>"; };
 		01CDECCE266C1FEC003051FD /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -268,6 +277,9 @@
 				01BE9C67266AFE8A0026C4ED /* Pilot.swift */,
 				019A35A92E860AD500F14F8C /* QuestionnaireData.swift */,
 				01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */,
+				E37F1BEFB89B4E588B943EB5 /* PilotProfile.swift */,
+				38DC8CD8FE6C4104AF5E1A6D /* PilotProfileManager.swift */,
+				CD85D2CDE30B45D19DBB8D72 /* PilotProfileMigration.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -629,6 +641,9 @@
 				019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
 				01D25088266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
+				37AF8762D9724225A525D122 /* PilotProfile.swift in Sources */,
+				86E407A79F194DEF81473149 /* PilotProfileManager.swift in Sources */,
+				B3417E131421422EAE4CE589 /* PilotProfileMigration.swift in Sources */,
 			);
 		};
 		01BE9C42266AEBC00026C4ED /* Sources */ = {
@@ -654,6 +669,9 @@
 				019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
 				01D25089266B4EED009BECAA /* String.swift in Sources */,
 				01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
+				8F9555176420490FA687D697 /* PilotProfile.swift in Sources */,
+				F056974369174BA88651D85A /* PilotProfileManager.swift in Sources */,
+				0AC3B4DAB428412E87785362 /* PilotProfileMigration.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */

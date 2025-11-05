@@ -1,17 +1,17 @@
 import Defaults
 import Foundation
 
-enum Rating: String, Defaults.Serializable {
+enum Rating: String, Codable, Defaults.Serializable {
   case VFR
   case IFR
 }
 
-enum Hours: String, Defaults.Serializable {
+enum Hours: String, Codable, Defaults.Serializable {
   case under100
   case over100
 }
 
-enum Ceiling: Int, CaseIterable, Defaults.Serializable {
+enum Ceiling: Int, CaseIterable, Codable, Defaults.Serializable {
   case threeThousandFeet = 3000
   case oneThousandFeet = 1000
   case fiveHundredFeet = 500
@@ -22,7 +22,7 @@ enum Ceiling: Int, CaseIterable, Defaults.Serializable {
   }
 }
 
-enum Visibility: Float, CaseIterable, Defaults.Serializable {
+enum Visibility: Float, CaseIterable, Codable, Defaults.Serializable {
   case threeSM = 3.0
   case oneSM = 1.0
   case oneHalfSM = 0.5
