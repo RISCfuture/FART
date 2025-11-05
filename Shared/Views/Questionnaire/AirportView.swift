@@ -1,15 +1,12 @@
-import Defaults
 import SwiftUI
 
 struct AirportView: View {
   @Environment(Questionnaire.self)
   private var questionnaire
 
-  @Default(.shortRunway)
-  private var shortRunway
-
   private var shortRunwayStr: String {
-    runwayLengthFormatter.string(from: NSNumber(value: shortRunway))!
+    guard let shortRunway = questionnaire.profile?.shortRunway else { return "0" }
+    return runwayLengthFormatter.string(from: NSNumber(value: shortRunway))!
   }
 
   var body: some View {

@@ -1,4 +1,3 @@
-import Defaults
 import SwiftUI
 
 struct WeatherView: View {
@@ -7,14 +6,13 @@ struct WeatherView: View {
 
   @State private var flightType = Rating.VFR
 
-  @Default(.lowCeiling)
-  private var lowCeiling
-
-  @Default(.lowVisibility)
-  private var lowVisibility
-
   private var lowCeilingStr: String {
-    ceilingFormatter.string(from: NSNumber(value: lowCeiling.rawValue))!
+    guard let lowCeiling = questionnaire.profile?.lowCeiling else { return "0" }
+    return ceilingFormatter.string(from: NSNumber(value: lowCeiling.rawValue))!
+  }
+
+  private var lowVisibility: Visibility {
+    questionnaire.profile?.lowVisibility ?? .threeSM
   }
 
   var body: some View {

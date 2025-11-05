@@ -1,14 +1,22 @@
 import Sentry
+import SwiftData
 import SwiftUI
 
 @main
 struct Flight_Assessment_of_Risk_ToolApp: App {
+  // MARK: - SwiftData Container
+
+  let modelContainer: ModelContainer
+
+  // MARK: - Body
+
   #if os(macOS)
     var body: some Scene {
       WindowGroup("Flight Assessment of Risk Tool") {
         ContentView()
           .frame(minWidth: 600, minHeight: 600)
       }
+      .modelContainer(modelContainer)
     }
 
   #else
@@ -16,10 +24,34 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       WindowGroup("Flight Assessment of Risk Tool") {
         ContentView()
       }
+      .modelContainer(modelContainer)
     }
   #endif
 
   init() {
+    // MARK: - SwiftData Setup
+
+    let schema = Schema([
+      PilotProfile.self
+    ])
+
+    let modelConfiguration = ModelConfiguration(
+      schema: schema,
+      isStoredInMemoryOnly: false,
+      cloudKitDatabase: .automatic
+    )
+
+    do {
+      modelContainer = try ModelContainer(
+        for: schema,
+        configurations: [modelConfiguration]
+      )
+    } catch {
+      fatalError("Could not create ModelContainer: \(error)")
+    }
+
+    // MARK: - Sentry Setup
+
     SentrySDK.start { options in
       options.dsn =
         "https://ca34bdbb2d92e968036855adc9831fa1@o4510156629475328.ingest.us.sentry.io/4510160946200576"

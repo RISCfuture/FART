@@ -1,27 +1,44 @@
-import Defaults
+import SwiftData
 import SwiftUI
 
 struct PilotProfileView: View {
-  @Default(.rating)
-  private var rating
+  @Query(
+    filter: #Predicate<PilotProfile> { $0.isActive == true },
+    sort: \PilotProfile.updatedAt,
+    order: .reverse
+  )
+  private var profiles: [PilotProfile]
 
-  @Default(.hours)
-  private var hours
+  @Environment(\.modelContext) private var modelContext
+  @Environment(Questionnaire.self) private var questionnaire
 
-  @Default(.shortRunway)
-  private var shortRunway
+  private var activeProfile: PilotProfile? {
+    profiles.first
+  }
 
-  @Default(.strongWinds)
-  private var strongWinds
+  var body: some View {
+    if let profile = activeProfile {
+      ProfileForm(profile: profile, questionnaire: questionnaire)
+    } else {
+      Text("Loading profile...")
+        .onAppear {
+          createDefaultProfileIfNeeded()
+        }
+    }
+  }
 
-  @Default(.strongCrosswinds)
-  private var strongCrosswinds
+  private func createDefaultProfileIfNeeded() {
+    if profiles.isEmpty {
+      let newProfile = PilotProfile()
+      modelContext.insert(newProfile)
+      try? modelContext.save()
+    }
+  }
+}
 
-  @Default(.lowCeiling)
-  private var lowCeiling
-
-  @Default(.lowVisibility)
-  private var lowVisibility
+private struct ProfileForm: View {
+  @Bindable var profile: PilotProfile
+  var questionnaire: Questionnaire
 
   var body: some View {
     Form {
@@ -29,28 +46,34 @@ struct PilotProfileView: View {
         Section {
           HStack {
             Text("Rating")
-            Picker("", selection: $rating) {
+            Picker("", selection: $profile.rating) {
               Text("VFR").tag(Rating.VFR)
                 .accessibilityIdentifier("ratingVFR")
               Text("IFR").tag(Rating.IFR)
             }
             .accessibilityIdentifier("ratingPicker")
+            .onChange(of: profile.rating) {
+              questionnaire.setProfile(profile)
+            }
           }
           HStack {
             Text("Hours")
-            Picker("", selection: $hours) {
+            Picker("", selection: $profile.hours) {
               Text("< 100").tag(Hours.under100)
               Text("> 100").tag(Hours.over100)
                 .accessibilityIdentifier("hoursOver100")
             }
             .accessibilityIdentifier("hoursPicker")
+            .onChange(of: profile.hours) {
+              questionnaire.setProfile(profile)
+            }
           }
         }
 
         Section {
           HStack {
             Text("Short runway")
-            IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
+            IntegerField("", value: $profile.shortRunway, formatter: runwayLengthFormatter)
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("shortRunwayField")
             Text("ft. or less").foregroundColor(.secondary)
@@ -60,23 +83,23 @@ struct PilotProfileView: View {
         Section {
           HStack {
             Text("Strong winds")
-            IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
+            IntegerField("", value: $profile.strongWinds, formatter: windSpeedFormatter)
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("strongWindsField")
             Text("kts. or more").foregroundColor(.secondary)
           }
           HStack {
             Text("Strong crosswinds")
-            IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
+            IntegerField("", value: $profile.strongCrosswinds, formatter: windSpeedFormatter)
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("strongCrosswindsField")
             Text("kts. or more").foregroundColor(.secondary)
           }
 
-          if rating == .IFR {
+          if profile.rating == .IFR {
             HStack {
               Text("Low ceiling")
-              Picker("", selection: $lowCeiling) {
+              Picker("", selection: $profile.lowCeiling) {
                 ForEach(Ceiling.allCases, id: \.rawValue) { value in
                   Text("\(value.stringValue)′").tag(value)
                 }
@@ -86,7 +109,7 @@ struct PilotProfileView: View {
 
             HStack {
               Text("Low visibility")
-              Picker("", selection: $lowVisibility) {
+              Picker("", selection: $profile.lowVisibility) {
                 ForEach(Visibility.allCases, id: \.rawValue) { value in
                   Text("\(value.stringValue) SM").tag(value)
                 }
