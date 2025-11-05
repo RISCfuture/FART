@@ -27,17 +27,19 @@ struct WeatherView: View {
         Text("IFR").tag(Rating.IFR)
       }
       .accessibilityIdentifier("flightTypePicker").onChange(of: flightType) {
-        switch flightType {
-          case .VFR:
-            questionnaire.ifrLowCeiling = false
-            questionnaire.ifrLowVisibility = false
-            questionnaire.ifrApproachType = .notApplicable
-          case .IFR:
-            questionnaire.vfrFlightPlan = false
-            questionnaire.vfrFlightFollowing = false
-            questionnaire.vfrCeilingUnder3000 = false
-            questionnaire.vfrVisibilityUnder5 = false
-            questionnaire.ifrApproachType = .none
+        questionnaire.batchUpdates {
+          switch flightType {
+            case .VFR:
+              questionnaire.ifrLowCeiling = false
+              questionnaire.ifrLowVisibility = false
+              questionnaire.ifrApproachType = .notApplicable
+            case .IFR:
+              questionnaire.vfrFlightPlan = false
+              questionnaire.vfrFlightFollowing = false
+              questionnaire.vfrCeilingUnder3000 = false
+              questionnaire.vfrVisibilityUnder5 = false
+              questionnaire.ifrApproachType = .none
+          }
         }
       }
 

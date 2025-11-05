@@ -19,77 +19,79 @@ enum ApproachType: String {
 @Observable
 class Questionnaire {
   // MARK: Inputs
+  private var updatesPaused = false
+
   var lessThan50InType = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var lessThan15InLast90 = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var afterWork = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var lessThan8HrSleep = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var dualInLast90 = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var wingsInLast6Mo = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var IFRCurrent = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
 
   var night = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var strongWinds = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var strongCrosswinds = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var mountainous = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
 
   var nontowered = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var shortRunway = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var wetOrSoftFieldRunway = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var runwayObstacles = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
 
   var vfrCeilingUnder3000 = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var vfrVisibilityUnder5 = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var noDestWx = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var vfrFlightPlan = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var vfrFlightFollowing = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var ifrLowCeiling = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var ifrLowVisibility = false {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
   var ifrApproachType = ApproachType.notApplicable {
-    didSet { update() }
+    didSet { scheduleUpdate() }
   }
 
   // MARK: Outputs
@@ -102,6 +104,18 @@ class Questionnaire {
         update()
       }
     }
+  }
+
+  private func scheduleUpdate() {
+    guard !updatesPaused else { return }
+    update()
+  }
+
+  func batchUpdates(_ block: () -> Void) {
+    updatesPaused = true
+    block()
+    updatesPaused = false
+    update()
   }
 
   func update() {
