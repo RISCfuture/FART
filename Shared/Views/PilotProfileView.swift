@@ -25,74 +25,72 @@ struct PilotProfileView: View {
 
   var body: some View {
     Form {
-      List {
-        Section {
-          HStack {
-            Text("Rating")
-            Picker("", selection: $rating) {
-              Text("VFR").tag(Rating.VFR)
-                .accessibilityIdentifier("ratingVFR")
-              Text("IFR").tag(Rating.IFR)
-            }
-            .accessibilityIdentifier("ratingPicker")
+      Section {
+        HStack {
+          Text("Rating")
+          Picker("", selection: $rating) {
+            Text("VFR").tag(Rating.VFR)
+              .accessibilityIdentifier("ratingVFR")
+            Text("IFR").tag(Rating.IFR)
           }
-          HStack {
-            Text("Hours")
-            Picker("", selection: $hours) {
-              Text("< 100").tag(Hours.under100)
-              Text("> 100").tag(Hours.over100)
-                .accessibilityIdentifier("hoursOver100")
-            }
-            .accessibilityIdentifier("hoursPicker")
+          .accessibilityIdentifier("ratingPicker")
+        }
+        HStack {
+          Text("Hours")
+          Picker("", selection: $hours) {
+            Text("< 100").tag(Hours.under100)
+            Text("> 100").tag(Hours.over100)
+              .accessibilityIdentifier("hoursOver100")
           }
+          .accessibilityIdentifier("hoursPicker")
+        }
+      }
+
+      Section {
+        HStack {
+          Text("Short runway")
+          IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
+            .multilineTextAlignment(.trailing)
+            .accessibilityIdentifier("shortRunwayField")
+          Text("ft. or less").foregroundColor(.secondary)
+        }
+      }
+
+      Section {
+        HStack {
+          Text("Strong winds")
+          IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
+            .multilineTextAlignment(.trailing)
+            .accessibilityIdentifier("strongWindsField")
+          Text("kts. or more").foregroundColor(.secondary)
+        }
+        HStack {
+          Text("Strong crosswinds")
+          IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
+            .multilineTextAlignment(.trailing)
+            .accessibilityIdentifier("strongCrosswindsField")
+          Text("kts. or more").foregroundColor(.secondary)
         }
 
-        Section {
+        if rating == .IFR {
           HStack {
-            Text("Short runway")
-            IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
-              .multilineTextAlignment(.trailing)
-              .accessibilityIdentifier("shortRunwayField")
-            Text("ft. or less").foregroundColor(.secondary)
-          }
-        }
-
-        Section {
-          HStack {
-            Text("Strong winds")
-            IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
-              .multilineTextAlignment(.trailing)
-              .accessibilityIdentifier("strongWindsField")
-            Text("kts. or more").foregroundColor(.secondary)
-          }
-          HStack {
-            Text("Strong crosswinds")
-            IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
-              .multilineTextAlignment(.trailing)
-              .accessibilityIdentifier("strongCrosswindsField")
-            Text("kts. or more").foregroundColor(.secondary)
-          }
-
-          if rating == .IFR {
-            HStack {
-              Text("Low ceiling")
-              Picker("", selection: $lowCeiling) {
-                ForEach(Ceiling.allCases, id: \.rawValue) { value in
-                  Text("\(value.stringValue)′").tag(value)
-                }
+            Text("Low ceiling")
+            Picker("", selection: $lowCeiling) {
+              ForEach(Ceiling.allCases, id: \.rawValue) { value in
+                Text("\(value.stringValue)′").tag(value)
               }
-              .accessibilityIdentifier("lowCeilingPicker")
             }
+            .accessibilityIdentifier("lowCeilingPicker")
+          }
 
-            HStack {
-              Text("Low visibility")
-              Picker("", selection: $lowVisibility) {
-                ForEach(Visibility.allCases, id: \.rawValue) { value in
-                  Text("\(value.stringValue) SM").tag(value)
-                }
+          HStack {
+            Text("Low visibility")
+            Picker("", selection: $lowVisibility) {
+              ForEach(Visibility.allCases, id: \.rawValue) { value in
+                Text("\(value.stringValue) SM").tag(value)
               }
-              .accessibilityIdentifier("lowVisibilityPicker")
             }
+            .accessibilityIdentifier("lowVisibilityPicker")
           }
         }
       }
@@ -101,9 +99,5 @@ struct PilotProfileView: View {
 }
 
 #Preview {
-  Form {
-    List {
-      PilotProfileView()
-    }
-  }
+  PilotProfileView()
 }

@@ -7,7 +7,7 @@ struct PilotView: View {
   var body: some View {
     @Bindable var questionnaire = questionnaire
 
-    Section(header: Text("Pilot")) {
+    Section("Pilot") {
       Toggle(
         "Fewer than 50 hours in aircraft or avionics type",
         isOn: $questionnaire.lessThan50InType
@@ -31,8 +31,6 @@ struct PilotView: View {
 
 #Preview {
   Form {
-    List {
-      PilotView().environment(Questionnaire())
-    }
+    PilotView().environment(Questionnaire())
   }
 }

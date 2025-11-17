@@ -21,7 +21,7 @@ struct ConditionsView: View {
   var body: some View {
     @Bindable var questionnaire = questionnaire
 
-    Section(header: Text("Flight Conditions")) {
+    Section("Flight Conditions") {
       Toggle("Twilight or night", isOn: $questionnaire.night)
         .accessibilityIdentifier("nightToggle")
       Toggle("Surface wind greater than \(strongWindsStr) knots", isOn: $questionnaire.strongWinds)
@@ -39,8 +39,6 @@ struct ConditionsView: View {
 
 #Preview {
   Form {
-    List {
-      ConditionsView().environment(Questionnaire())
-    }
+    ConditionsView().environment(Questionnaire())
   }
 }

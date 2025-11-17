@@ -20,7 +20,7 @@ struct WeatherView: View {
   var body: some View {
     @Bindable var questionnaire = questionnaire
 
-    Section(header: Text("Weather")) {
+    Section("Weather") {
       Picker("Flight Type", selection: $flightType) {
         Text("VFR").tag(Rating.VFR)
           .accessibilityIdentifier("flightTypeVFR")
@@ -76,8 +76,6 @@ struct WeatherView: View {
 
 #Preview {
   Form {
-    List {
-      WeatherView().environment(Questionnaire())
-    }
+    WeatherView().environment(Questionnaire())
   }
 }

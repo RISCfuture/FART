@@ -15,7 +15,7 @@ struct AirportView: View {
   var body: some View {
     @Bindable var questionnaire = questionnaire
 
-    Section(header: Text("Departure and Destination Airport")) {
+    Section("Departure and Destination Airport") {
       Toggle("Nontowered airport (or tower closed)", isOn: $questionnaire.nontowered)
         .accessibilityIdentifier("nontoweredToggle")
       Toggle("Runway length less than \(shortRunwayStr)′", isOn: $questionnaire.shortRunway)
@@ -30,8 +30,6 @@ struct AirportView: View {
 
 #Preview {
   Form {
-    List {
-      AirportView().environment(Questionnaire())
-    }
+    AirportView().environment(Questionnaire())
   }
 }

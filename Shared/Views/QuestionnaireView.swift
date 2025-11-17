@@ -6,12 +6,10 @@ struct QuestionnaireView: View {
 
   var body: some View {
     Form {
-      List {
-        PilotView()
-        ConditionsView()
-        AirportView()
-        WeatherView()
-      }
+      PilotView()
+      ConditionsView()
+      AirportView()
+      WeatherView()
     }
   }
 }
