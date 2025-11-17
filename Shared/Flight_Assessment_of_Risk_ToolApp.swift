@@ -6,9 +6,14 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
   #if os(macOS)
     var body: some Scene {
       WindowGroup("Flight Assessment of Risk Tool") {
-        ContentView()
-          .frame(minWidth: 600, minHeight: 600)
+        NavigationStack {
+          ContentView()
+        }
+        .frame(minWidth: 700, minHeight: 500)
+        .frame(idealWidth: 900, idealHeight: 650)
       }
+      .windowStyle(.titleBar)
+      .windowToolbarStyle(.unified)
     }
 
   #else
