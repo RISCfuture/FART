@@ -1,6 +1,10 @@
 import Sentry
 import SwiftUI
 
+#if os(iOS)
+  import UIKit
+#endif
+
 @main
 struct Flight_Assessment_of_Risk_ToolApp: App {
   #if os(macOS)
@@ -25,6 +29,21 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
   #endif
 
   init() {
+    // Skip Sentry initialization during UI testing or unit testing
+    let isUITesting = ProcessInfo.processInfo.arguments.contains("UI-TESTING")
+    let isUnitTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+
+    if isUITesting {
+      #if os(iOS)
+        UIView.setAnimationsEnabled(false)
+      #endif
+      return
+    }
+
+    if isUnitTesting {
+      return
+    }
+
     SentrySDK.start { options in
       options.dsn =
         "https://ca34bdbb2d92e968036855adc9831fa1@o4510156629475328.ingest.us.sentry.io/4510160946200576"

@@ -2,8 +2,17 @@ import XCTest
 
 extension XCUIElement {
   var isVisible: Bool {
-    guard self.exists && !self.frame.isEmpty else { return false }
-    return XCUIApplication().windows.element(boundBy: 0).frame.contains(self.frame)
+    guard exists else { return false }
+    // On smaller screens (iPhone SE), isHittable can return false even when
+    // the element is visible but near screen edges. Check frame instead.
+    let window = XCUIApplication().windows.firstMatch
+    guard window.exists else { return isHittable }
+    let windowFrame = window.frame
+    let elementFrame = frame
+    // Element is visible if its center is within the window bounds (with margin for tab bar)
+    let centerY = elementFrame.midY
+    let tabBarMargin: CGFloat = 100  // Account for tab bar height
+    return centerY > 0 && centerY < (windowFrame.height - tabBarMargin)
   }
 
   func toggleOn() {
@@ -17,36 +26,32 @@ extension XCUIElement {
   }
 
   func makeVisible(element: XCUIElement) -> XCUIElement? {
+    // If already visible, return immediately
+    if element.isVisible { return element }
+
+    // Element must at least exist to scroll to it
+    guard element.exists else { return nil }
+
+    // Try scrolling to make it visible
     if self.elementType == .scrollView || self.elementType == .collectionView
       || self.elementType == .table
     {
-      let visible = self.scroll(to: element) || self.swipe(to: element)
-      return visible ? element : nil
+      if scrollToElement(element) { return element }
     }
-    return self.swipe(to: element) ? element : nil
+    return nil
   }
 
-  // Use the collection view's scrollToItem method via coordinate-based scrolling
-  private func scroll(to element: XCUIElement) -> Bool {
-    var attempts = 0
-
-    while !element.isVisible && attempts < 10 {
-      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
-      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-      startCoordinate.press(forDuration: 0.01, thenDragTo: endCoordinate)
-      attempts += 1
-    }
-
-    return element.isVisible
-  }
-
-  // Fallback to swipe-based scrolling with limits
-  private func swipe(to element: XCUIElement) -> Bool {
-    var attempts = 0
-
-    while !element.isVisible && attempts < 10 {
+  private func scrollToElement(_ element: XCUIElement) -> Bool {
+    // Try scrolling down first (swipe up) - increased for smaller screens like iPhone SE
+    for _ in 0..<10 {
+      if element.isVisible { return true }
       swipeUp()
-      attempts += 1
+    }
+
+    // If not found, scroll back up past starting point (swipe down)
+    for _ in 0..<20 {
+      if element.isVisible { return true }
+      swipeDown()
     }
 
     return element.isVisible

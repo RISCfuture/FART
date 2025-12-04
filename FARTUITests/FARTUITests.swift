@@ -194,7 +194,8 @@ final class FARTUITests: XCTestCase {
   }
 
   private func setupInitialRatingAndHours(app: XCUIApplication) {
-    XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
+    // Increased timeout for Xcode Cloud cold starts
+    XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 30))
     app.buttons["ratingPicker"].tap()
     app.buttons["ratingVFR"].tap()
     app.buttons["hoursPicker"].tap()
@@ -231,29 +232,30 @@ final class FARTUITests: XCTestCase {
   }
 
   private func set(app: XCUIApplication, name: String, value: Bool) {
-    let control = app.collectionViews.firstMatch.makeVisible(element: app.switches[name])
-    XCTAssertNotNil(control)
+    // Try finding as switch first, then as any descendant
+    var element = app.switches[name]
+    if !element.waitForExistence(timeout: 3) {
+      element = app.descendants(matching: .any)[name]
+      XCTAssert(element.waitForExistence(timeout: 2), "Element not found: \(name)")
+    }
+
+    let control = app.collectionViews.firstMatch.makeVisible(element: element)
+    XCTAssertNotNil(control, "Could not scroll to element: \(name)")
     value ? control!.toggleOn() : control!.toggleOff()
   }
 
   private func scrollToTop(app: XCUIApplication) {
-    // First try tapping status bar
+    // Tap status bar to scroll to top (standard iOS behavior)
     let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")
     for bar in springboardApp.statusBars.allElementsBoundByIndex { bar.tap() }
-
-    // Give it time to scroll and wait for app to idle
     Thread.sleep(forTimeInterval: 0.5)
 
-    // Ensure we're at the top by scrolling down from top of collection view
+    // Swipe down repeatedly to ensure we're at the very top
     let collectionView = app.collectionViews.firstMatch
     if collectionView.exists {
-      let topCoordinate = collectionView.coordinate(
-        withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)
-      )
-      let bottomCoordinate = collectionView.coordinate(
-        withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)
-      )
-      bottomCoordinate.press(forDuration: 0.1, thenDragTo: topCoordinate)
+      for _ in 0..<3 {
+        collectionView.swipeDown()
+      }
       Thread.sleep(forTimeInterval: 0.3)
     }
   }
