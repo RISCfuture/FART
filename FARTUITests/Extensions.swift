@@ -3,7 +3,9 @@ import XCTest
 extension XCUIElement {
   var isVisible: Bool {
     guard self.exists && !self.frame.isEmpty else { return false }
-    return XCUIApplication().windows.element(boundBy: 0).frame.contains(self.frame)
+    let app = XCUIApplication()
+    guard let firstWindow = app.windows.allElementsBoundByIndex.first else { return false }
+    return firstWindow.frame.contains(self.frame)
   }
 
   func toggleOn() {
@@ -31,8 +33,8 @@ extension XCUIElement {
     var attempts = 0
 
     while !element.isVisible && attempts < 10 {
-      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
-      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
+      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2))
       startCoordinate.press(forDuration: 0.01, thenDragTo: endCoordinate)
       attempts += 1
     }
@@ -50,5 +52,12 @@ extension XCUIElement {
     }
 
     return element.isVisible
+  }
+}
+
+extension XCUIApplication {
+  func scrollToTop() {
+    let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+    for bar in springboardApp.statusBars.allElementsBoundByIndex { bar.tap() }
   }
 }
