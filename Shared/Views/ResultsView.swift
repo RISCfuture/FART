@@ -64,6 +64,7 @@ struct ResultsView: View {
       Text(riskText.uppercased())
         .bold()
         .font(.title)
+        .contentTransition(.interpolate)
         .accessibilityIdentifier("riskLevelText")
     }
   }
@@ -76,9 +77,11 @@ struct ResultsView: View {
       riskTitle
         .foregroundColor(riskColor)
       Text(riskDescription).font(.caption)
+        .contentTransition(.opacity)
         .accessibilityIdentifier("riskDescriptionText")
       Spacer()
     }.padding()
+      .animation(.default, value: questionnaire.risk)
   }
 }
 
