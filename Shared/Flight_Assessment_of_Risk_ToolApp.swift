@@ -34,6 +34,9 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     let isUnitTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
     if isUITesting {
+      if let bundleID = Bundle.main.bundleIdentifier {
+        UserDefaults.standard.removePersistentDomain(forName: bundleID)
+      }
       #if os(iOS)
         UIView.setAnimationsEnabled(false)
       #endif

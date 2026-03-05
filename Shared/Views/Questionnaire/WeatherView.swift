@@ -25,6 +25,7 @@ struct WeatherView: View {
         Text("VFR").tag(Rating.VFR)
           .accessibilityIdentifier("flightTypeVFR")
         Text("IFR").tag(Rating.IFR)
+          .accessibilityIdentifier("flightTypeIFR")
       }
       .accessibilityIdentifier("flightTypePicker").onChange(of: flightType) {
         questionnaire.batchUpdates {
@@ -62,9 +63,13 @@ struct WeatherView: View {
         .accessibilityIdentifier("ifrLowVisibilityToggle")
         Picker("Best available approach", selection: $questionnaire.ifrApproachType) {
           Text("Precision").tag(ApproachType.precision)
+            .accessibilityIdentifier("approachPrecision")
           Text("Non-precision").tag(ApproachType.nonprecision)
+            .accessibilityIdentifier("approachNonprecision")
           Text("Circling only").tag(ApproachType.circling)
+            .accessibilityIdentifier("approachCircling")
           Text("No IFR approaches").tag(ApproachType.none)
+            .accessibilityIdentifier("approachNone")
         }
         .accessibilityIdentifier("ifrApproachTypePicker")
       }

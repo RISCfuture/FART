@@ -4,12 +4,12 @@
 # Using only devices that produce App Store Connect-compatible dimensions
 devices([
     # iPhone categories - Required sizes for App Store Connect
-    "iPhone 15 Pro Max",              # 6.9" display - 1290x2796 (Required)
-    "iPhone 14 Plus",                 # 6.5" display - 1284x2778 (Optional but recommended)
+    "iPhone 17 Pro Max",              # 6.7" display (Required)
+    "iPhone 16e",                     # 6.5" display (Optional but recommended)
 
     # iPad categories - Required sizes for App Store Connect
-    "iPad Pro (12.9-inch) (6th generation)", # 12.9" display - 2048x2732 (Required)
-    "iPad Pro 13-inch (M4)"                  # 13" display - 2064x2752 (New requirement)
+    "iPad Pro 13-inch (M5)",          # 12.9" display (Required)
+    "iPad Pro 11-inch (M5)"           # 11" display (covers second tier iPad)
 ])
 
 languages %w[

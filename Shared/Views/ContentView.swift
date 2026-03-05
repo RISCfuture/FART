@@ -35,6 +35,9 @@ struct ContentView: View {
   #endif
 
   @State private var questionnaire = Questionnaire()
+  #if !os(macOS)
+    @State private var showingAbout = false
+  #endif
 
   var body: some View {
     #if os(macOS)
@@ -153,8 +156,31 @@ struct ContentView: View {
             .accessibilityIdentifier("questionsTab")
         }
       } detail: {
-        ResultsView()
-          .environment(questionnaire)
+        NavigationStack {
+          ResultsView()
+            .environment(questionnaire)
+            .toolbar {
+              ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                  showingAbout = true
+                } label: {
+                  Label("About", systemImage: "info.circle")
+                }
+                .accessibilityIdentifier("aboutButton")
+              }
+            }
+        }
+        .sheet(isPresented: $showingAbout) {
+          NavigationView {
+            AboutView()
+              .navigationTitle("About")
+              .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                  Button("Done") { showingAbout = false }
+                }
+              }
+          }
+        }
       }
     }
   #endif

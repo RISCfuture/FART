@@ -16,16 +16,21 @@ struct AboutView: View {
           "Flight Assessment of Risk Tool is developed using the FAA Safety Team’s Flight Risk Assessment Tool."
         )
         .multilineTextAlignment(.leading)
+        .accessibilityIdentifier("aboutDescriptionText")
         Button("More information about FAAST FRAT") {
           openURL(moreInfoURL)
         }
+        .accessibilityIdentifier("moreInfoButton")
 
         Text("Copyright ©2021 Tim Morgan. Source code is available under the MIT License.")
+          .accessibilityIdentifier("aboutCopyrightText")
         Button("View source code") {
           openURL(sourceURL)
         }
+        .accessibilityIdentifier("viewSourceCodeButton")
 
         Text("Icons in this application are from The Noun Project:")
+          .accessibilityIdentifier("aboutIconCreditsText")
           .multilineTextAlignment(.leading)
         VStack(alignment: .leading, spacing: 0) {
           Text("• Captain by Vectors Market")

@@ -32,6 +32,7 @@ struct PilotProfileView: View {
             Text("VFR").tag(Rating.VFR)
               .accessibilityIdentifier("ratingVFR")
             Text("IFR").tag(Rating.IFR)
+              .accessibilityIdentifier("ratingIFR")
           }
           .accessibilityIdentifier("ratingPicker")
         }
@@ -39,6 +40,7 @@ struct PilotProfileView: View {
           Text("Hours")
           Picker("", selection: $hours) {
             Text("< 100").tag(Hours.under100)
+              .accessibilityIdentifier("hoursUnder100")
             Text("> 100").tag(Hours.over100)
               .accessibilityIdentifier("hoursOver100")
           }

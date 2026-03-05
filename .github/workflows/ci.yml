@@ -13,31 +13,27 @@ concurrency:
 jobs:
   unit:
     name: Unit Tests
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - macos: macos-26
-            ios: "26.2"
-            device: "iPhone 17 Pro"
-    runs-on: ${{ matrix.macos }}
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
       - name: Run unit tests
-        run: xcodebuild test -retry-tests-on-failure -test-iterations 3 -scheme "FART (iOS)" -testPlan "Unit Tests" -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.ios }}" | xcpretty && exit ${PIPESTATUS[0]}
+        run: xcodebuild test -retry-tests-on-failure -test-iterations 3 -scheme "FART (iOS)" -testPlan "Unit Tests" -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" | xcpretty && exit ${PIPESTATUS[0]}
 
   ui:
-    name: UI Tests
+    name: UI Tests (${{ matrix.device }}, iOS ${{ matrix.ios }})
     strategy:
       fail-fast: false
       matrix:
         include:
-          - macos: macos-26
-            ios: "26.2"
+          # iPhone
+          - ios: "26.2"
             device: "iPhone 17 Pro"
-    runs-on: ${{ matrix.macos }}
+          # iPad
+          - ios: "26.2"
+            device: "iPad Pro 13-inch (M5)"
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
       - name: Enable macros
