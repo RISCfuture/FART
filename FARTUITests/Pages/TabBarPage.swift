@@ -1,6 +1,7 @@
 import XCTest
 
 class TabBarPage: BasePage {
+  // swiftlint:disable:next type_contents_order
   enum Tab: String {
     case pilot = "Pilot"
     case questions = "Questions"

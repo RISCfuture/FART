@@ -1,5 +1,7 @@
 import XCTest
 
+// swiftlint:disable final_test_case test_case_accessibility
+@MainActor
 class FARTUITestCase: XCTestCase {
   var app: XCUIApplication!
   var tabBar: TabBarPage!
@@ -15,3 +17,4 @@ class FARTUITestCase: XCTestCase {
     tabBar = TabBarPage(app: app)
   }
 }
+// swiftlint:enable final_test_case test_case_accessibility

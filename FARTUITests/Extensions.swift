@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 extension XCUIElement {
   var isVisible: Bool {
     guard self.exists && !self.frame.isEmpty else { return false }
@@ -55,6 +56,7 @@ extension XCUIElement {
   }
 }
 
+@MainActor
 extension XCUIApplication {
   func scrollToTop() {
     let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")

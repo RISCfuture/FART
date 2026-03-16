@@ -1,6 +1,7 @@
 import XCTest
 
 // swiftlint:disable prefer_nimble
+@MainActor
 final class Generate_Screenshots: XCTestCase {
 
   override func setUpWithError() throws {

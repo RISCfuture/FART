@@ -35,6 +35,7 @@ struct ContentView: View {
   #endif
 
   @State private var questionnaire = Questionnaire()
+
   #if !os(macOS)
     @State private var showingAbout = false
   #endif

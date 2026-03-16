@@ -1,6 +1,5 @@
 import XCTest
 
-// swiftlint:disable prefer_nimble
 final class IntegrationTests: FARTUITestCase {
 
   // MARK: - VFR >100h (low ≤20, moderate 21-25, high >25)
@@ -252,4 +251,3 @@ final class IntegrationTests: FARTUITestCase {
       .assertResults(score: "34", riskLevel: "HIGH RISK")
   }
 }
-// swiftlint:enable prefer_nimble

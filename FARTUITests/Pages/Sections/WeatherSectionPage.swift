@@ -65,27 +65,37 @@ class WeatherSectionPage: BasePage {
 
   @discardableResult
   func selectApproachPrecision() -> Self {
-    selectPickerOption(picker: "ifrApproachTypePicker", option: "approachPrecision", optionLabel: "Precision")
+    selectPickerOption(
+      picker: "ifrApproachTypePicker",
+      option: "approachPrecision",
+      optionLabel: "Precision"
+    )
   }
 
   @discardableResult
   func selectApproachNonprecision() -> Self {
     selectPickerOption(
-      picker: "ifrApproachTypePicker", option: "approachNonprecision", optionLabel: "Non-precision"
+      picker: "ifrApproachTypePicker",
+      option: "approachNonprecision",
+      optionLabel: "Non-precision"
     )
   }
 
   @discardableResult
   func selectApproachCircling() -> Self {
     selectPickerOption(
-      picker: "ifrApproachTypePicker", option: "approachCircling", optionLabel: "Circling only"
+      picker: "ifrApproachTypePicker",
+      option: "approachCircling",
+      optionLabel: "Circling only"
     )
   }
 
   @discardableResult
   func selectApproachNone() -> Self {
     selectPickerOption(
-      picker: "ifrApproachTypePicker", option: "approachNone", optionLabel: "No IFR approaches"
+      picker: "ifrApproachTypePicker",
+      option: "approachNone",
+      optionLabel: "No IFR approaches"
     )
   }
 
