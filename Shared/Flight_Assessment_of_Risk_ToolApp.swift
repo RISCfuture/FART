@@ -70,8 +70,8 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       // options.attachScreenshot = true // This adds a screenshot to the error events
       // options.attachViewHierarchy = true // This adds the view hierarchy to the error events
 
-      // Enable experimental logging features
-      options.experimental.enableLogs = true
+      // Enable logging features
+      options.enableLogs = true
 
       // Discard all events when running on simulator
       options.beforeSend = { event in

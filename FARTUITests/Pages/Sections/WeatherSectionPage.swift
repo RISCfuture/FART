@@ -6,7 +6,7 @@ class WeatherSectionPage: BasePage {
 
   @discardableResult
   func selectVFR() -> Self {
-    selectPickerOption(picker: "flightTypePicker", option: "flightTypeVFR")
+    selectPickerOption(picker: "flightTypePicker", option: "flightTypeVFR", optionLabel: "VFR")
     // Wait for VFR-specific fields to render after flight type switch
     _ = app.switches["vfrCeilingUnder3000Toggle"].waitForExistence(timeout: 5)
     return self
@@ -14,7 +14,7 @@ class WeatherSectionPage: BasePage {
 
   @discardableResult
   func selectIFR() -> Self {
-    selectPickerOption(picker: "flightTypePicker", option: "flightTypeIFR")
+    selectPickerOption(picker: "flightTypePicker", option: "flightTypeIFR", optionLabel: "IFR")
     // Wait for IFR-specific fields to render after flight type switch
     _ = app.switches["ifrLowCeilingToggle"].waitForExistence(timeout: 5)
     return self

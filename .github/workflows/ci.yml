@@ -12,41 +12,137 @@ concurrency:
 
 jobs:
   unit:
-    name: Unit Tests
-    runs-on: macos-26
-    steps:
-      - uses: actions/checkout@v4
-      - name: Enable macros
-        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
-      - name: Run unit tests
-        run: xcodebuild test -retry-tests-on-failure -test-iterations 3 -scheme "FART (iOS)" -testPlan "Unit Tests" -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" | xcpretty && exit ${PIPESTATUS[0]}
-
-  ui:
-    name: UI Tests (${{ matrix.device }}, iOS ${{ matrix.ios }})
+    name: Unit Tests (iOS ${{ matrix.ios-label }})
     strategy:
       fail-fast: false
       matrix:
         include:
-          # iPhone
-          - ios: "26.2"
+          - ios-label: latest
+            runner: macos-26
             device: "iPhone 17 Pro"
-          # iPad
-          - ios: "26.2"
-            device: "iPad Pro 13-inch (M5)"
-    runs-on: macos-26
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro
+            os-version: ""
+            xcode-version: latest-stable
+          - ios-label: "18.5"
+            runner: macos-latest
+            device: "iPhone 15 Pro"
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
+            os-version: "18.5"
+            xcode-version: latest-stable
+    runs-on: ${{ matrix.runner }}
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode-version }}
+      - name: Ensure iOS simulator runtime
+        run: |
+          if [ -n "${{ matrix.os-version }}" ]; then
+            if ! xcrun simctl list runtimes | grep -q "iOS ${{ matrix.os-version }}"; then
+              echo "iOS ${{ matrix.os-version }} runtime not found, downloading..."
+              xcodebuild -downloadPlatform iOS -buildVersion "${{ matrix.os-version }}"
+            fi
+          else
+            SDK_VERSION=$(xcrun --sdk iphonesimulator --show-sdk-version)
+            if ! xcrun simctl list runtimes | grep -q "iOS ${SDK_VERSION}"; then
+              echo "iOS ${SDK_VERSION} runtime not found, downloading..."
+              xcodebuild -downloadPlatform iOS
+            fi
+          fi
+      - name: Create simulator
+        id: sim
+        run: |
+          while xcrun simctl delete "${{ matrix.device }}" 2>/dev/null; do :; done
+          if [ -n "${{ matrix.os-version }}" ]; then
+            RUNTIME_ID="com.apple.CoreSimulator.SimRuntime.iOS-$(echo "${{ matrix.os-version }}" | tr '.' '-')"
+            UDID=$(xcrun simctl create "${{ matrix.device }}" "${{ matrix.device-type }}" "$RUNTIME_ID")
+          else
+            UDID=$(xcrun simctl create "${{ matrix.device }}" "${{ matrix.device-type }}")
+          fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          echo "Created simulator ${{ matrix.device }} ($UDID)"
+      - uses: actions/checkout@v4
+      - name: Enable macros
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Run unit tests
+        run: |
+          xcodebuild test -retry-tests-on-failure -test-iterations 3 \
+            -scheme "FART (iOS)" -testPlan "Unit Tests" \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+            | xcpretty && exit ${PIPESTATUS[0]}
+
+  ui:
+    name: UI Tests (${{ matrix.device }}, iOS ${{ matrix.ios-label }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ios-label: latest
+            runner: macos-26
+            device: "iPhone 17 Pro"
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro
+            os-version: ""
+            xcode-version: latest-stable
+          - ios-label: latest
+            runner: macos-26
+            device: "iPad Pro 13-inch (M5)"
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB
+            os-version: ""
+            xcode-version: latest-stable
+          - ios-label: "18.5"
+            runner: macos-latest
+            device: "iPhone 15 Pro"
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
+            os-version: "18.5"
+            xcode-version: latest-stable
+          - ios-label: "18.5"
+            runner: macos-latest
+            device: "iPad Pro 12.9-inch (6th generation)"
+            device-type: com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB
+            os-version: "18.5"
+            xcode-version: latest-stable
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode-version }}
+      - name: Ensure iOS simulator runtime
+        run: |
+          if [ -n "${{ matrix.os-version }}" ]; then
+            if ! xcrun simctl list runtimes | grep -q "iOS ${{ matrix.os-version }}"; then
+              echo "iOS ${{ matrix.os-version }} runtime not found, downloading..."
+              xcodebuild -downloadPlatform iOS -buildVersion "${{ matrix.os-version }}"
+            fi
+          else
+            SDK_VERSION=$(xcrun --sdk iphonesimulator --show-sdk-version)
+            if ! xcrun simctl list runtimes | grep -q "iOS ${SDK_VERSION}"; then
+              echo "iOS ${SDK_VERSION} runtime not found, downloading..."
+              xcodebuild -downloadPlatform iOS
+            fi
+          fi
+      - name: Create simulator
+        id: sim
+        run: |
+          while xcrun simctl delete "${{ matrix.device }}" 2>/dev/null; do :; done
+          if [ -n "${{ matrix.os-version }}" ]; then
+            RUNTIME_ID="com.apple.CoreSimulator.SimRuntime.iOS-$(echo "${{ matrix.os-version }}" | tr '.' '-')"
+            UDID=$(xcrun simctl create "${{ matrix.device }}" "${{ matrix.device-type }}" "$RUNTIME_ID")
+          else
+            UDID=$(xcrun simctl create "${{ matrix.device }}" "${{ matrix.device-type }}")
+          fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          echo "Created simulator ${{ matrix.device }} ($UDID)"
       - uses: actions/checkout@v4
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
       - name: Configure simulator
         run: |
-          # Boot simulator
-          xcrun simctl boot "${{ matrix.device }}" || true
-          # Wait for simulator to boot
-          xcrun simctl bootstatus "${{ matrix.device }}" || true
-          # Set locale to US for consistent 12-hour time format
-          xcrun simctl spawn booted defaults write -g AppleLocale en_US
-          # Override status bar
-          xcrun simctl status_bar "${{ matrix.device }}" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 --batteryState charged --batteryLevel 100 || true
+          xcrun simctl boot "${{ steps.sim.outputs.udid }}" || true
+          xcrun simctl bootstatus "${{ steps.sim.outputs.udid }}" || true
+          xcrun simctl spawn "${{ steps.sim.outputs.udid }}" defaults write -g AppleLocale en_US
+          xcrun simctl status_bar "${{ steps.sim.outputs.udid }}" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 --batteryState charged --batteryLevel 100 || true
       - name: Run UI tests
-        run: xcodebuild test -retry-tests-on-failure -test-iterations 3 -scheme "FART (iOS)" -testPlan "UI Tests" -destination "platform=iOS Simulator,name=${{ matrix.device }},OS=${{ matrix.ios }}" | xcpretty && exit ${PIPESTATUS[0]}
+        run: |
+          xcodebuild test -retry-tests-on-failure -test-iterations 3 \
+            -scheme "FART (iOS)" -testPlan "UI Tests" \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+            | xcpretty && exit ${PIPESTATUS[0]}

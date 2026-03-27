@@ -11,6 +11,7 @@ struct QuestionnaireView: View {
       AirportView()
       WeatherView()
     }
+    .accessibilityIdentifier("questionnaireForm")
   }
 }
 

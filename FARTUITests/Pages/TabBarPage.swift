@@ -57,11 +57,32 @@ class TabBarPage: BasePage {
       goTo(tab: .pilot)
     }
     _ = waitForElement("ratingPicker", timeout: 30)
+
+    // iOS 26 Liquid Glass: nudge the form content down so top-of-form
+    // pickers clear the translucent navigation bar overlay.
+    let collectionView = app.collectionViews.firstMatch
+    if collectionView.waitForExistence(timeout: 5) {
+      let ratingPicker = app.buttons["ratingPicker"]
+      if ratingPicker.exists {
+        ensureHittable(ratingPicker, in: collectionView)
+      }
+    }
+
     return PilotProfilePage(app: app)
   }
 
   func goToQuestionnaire() -> QuestionnairePage {
     goTo(tab: .questions)
+    // Confirm the tab switch by waiting for a questionnaire-specific element.
+    // On iPad, stale picker menus from the Pilot Profile can block the tab switch.
+    let firstToggle = app.switches["lessThan50InTypeToggle"]
+    if !firstToggle.waitForExistence(timeout: 5) {
+      // Dismiss any open menus/popovers and retry
+      app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+      sleep(1)
+      goTo(tab: .questions)
+      _ = firstToggle.waitForExistence(timeout: 10)
+    }
     _ = app.collectionViews.firstMatch.waitForExistence(timeout: 10)
     scrollToTop()
     return QuestionnairePage(app: app)
