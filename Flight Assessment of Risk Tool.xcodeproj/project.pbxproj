@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 90;
+	objectVersion = 100;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -479,7 +479,7 @@
 				01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */,
 				A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
-			preferredProjectObjectVersion = 90;
+			preferredProjectObjectVersion = 100;
 			productRefGroup = 01BE9C3F266AEBC00026C4ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

@@ -24,7 +24,7 @@ jobs:
             os-version: ""
             xcode-version: latest-stable
           - ios-label: "18.5"
-            runner: macos-latest
+            runner: macos-26
             device: "iPhone 15 Pro"
             device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
             os-version: "18.5"
@@ -105,7 +105,7 @@ jobs:
             os-version: ""
             xcode-version: latest-stable
           - ios-label: "18.5"
-            runner: macos-latest
+            runner: macos-26
             device: "iPhone 15 Pro"
             device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
             os-version: "18.5"
@@ -181,13 +181,13 @@ jobs:
             os-version: ""
             xcode-version: latest-stable
           - ios-label: "18.5"
-            runner: macos-latest
+            runner: macos-26
             device: "iPhone 15 Pro"
             device-type: com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
             os-version: "18.5"
             xcode-version: latest-stable
           - ios-label: "18.5"
-            runner: macos-latest
+            runner: macos-26
             device: "iPad Pro 12.9-inch (6th generation)"
             device-type: com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB
             os-version: "18.5"
