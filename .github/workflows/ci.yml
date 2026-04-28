@@ -64,7 +64,7 @@ jobs:
           fi
           echo "udid=$UDID" >> "$GITHUB_OUTPUT"
           echo "Created simulator ${{ matrix.device }} ($UDID)"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
       - name: Build for testing
@@ -85,7 +85,7 @@ jobs:
       - name: Clean build intermediates
         run: rm -rf DerivedData/Build/Intermediates.noindex
       - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: derived-data-${{ matrix.ios-label }}
           path: DerivedData
@@ -145,9 +145,9 @@ jobs:
           fi
           echo "udid=$UDID" >> "$GITHUB_OUTPUT"
           echo "Created simulator ${{ matrix.device }} ($UDID)"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download test artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: derived-data-${{ matrix.ios-label }}
           path: DerivedData
@@ -239,9 +239,9 @@ jobs:
           xcrun simctl status_bar "${{ steps.sim.outputs.udid }}" override \
             --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 \
             --cellularMode active --cellularBars 4 --batteryState charged --batteryLevel 100 || true
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download test artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: derived-data-${{ matrix.ios-label }}
           path: DerivedData
