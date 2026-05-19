@@ -20,7 +20,7 @@ jobs:
         with:
           xcode-version: latest-stable
       - name: Install Periphery
-        run: brew install peripheryapp/periphery/periphery
+        run: brew install periphery
       - name: Run Periphery
         run: |
           periphery scan \
