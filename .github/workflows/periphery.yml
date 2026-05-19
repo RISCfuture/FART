@@ -19,9 +19,6 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
-      - uses: SwiftyLab/setup-swift@latest
-        with:
-          swift-version: "6.3"
       - name: Install Periphery
         run: brew install peripheryapp/periphery/periphery
       - name: Run Periphery
