@@ -22,4 +22,10 @@ jobs:
       - name: Install Periphery
         run: brew install peripheryapp/periphery/periphery
       - name: Run Periphery
-        run: periphery scan
+        run: |
+          periphery scan \
+            --project "Flight Assessment of Risk Tool.xcodeproj" \
+            --schemes "FART (iOS)" \
+            --exclude-targets "FARTUnitTests,FARTUITests" \
+            --exclude-tests \
+            --disable-update-check
