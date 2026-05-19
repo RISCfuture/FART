@@ -1,9 +1,6 @@
 import SwiftUI
 
 struct QuestionnaireView: View {
-  @Environment(Questionnaire.self)
-  private var questionnaire
-
   var body: some View {
     Form {
       PilotView()
