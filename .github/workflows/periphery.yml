@@ -13,23 +13,44 @@ concurrency:
 jobs:
   periphery:
     name: Run Periphery
-    runs-on: macos-latest
-    # Project file format 100 (Xcode 26.5+) is newer than the latest Xcode
-    # available on GitHub macOS runners (26.3 as of this writing). Mark
-    # non-blocking until runner images catch up.
-    continue-on-error: true
+    runs-on: macos-26
     steps:
-      - uses: actions/checkout@v6
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
+      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
+      # required to open project file format 100.
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.3"
+      - name: Ensure iOS simulator runtime
+        run: |
+          VERSION=$(xcrun --sdk iphonesimulator --show-sdk-version)
+          if xcrun simctl list runtimes | grep -q "iOS ${VERSION}"; then
+            echo "iOS ${VERSION} runtime already installed"
+          else
+            echo "iOS ${VERSION} runtime not found, downloading..."
+            xcodebuild -downloadPlatform iOS
+          fi
+      - name: Create simulator
+        id: sim
+        run: |
+          while xcrun simctl delete "periphery-sim" 2>/dev/null; do :; done
+          UDID=$(xcrun simctl create "periphery-sim" com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro)
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v6
       - name: Install Periphery
         run: brew install periphery
       - name: Run Periphery
+        env:
+          SIM_UDID: ${{ steps.sim.outputs.udid }}
         run: |
           periphery scan \
             --project "Flight Assessment of Risk Tool.xcodeproj" \
             --schemes "FART (iOS)" \
             --exclude-targets "FARTUnitTests,FARTUITests" \
             --exclude-tests \
-            --disable-update-check
+            --disable-update-check \
+            -- \
+            -destination "platform=iOS Simulator,id=${SIM_UDID}" \
+            -destination-timeout 300
