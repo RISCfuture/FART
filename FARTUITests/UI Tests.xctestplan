@@ -9,6 +9,12 @@
     }
   ],
   "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "FART_UI_TIMEOUT_MULTIPLIER",
+        "value" : "3"
+      }
+    ],
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [

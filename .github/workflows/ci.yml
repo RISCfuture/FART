@@ -198,6 +198,9 @@ jobs:
         run: |
           sudo mdutil -a -i off
           sudo launchctl bootout system/com.apple.metadata.mds 2>/dev/null || true
+          # xcodebuild allocates a PTY per test launch and never reclaims them.
+          # The macOS default (127) can starve out long UI test suites.
+          sudo sysctl -w kern.tty.ptmx_max=999 || true
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ matrix.xcode-version }}
@@ -245,6 +248,23 @@ jobs:
         with:
           name: derived-data-${{ matrix.ios-label }}
           path: DerivedData
+      - name: Pre-warm app launch
+        # Pay the cold-launch cost (framework load, first-render JIT) before
+        # xctest starts measuring against UI test timeouts.
+        run: |
+          set +e
+          APP_PATH=$(find DerivedData/Build/Products -maxdepth 4 -name '*.app' \
+            ! -path '*Generate Screenshots*' ! -path '*UITests-Runner*' \
+            ! -path '*xctest*' | head -1)
+          if [ -z "$APP_PATH" ]; then
+            echo "No .app bundle found under DerivedData; skipping pre-warm"
+            exit 0
+          fi
+          echo "Pre-warming $APP_PATH"
+          xcrun simctl install "${{ steps.sim.outputs.udid }}" "$APP_PATH" || true
+          xcrun simctl launch "${{ steps.sim.outputs.udid }}" codes.tim.FART || true
+          sleep 5
+          xcrun simctl terminate "${{ steps.sim.outputs.udid }}" codes.tim.FART || true
       - name: Run UI tests
         run: |
           set -o pipefail
@@ -253,4 +273,14 @@ jobs:
             -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
             -destination-timeout 300 \
             -derivedDataPath DerivedData \
+            -resultBundlePath UITestResults.xcresult \
+            -retry-tests-on-failure -test-iterations 3 \
             | xcbeautify --renderer github-actions
+      - name: Upload UI test result bundle
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-test-results-${{ matrix.ios-label }}-${{ matrix.device }}
+          path: UITestResults.xcresult
+          retention-days: 7
+          if-no-files-found: ignore
