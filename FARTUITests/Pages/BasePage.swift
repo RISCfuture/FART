@@ -1,4 +1,5 @@
 import XCTest
+import XCUITestKit
 
 @MainActor
 class BasePage {
@@ -109,9 +110,9 @@ class BasePage {
         // Dismiss any partial state, then retry
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
         sleep(1)
-        forceTap(pickerButton)
+        pickerButton.forceTap()
       } else {
-        forceTap(pickerButton)
+        pickerButton.forceTap()
       }
 
       // Find and tap the option — try buttons first, then any element type
@@ -124,14 +125,14 @@ class BasePage {
             return self
           }
         }
-        forceTap(allButtons.firstMatch)
+        allButtons.firstMatch.forceTap()
         return self
       }
 
       // Fallback: match any element type by identifier
       let anyOption = app.descendants(matching: .any)[option]
       if anyOption.waitForExistence(timeout: 3) {
-        forceTap(anyOption)
+        anyOption.forceTap()
         return self
       }
 
@@ -140,7 +141,7 @@ class BasePage {
         let labelPredicate = NSPredicate(format: "label == %@", label)
         let labelButton = app.buttons.matching(labelPredicate).firstMatch
         if labelButton.waitForExistence(timeout: 3) {
-          forceTap(labelButton)
+          labelButton.forceTap()
           return self
         }
       }
@@ -181,17 +182,6 @@ class BasePage {
         break
       }
       if element.isHittable || !element.exists { return }
-    }
-  }
-
-  /// Tap an element, falling back to coordinate-based tap when not hittable.
-  /// Works around iOS 26 Liquid Glass overlay making elements "not hittable"
-  /// or producing invalid hit points.
-  func forceTap(_ element: XCUIElement) {
-    if element.isHittable {
-      element.tap()
-    } else {
-      element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
     }
   }
 

@@ -11,7 +11,7 @@
   "defaultOptions" : {
     "environmentVariableEntries" : [
       {
-        "key" : "FART_UI_TIMEOUT_MULTIPLIER",
+        "key" : "XCUITEST_TIMEOUT_MULTIPLIER",
         "value" : "3"
       }
     ],

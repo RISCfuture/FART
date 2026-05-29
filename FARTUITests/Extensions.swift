@@ -1,5 +1,9 @@
 import XCTest
 
+// App-specific UI-test helpers shared between the FARTUITests and
+// "Generate Screenshots" targets. The screenshot target does not link
+// XCUITestKit, so `isVisible`/`makeVisible`/`toggleOn`/`toggleOff` must live
+// here rather than be sourced from the package.
 @MainActor
 extension XCUIElement {
   var isVisible: Bool {

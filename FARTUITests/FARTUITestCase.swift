@@ -1,4 +1,5 @@
 import XCTest
+import XCUITestKit
 
 // swiftlint:disable final_test_case test_case_accessibility
 @MainActor
@@ -12,6 +13,7 @@ class FARTUITestCase: XCTestCase {
   override func setUpWithError() throws {
     continueAfterFailure = false
     app = XCUIApplication()
+    app.disableLogStderrMirroring()
     app.launchArguments = ["UI-TESTING"]
     app.launch()
     tabBar = TabBarPage(app: app)

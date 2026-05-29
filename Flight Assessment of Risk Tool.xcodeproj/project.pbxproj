@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		011232D02E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		011232D22E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		011232D32E98376800B92C62 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		0159225B2FCA2B45007FB6BB /* XCUITestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0159225A2FCA2B45007FB6BB /* XCUITestKit */; };
 		017F9F5F2EB145E800789538 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 017F9F5E2EB145E800789538 /* Sentry */; };
 		019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
 		019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
@@ -61,6 +59,7 @@
 		01D25089266B4EED009BECAA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25087266B4EED009BECAA /* String.swift */; };
 		01D2508B266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
 		01D2508C266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
+		01EB02DC2FCA2CEF007C3D1E /* XCUITestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */; };
 		6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 9373A74ADA3745F38306B8B8 /* Sentry */; };
 /* End PBXBuildFile section */
 
@@ -159,19 +158,18 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				019DB8472E8780D8002E7411 /* Defaults in Frameworks */,
-				011232D22E98376800B92C62 /* (null) in Frameworks */,
 			);
 		};
 		019A35992E85FAF100F14F8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
-				011232D32E98376800B92C62 /* (null) in Frameworks */,
+				0159225B2FCA2B45007FB6BB /* XCUITestKit in Frameworks */,
 			);
 		};
 		019A35BB2E861E4C00F14F8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
-				011232D02E98376800B92C62 /* (null) in Frameworks */,
+				01EB02DC2FCA2CEF007C3D1E /* XCUITestKit in Frameworks */,
 			);
 		};
 		01BE9C3B266AEBC00026C4ED /* Frameworks */ = {
@@ -372,6 +370,9 @@
 				019A359D2E85FAF100F14F8C /* FARTUITests */,
 			);
 			name = FARTUITests;
+			packageProductDependencies = (
+				0159225A2FCA2B45007FB6BB /* XCUITestKit */,
+			);
 			productName = FARTUITests;
 			productReference = 019A359C2E85FAF100F14F8C /* FARTUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -393,6 +394,9 @@
 				019A35BF2E861E4C00F14F8C /* Generate Screenshots */,
 			);
 			name = "Generate Screenshots";
+			packageProductDependencies = (
+				01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */,
+			);
 			productName = "Generate Screenshots";
 			productReference = 019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -478,6 +482,7 @@
 			packageReferences = (
 				01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */,
 				A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */,
 			);
 			preferredProjectObjectVersion = 100;
 			productRefGroup = 01BE9C3F266AEBC00026C4ED /* Products */;
@@ -1138,6 +1143,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RISCfuture/XCUITestKit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -1159,6 +1172,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0159225A2FCA2B45007FB6BB /* XCUITestKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */;
+			productName = XCUITestKit;
+		};
 		017F9F5E2EB145E800789538 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
@@ -1178,6 +1196,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */;
+			productName = XCUITestKit;
 		};
 		9373A74ADA3745F38306B8B8 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;

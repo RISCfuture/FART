@@ -1,5 +1,5 @@
 {
-  "originHash" : "a9c83e62f3d77bced04e6561c406901c70f6d33d34060af2fb9f37f1b1f126b3",
+  "originHash" : "3cab6df893e12a6c4e878212091d9dbb7987ae1378f5364dcc45bf3e4a84164b",
   "pins" : [
     {
       "identity" : "defaults",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
         "version" : "602.0.0"
+      }
+    },
+    {
+      "identity" : "xcuitestkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RISCfuture/XCUITestKit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "861b6da306b9b791e1bb39bcb698ad956fa9749f"
       }
     }
   ],
