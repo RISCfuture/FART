@@ -59,11 +59,3 @@ extension XCUIElement {
     return element.isVisible
   }
 }
-
-@MainActor
-extension XCUIApplication {
-  func scrollToTop() {
-    let springboardApp = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-    for bar in springboardApp.statusBars.allElementsBoundByIndex { bar.tap() }
-  }
-}

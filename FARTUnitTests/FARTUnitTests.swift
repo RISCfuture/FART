@@ -6,43 +6,6 @@ import Testing
 @Suite("FART Score and Risk Tests")
 struct FARTUnitTests {
 
-  @Suite("BoolScorer Tests")
-  struct BoolScorerTests {
-
-    @Test("BoolScorer returns correct value when true")
-    func scorerReturnsValueWhenTrue() {
-      let scorer = BoolScorer(5)
-      #expect(scorer.score(true) == 5)
-    }
-
-    @Test("BoolScorer returns 0 when false")
-    func scorerReturnsZeroWhenFalse() {
-      let scorer = BoolScorer(5)
-      #expect(scorer.score(false) == 0)
-    }
-
-    @Test("BoolScorer handles negative values")
-    func scorerHandlesNegativeValues() {
-      let scorer = BoolScorer(-3)
-      #expect(scorer.score(true) == -3)
-      #expect(scorer.score(false) == 0)
-    }
-  }
-
-  @Suite("ApproachScorer Tests")
-  struct ApproachScorerTests {
-
-    @Test("ApproachScorer returns correct scores")
-    func scoreApproachTypes() {
-      let scorer = ApproachScorer()
-      #expect(scorer.score(.precision) == -2)
-      #expect(scorer.score(.nonprecision) == 3)
-      #expect(scorer.score(.none) == 4)
-      #expect(scorer.score(.circling) == 7)
-      #expect(scorer.score(.notApplicable) == 0)
-    }
-  }
-
   @Suite("FARTScoreCalculator Tests")
   struct CalculatorTests {
 

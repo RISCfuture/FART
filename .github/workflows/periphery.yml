@@ -48,6 +48,7 @@ jobs:
           SIM_UDID: ${{ steps.sim.outputs.udid }}
         run: |
           periphery scan \
+            --strict \
             --project "Flight Assessment of Risk Tool.xcodeproj" \
             --schemes "FART (iOS)" \
             --exclude-targets "FARTUnitTests,FARTUITests" \
