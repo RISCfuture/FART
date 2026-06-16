@@ -2,6 +2,16 @@ import XCTest
 
 class WeatherSectionPage: BasePage {
 
+  // MARK: - Field Accessors
+
+  var vfrCeilingUnder3000Toggle: XCUIElement { app.switches["vfrCeilingUnder3000Toggle"] }
+  var vfrVisibilityUnder5Toggle: XCUIElement { app.switches["vfrVisibilityUnder5Toggle"] }
+  var vfrFlightPlanToggle: XCUIElement { app.switches["vfrFlightPlanToggle"] }
+  var vfrFlightFollowingToggle: XCUIElement { app.switches["vfrFlightFollowingToggle"] }
+  var ifrLowCeilingToggle: XCUIElement { app.switches["ifrLowCeilingToggle"] }
+  var ifrLowVisibilityToggle: XCUIElement { app.switches["ifrLowVisibilityToggle"] }
+  var ifrApproachTypePicker: XCUIElement { app.buttons["ifrApproachTypePicker"] }
+
   // MARK: - Flight Type
 
   @discardableResult

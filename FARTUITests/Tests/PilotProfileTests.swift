@@ -1,4 +1,5 @@
 import XCTest
+import XCUITestKit
 
 // swiftlint:disable prefer_nimble
 final class PilotProfileTests: FARTUITestCase {
@@ -14,8 +15,8 @@ final class PilotProfileTests: FARTUITestCase {
 
     // Switch back to VFR — pickers should disappear
     profile.selectVFR()
-    XCTAssertFalse(app.buttons["lowCeilingPicker"].exists)
-    XCTAssertFalse(app.buttons["lowVisibilityPicker"].exists)
+    profile.lowCeilingPicker.assertHidden()
+    profile.lowVisibilityPicker.assertHidden()
 
     // Switch to IFR again — pickers should reappear
     profile.selectIFR()

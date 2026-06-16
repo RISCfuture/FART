@@ -2,6 +2,9 @@ import XCTest
 
 class PilotProfilePage: BasePage {
 
+  var lowCeilingPicker: XCUIElement { app.buttons["lowCeilingPicker"] }
+  var lowVisibilityPicker: XCUIElement { app.buttons["lowVisibilityPicker"] }
+
   @discardableResult
   func selectVFR() -> Self {
     selectPickerOption(picker: "ratingPicker", option: "ratingVFR", optionLabel: "VFR")
@@ -23,10 +26,10 @@ class PilotProfilePage: BasePage {
   }
 
   func isLowCeilingPickerVisible() -> Bool {
-    app.buttons["lowCeilingPicker"].waitForExistence(timeout: 2)
+    lowCeilingPicker.waitForExistence(timeout: 2)
   }
 
   func isLowVisibilityPickerVisible() -> Bool {
-    app.buttons["lowVisibilityPicker"].waitForExistence(timeout: 2)
+    lowVisibilityPicker.waitForExistence(timeout: 2)
   }
 }
