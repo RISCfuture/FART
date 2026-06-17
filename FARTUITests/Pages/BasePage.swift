@@ -107,9 +107,10 @@ class BasePage {
     // Tap picker and find option — retry once if menu doesn't open
     for attempt in 0..<2 {
       if attempt > 0 {
-        // Dismiss any partial state, then retry
+        // Dismiss any partial state, then retry once the picker is tappable again
+        // (the partial menu overlay blocks hittability until it clears).
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
-        sleep(1)
+        pickerButton.waitUntilHittable()
         pickerButton.forceTap()
       } else {
         pickerButton.forceTap()

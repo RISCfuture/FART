@@ -1,4 +1,5 @@
 import XCTest
+import XCUITestKit
 
 class TabBarPage: BasePage {
   // swiftlint:disable:next type_contents_order
@@ -77,9 +78,10 @@ class TabBarPage: BasePage {
     // On iPad, stale picker menus from the Pilot Profile can block the tab switch.
     let firstToggle = app.switches["lessThan50InTypeToggle"]
     if !firstToggle.waitForExistence(timeout: 5) {
-      // Dismiss any open menus/popovers and retry
+      // Dismiss any open menus/popovers, wait for the Questions tab to become
+      // tappable again (the overlay blocks it), then retry.
       app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
-      sleep(1)
+      app.tabBars.buttons[Tab.questions.rawValue].waitUntilHittable()
       goTo(tab: .questions)
       _ = firstToggle.waitForExistence(timeout: 10)
     }

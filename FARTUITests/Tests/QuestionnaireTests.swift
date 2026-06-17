@@ -1,6 +1,6 @@
 import XCTest
+import XCUITestKit
 
-// swiftlint:disable prefer_nimble
 final class QuestionnaireTests: FARTUITestCase {
 
   @MainActor
@@ -10,44 +10,46 @@ final class QuestionnaireTests: FARTUITestCase {
     // VFR by default — scroll to last VFR weather toggle to ensure all are loaded
     _ = q.scrollTo("vfrFlightFollowingToggle")
 
+    let weather = q.weatherSection
+
     // VFR toggles visible
-    XCTAssertTrue(app.switches["vfrFlightFollowingToggle"].exists)
-    XCTAssertTrue(app.switches["vfrFlightPlanToggle"].exists)
-    XCTAssertTrue(app.switches["vfrVisibilityUnder5Toggle"].exists)
-    XCTAssertTrue(app.switches["vfrCeilingUnder3000Toggle"].exists)
+    weather.vfrFlightFollowingToggle.assertExists()
+    weather.vfrFlightPlanToggle.assertExists()
+    weather.vfrVisibilityUnder5Toggle.assertExists()
+    weather.vfrCeilingUnder3000Toggle.assertExists()
 
     // IFR toggles not present
-    XCTAssertFalse(app.switches["ifrLowCeilingToggle"].exists)
-    XCTAssertFalse(app.switches["ifrLowVisibilityToggle"].exists)
-    XCTAssertFalse(app.buttons["ifrApproachTypePicker"].exists)
+    weather.ifrLowCeilingToggle.assertNeverAppears()
+    weather.ifrLowVisibilityToggle.assertNeverAppears()
+    weather.ifrApproachTypePicker.assertNeverAppears()
 
     // Switch to IFR
-    q.weatherSection.selectIFR()
+    weather.selectIFR()
 
     // IFR toggles visible
-    XCTAssertTrue(app.switches["ifrLowCeilingToggle"].waitForExistence(timeout: 3))
-    XCTAssertTrue(app.switches["ifrLowVisibilityToggle"].exists)
-    XCTAssertTrue(app.buttons["ifrApproachTypePicker"].exists)
+    weather.ifrLowCeilingToggle.assertExists()
+    weather.ifrLowVisibilityToggle.assertExists()
+    weather.ifrApproachTypePicker.assertExists()
 
     // VFR toggles gone
-    XCTAssertFalse(app.switches["vfrCeilingUnder3000Toggle"].exists)
-    XCTAssertFalse(app.switches["vfrVisibilityUnder5Toggle"].exists)
-    XCTAssertFalse(app.switches["vfrFlightPlanToggle"].exists)
-    XCTAssertFalse(app.switches["vfrFlightFollowingToggle"].exists)
+    weather.vfrCeilingUnder3000Toggle.assertNeverAppears()
+    weather.vfrVisibilityUnder5Toggle.assertNeverAppears()
+    weather.vfrFlightPlanToggle.assertNeverAppears()
+    weather.vfrFlightFollowingToggle.assertNeverAppears()
 
     // Switch back to VFR
-    q.weatherSection.selectVFR()
+    weather.selectVFR()
 
     // VFR toggles back
-    XCTAssertTrue(app.switches["vfrCeilingUnder3000Toggle"].waitForExistence(timeout: 3))
-    XCTAssertTrue(app.switches["vfrVisibilityUnder5Toggle"].exists)
-    XCTAssertTrue(app.switches["vfrFlightPlanToggle"].exists)
-    XCTAssertTrue(app.switches["vfrFlightFollowingToggle"].exists)
+    weather.vfrCeilingUnder3000Toggle.assertExists()
+    weather.vfrVisibilityUnder5Toggle.assertExists()
+    weather.vfrFlightPlanToggle.assertExists()
+    weather.vfrFlightFollowingToggle.assertExists()
 
     // IFR toggles gone again
-    XCTAssertFalse(app.switches["ifrLowCeilingToggle"].exists)
-    XCTAssertFalse(app.switches["ifrLowVisibilityToggle"].exists)
-    XCTAssertFalse(app.buttons["ifrApproachTypePicker"].exists)
+    weather.ifrLowCeilingToggle.assertNeverAppears()
+    weather.ifrLowVisibilityToggle.assertNeverAppears()
+    weather.ifrApproachTypePicker.assertNeverAppears()
   }
 
   @MainActor
@@ -195,4 +197,3 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "3", riskLevel: "LOW RISK")
   }
 }
-// swiftlint:enable prefer_nimble
