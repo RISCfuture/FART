@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
-        "revision" : "d9406c926b86a1ea642cab375b4745c5e15cc808",
-        "version" : "9.0.7"
+        "revision" : "00a7465a0668a87fa159e779b9d80f1f9652357e",
+        "version" : "9.0.9"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa/",
       "state" : {
-        "revision" : "05d3ce8332097ff0b2347231ac66476fd7d2f4d8",
-        "version" : "9.8.0"
+        "revision" : "d3562ee73e56a7b0b8319ec613db3c529924f07a",
+        "version" : "9.19.1"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
-        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
-        "version" : "602.0.0"
+        "revision" : "79e4b74a295b6eb74a8b585e3a39d29e70c1dbd1",
+        "version" : "603.0.2"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/RISCfuture/XCUITestKit",
       "state" : {
         "branch" : "main",
-        "revision" : "6eba944a8b47c8c362275a4bca443d30d89ad45b"
+        "revision" : "68a4cce9d7c037f5e7a38ef4c49b9c92da8578a5"
       }
     }
   ],
