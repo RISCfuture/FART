@@ -1,11 +1,9 @@
 import SwiftUI
 
 #if os(macOS)
-  enum ViewMode: String, CaseIterable, Identifiable {
+  enum InputTab: String, CaseIterable, Identifiable {
     case profile = "Pilot Profile"
     case questionnaire = "Questionnaire"
-    case results = "Results"
-    case about = "About"
 
     var id: String { rawValue }
 
@@ -13,8 +11,6 @@ import SwiftUI
       switch self {
         case .profile: "person.fill"
         case .questionnaire: "checklist.checked"
-        case .results: "gauge.with.dots.needle.bottom.0percent"
-        case .about: "info.circle"
       }
     }
 
@@ -22,8 +18,6 @@ import SwiftUI
       switch self {
         case .profile: "1"
         case .questionnaire: "2"
-        case .results: "3"
-        case .about: "4"
       }
     }
   }
@@ -31,7 +25,7 @@ import SwiftUI
 
 struct ContentView: View {
   #if os(macOS)
-    @State private var currentView: ViewMode = .questionnaire
+    @State private var selectedInput: InputTab = .questionnaire
   #endif
 
   @State private var questionnaire = Questionnaire()
@@ -50,51 +44,38 @@ struct ContentView: View {
 
   #if os(macOS)
     private var macOSLayout: some View {
-      Group {
-        switch currentView {
-          case .profile:
-            ScrollView {
-              PilotProfileView()
-                .environment(questionnaire)
-                .formStyle(.grouped)
-                .frame(maxWidth: 600)
-                .frame(maxWidth: .infinity)
-                .padding()
-            }
-          case .questionnaire:
-            ScrollView {
-              QuestionnaireView()
-                .environment(questionnaire)
-                .formStyle(.grouped)
-                .frame(maxWidth: 600)
-                .frame(maxWidth: .infinity)
-                .padding()
-            }
-          case .results:
-            ResultsView()
+      NavigationSplitView {
+        TabView(selection: $selectedInput) {
+          ScrollView {
+            PilotProfileView()
               .environment(questionnaire)
-          case .about:
-            AboutView()
-        }
-      }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .toolbar {
-        ToolbarItem(placement: .principal) {
-          Picker("View", selection: $currentView) {
-            ForEach(ViewMode.allCases) { mode in
-              Label(mode.rawValue, systemImage: mode.systemImage)
-                .tag(mode)
-            }
+              .formStyle(.grouped)
+              .padding()
           }
-          .pickerStyle(.segmented)
-          .fixedSize()
+          .tabItem { Label(InputTab.profile.rawValue, systemImage: InputTab.profile.systemImage) }
+          .tag(InputTab.profile)
+          .accessibilityIdentifier("pilotTab")
+
+          ScrollView {
+            QuestionnaireView()
+              .environment(questionnaire)
+              .formStyle(.grouped)
+              .padding()
+          }
+          .tabItem {
+            Label(InputTab.questionnaire.rawValue, systemImage: InputTab.questionnaire.systemImage)
+          }
+          .tag(InputTab.questionnaire)
+          .accessibilityIdentifier("questionsTab")
         }
+        .navigationSplitViewColumnWidth(min: 320, ideal: 380)
+        .keyboardShortcut(for: .profile, selection: $selectedInput)
+        .keyboardShortcut(for: .questionnaire, selection: $selectedInput)
+      } detail: {
+        ResultsView()
+          .environment(questionnaire)
+          .navigationTitle("Results")
       }
-      .navigationTitle(currentView.rawValue)
-      .keyboardShortcut(for: .profile, selection: $currentView)
-      .keyboardShortcut(for: .questionnaire, selection: $currentView)
-      .keyboardShortcut(for: .results, selection: $currentView)
-      .keyboardShortcut(for: .about, selection: $currentView)
     }
   #endif
 
@@ -172,32 +153,42 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showingAbout) {
-          NavigationView {
-            AboutView()
-              .navigationTitle("About")
-              .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                  Button("Done") { showingAbout = false }
-                }
-              }
-          }
+          AboutSheet(isPresented: $showingAbout)
         }
       }
     }
   #endif
 }
 
+#if !os(macOS)
+  private struct AboutSheet: View {
+    @Binding var isPresented: Bool
+
+    var body: some View {
+      NavigationStack {
+        AboutView()
+          .navigationTitle("About")
+          .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+              Button("Done") { isPresented = false }
+            }
+          }
+      }
+    }
+  }
+#endif
+
 #if os(macOS)
   extension View {
     func keyboardShortcut(
-      for mode: ViewMode,
-      selection: Binding<ViewMode>
+      for tab: InputTab,
+      selection: Binding<InputTab>
     ) -> some View {
       self.background(
         Button("") {
-          selection.wrappedValue = mode
+          selection.wrappedValue = tab
         }
-        .keyboardShortcut(mode.keyboardShortcut, modifiers: .command)
+        .keyboardShortcut(tab.keyboardShortcut, modifiers: .command)
         .hidden()
       )
     }

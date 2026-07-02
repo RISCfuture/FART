@@ -8,6 +8,11 @@ import SwiftUI
 @main
 struct Flight_Assessment_of_Risk_ToolApp: App {
   #if os(macOS)
+    private static let aboutWindowID = "about"
+
+    @Environment(\.openWindow)
+    private var openWindow
+
     var body: some Scene {
       WindowGroup("Flight Assessment of Risk Tool") {
         NavigationStack {
@@ -18,6 +23,19 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       }
       .windowStyle(.titleBar)
       .windowToolbarStyle(.unified)
+      .commands {
+        CommandGroup(replacing: .appInfo) {
+          Button("About Flight Assessment of Risk Tool") {
+            openWindow(id: Self.aboutWindowID)
+          }
+        }
+      }
+
+      Window("About Flight Assessment of Risk Tool", id: Self.aboutWindowID) {
+        AboutView()
+          .frame(width: 420, height: 320)
+      }
+      .windowResizability(.contentSize)
     }
 
   #else
