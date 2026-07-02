@@ -46,27 +46,21 @@ struct ContentView: View {
     private var macOSLayout: some View {
       NavigationSplitView {
         TabView(selection: $selectedInput) {
-          ScrollView {
-            PilotProfileView()
-              .environment(questionnaire)
-              .formStyle(.grouped)
-              .padding()
+          Tab(
+            InputTab.profile.rawValue,
+            systemImage: InputTab.profile.systemImage,
+            value: .profile
+          ) {
+            InputColumn(questionnaire: questionnaire) { PilotProfileView() }
           }
-          .tabItem { Label(InputTab.profile.rawValue, systemImage: InputTab.profile.systemImage) }
-          .tag(InputTab.profile)
-          .accessibilityIdentifier("pilotTab")
 
-          ScrollView {
-            QuestionnaireView()
-              .environment(questionnaire)
-              .formStyle(.grouped)
-              .padding()
+          Tab(
+            InputTab.questionnaire.rawValue,
+            systemImage: InputTab.questionnaire.systemImage,
+            value: .questionnaire
+          ) {
+            InputColumn(questionnaire: questionnaire) { QuestionnaireView() }
           }
-          .tabItem {
-            Label(InputTab.questionnaire.rawValue, systemImage: InputTab.questionnaire.systemImage)
-          }
-          .tag(InputTab.questionnaire)
-          .accessibilityIdentifier("questionsTab")
         }
         .navigationSplitViewColumnWidth(min: 320, ideal: 380)
         .keyboardShortcut(for: .profile, selection: $selectedInput)
@@ -93,49 +87,52 @@ struct ContentView: View {
 
     private var oneColumnLayout: some View {
       TabView {
-        NavigationView {
-          PilotProfileView()
-            .environment(questionnaire)
-            .navigationTitle("Pilot Profile")
-        }.tabItem { Label("Pilot", image: "Pilot") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("pilotTab")
+        Tab("Pilot", image: "Pilot") {
+          NavigationStack {
+            PilotProfileView()
+              .environment(questionnaire)
+              .navigationTitle("Pilot Profile")
+          }
+        }
 
-        NavigationView {
-          QuestionnaireView()
-            .environment(questionnaire)
-            .navigationTitle("Questionnaire")
-        }.tabItem { Label("Questions", systemImage: "checklist.checked") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("questionsTab")
+        Tab("Questions", systemImage: "checklist.checked") {
+          NavigationStack {
+            QuestionnaireView()
+              .environment(questionnaire)
+              .navigationTitle("Questionnaire")
+          }
+        }
 
-        NavigationView {
-          ResultsView()
-            .environment(questionnaire)
-            .navigationTitle("Results")
-        }.tabItem { Label("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("resultsTab")
+        Tab("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") {
+          NavigationStack {
+            ResultsView()
+              .environment(questionnaire)
+              .navigationTitle("Results")
+          }
+        }
 
-        NavigationView {
-          AboutView().navigationTitle("About")
-        }.tabItem { Label("About", systemImage: "info.circle") }
-          .navigationViewStyle(StackNavigationViewStyle())
-          .accessibilityIdentifier("aboutTab")
+        Tab("About", systemImage: "info.circle") {
+          NavigationStack {
+            AboutView().navigationTitle("About")
+          }
+        }
+      }
+      .tabBarMinimizeBehavior(.onScrollDown)
+      .tabViewBottomAccessory {
+        RiskScoreBadge()
+          .environment(questionnaire)
       }
     }
 
     private var twoColumnLayout: some View {
       NavigationSplitView(preferredCompactColumn: .constant(.detail)) {
         TabView {
-          PilotProfileView()
-            .environment(questionnaire)
-            .tabItem { Label("Pilot", image: "Pilot") }
-            .accessibilityIdentifier("pilotTab")
-          QuestionnaireView()
-            .environment(questionnaire)
-            .tabItem { Label("Questions", systemImage: "checklist.checked") }
-            .accessibilityIdentifier("questionsTab")
+          Tab("Pilot", image: "Pilot") {
+            PilotProfileView().environment(questionnaire)
+          }
+          Tab("Questions", systemImage: "checklist.checked") {
+            QuestionnaireView().environment(questionnaire)
+          }
         }
       } detail: {
         NavigationStack {
@@ -154,6 +151,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingAbout) {
           AboutSheet(isPresented: $showingAbout)
+            .presentationSizing(.form)
         }
       }
     }
@@ -179,6 +177,24 @@ struct ContentView: View {
 #endif
 
 #if os(macOS)
+  /// A scrolling input form column for the master/detail sidebar, with a soft scroll-edge
+  /// glass effect at the top so content fades under the toolbar rather than clipping hard.
+  private struct InputColumn<Content: View>: View {
+    let questionnaire: Questionnaire
+    @ViewBuilder let content: () -> Content
+
+    var body: some View {
+      ScrollView {
+        content()
+          .environment(questionnaire)
+          .formStyle(.grouped)
+          .scrollContentBackground(.hidden)
+          .padding()
+      }
+      .scrollEdgeEffectStyle(.soft, for: .top)
+    }
+  }
+
   extension View {
     func keyboardShortcut(
       for tab: InputTab,
@@ -191,6 +207,37 @@ struct ContentView: View {
         .keyboardShortcut(tab.keyboardShortcut, modifiers: .command)
         .hidden()
       )
+    }
+  }
+#endif
+
+#if !os(macOS)
+  /// A compact, live readout of the current FART score and risk level, shown in the tab
+  /// bar's bottom accessory so the score stays visible across the Pilot and Questions tabs.
+  private struct RiskScoreBadge: View {
+    @Environment(Questionnaire.self)
+    private var questionnaire
+
+    // Text's `+` concatenation is deprecated in iOS 26, so the colored, heavy, rounded score
+    // run is composed as an AttributedString instead.
+    private var summary: AttributedString {
+      var score = AttributedString(questionnaire.score.formatted(.number))
+      score.foregroundColor = questionnaire.risk.color
+      score.font = .system(.subheadline, design: .rounded, weight: .heavy)
+
+      let remainder = AttributedString(localized: " pts., \(questionnaire.risk.inlineLabel)")
+
+      return score + remainder
+    }
+
+    var body: some View {
+      Text(summary)
+        .font(.subheadline)
+        .contentTransition(.numericText())
+        .padding(.horizontal)
+        .animation(.default, value: questionnaire.score)
+        .animation(.default, value: questionnaire.risk)
+        .accessibilityIdentifier("scoreBadge")
     }
   }
 #endif

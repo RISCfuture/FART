@@ -36,6 +36,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
           .frame(width: 420, height: 320)
       }
       .windowResizability(.contentSize)
+      .windowBackgroundDragBehavior(.enabled)
     }
 
   #else

@@ -16,8 +16,7 @@ jobs:
       ui-test-plan: "UI Tests"
       build-matrix: |
         {"include":[
-          {"ios-label":"latest","runner":"macos-26","device":"iPhone 17 Pro","device-type":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","os-version":"","xcode-version":"latest-stable"},
-          {"ios-label":"18.5","runner":"macos-26","device":"iPhone 15 Pro","device-type":"com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro","os-version":"18.5","xcode-version":"latest-stable"}
+          {"ios-label":"latest","runner":"macos-26","device":"iPhone 17 Pro","device-type":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","os-version":"","xcode-version":"latest-stable"}
         ]}
       ui-matrix: |
         {"include":[

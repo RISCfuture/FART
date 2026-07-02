@@ -20,10 +20,3 @@ let ceilingFormatter: NumberFormatter = {
   formatter.maximumFractionDigits = 0
   return formatter
 }()
-
-let scoreFormatter: NumberFormatter = {
-  let formatter = NumberFormatter()
-  formatter.numberStyle = .decimal
-  formatter.maximumFractionDigits = 0
-  return formatter
-}()

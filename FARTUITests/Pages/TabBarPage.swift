@@ -13,7 +13,10 @@ class TabBarPage: BasePage {
   /// iPad uses a two-column NavigationSplitView with Pilot, Questions, and About tabs
   /// in the sidebar. Results is always visible in the detail column.
   lazy var isIPad: Bool = {
-    !app.tabBars.buttons["Results"].waitForExistence(timeout: 3)
+    // Restore a possibly-minimized tab bar first; otherwise a scrolled-away Results
+    // button (iOS 26 tabBarMinimizeBehavior) would be misread as "no Results tab" (iPad).
+    scrollToTop()
+    return !app.tabBars.buttons["Results"].waitForExistence(timeout: 3)
   }()
 
   @discardableResult
@@ -23,6 +26,17 @@ class TabBarPage: BasePage {
     if tabBarButton.waitForExistence(timeout: 2) {
       tabBarButton.tap()
       return self
+    }
+
+    // iOS 26 tabBarMinimizeBehavior(.onScrollDown) collapses the iPhone tab bar after
+    // scrolling a long form, hiding its individual buttons. Scroll back to the top to
+    // restore it, then retry.
+    if app.collectionViews.firstMatch.exists {
+      scrollToTop()
+      if tabBarButton.waitForExistence(timeout: 2) {
+        tabBarButton.tap()
+        return self
+      }
     }
 
     if isIPad && (tab == .pilot || tab == .questions) {

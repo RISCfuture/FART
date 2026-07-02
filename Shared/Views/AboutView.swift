@@ -1,4 +1,5 @@
 import SwiftUI
+import WebKit
 
 #if os(macOS)
   import AppKit
@@ -7,13 +8,17 @@ import SwiftUI
 #endif
 
 struct AboutView: View {
-  @Environment(\.openURL)
-  private var openURL
+  #if os(macOS)
+    @Environment(\.openURL)
+    private var openURL
+  #else
+    @State private var webLink: WebLink?
+  #endif
 
-  private var moreInfoURL = URL(
+  private let moreInfoURL = URL(
     string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf"
   )!
-  private var sourceURL = URL(string: "https://github.com/RISCfuture/FART")!
+  private let sourceURL = URL(string: "https://github.com/RISCfuture/FART")!
 
   var body: some View {
     ScrollView {
@@ -27,15 +32,17 @@ struct AboutView: View {
           .accessibilityIdentifier("aboutDescriptionText")
         }
         Button("More information about FAAST FRAT") {
-          openURL(moreInfoURL)
+          open(moreInfoURL, title: "FAAST FRAT")
         }
+        .buttonStyle(.glass)
         .accessibilityIdentifier("moreInfoButton")
 
         Text("Copyright ©2021 Tim Morgan. Source code is available under the MIT License.")
           .accessibilityIdentifier("aboutCopyrightText")
         Button("View source code") {
-          openURL(sourceURL)
+          open(sourceURL, title: "Source Code")
         }
+        .buttonStyle(.glass)
         .accessibilityIdentifier("viewSourceCodeButton")
 
         Text("Icons in this application are from The Noun Project:")
@@ -54,8 +61,49 @@ struct AboutView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding()
     }
+    #if !os(macOS)
+      .sheet(item: $webLink) { link in
+        WebLinkSheet(link: link) { webLink = nil }
+      }
+    #endif
+  }
+
+  private func open(_ url: URL, title: LocalizedStringKey) {
+    #if os(macOS)
+      openURL(url)
+    #else
+      webLink = WebLink(title: title, url: url)
+    #endif
   }
 }
+
+#if !os(macOS)
+  /// A web destination presented in-app rather than kicking the pilot out to the browser.
+  private struct WebLink: Identifiable {
+    var id: URL { url }
+
+    let title: LocalizedStringKey
+    let url: URL
+  }
+
+  private struct WebLinkSheet: View {
+    let link: WebLink
+    let onDone: () -> Void
+
+    var body: some View {
+      NavigationStack {
+        WebView(url: link.url)
+          .navigationTitle(link.title)
+          .navigationBarTitleDisplayMode(.inline)
+          .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+              Button("Done", action: onDone)
+            }
+          }
+      }
+    }
+  }
+#endif
 
 /// Displays the running application's own icon, resolved from the bundle.
 private struct AppIconView: View {
