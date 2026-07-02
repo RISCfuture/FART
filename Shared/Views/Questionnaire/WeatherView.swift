@@ -28,19 +28,19 @@ struct WeatherView: View {
           .accessibilityIdentifier("flightTypeIFR")
       }
       .accessibilityIdentifier("flightTypePicker").onChange(of: flightType) {
-        questionnaire.batchUpdates {
-          switch flightType {
-            case .VFR:
-              questionnaire.ifrLowCeiling = false
-              questionnaire.ifrLowVisibility = false
-              questionnaire.ifrApproachType = .notApplicable
-            case .IFR:
-              questionnaire.vfrFlightPlan = false
-              questionnaire.vfrFlightFollowing = false
-              questionnaire.vfrCeilingUnder3000 = false
-              questionnaire.vfrVisibilityUnder5 = false
-              questionnaire.ifrApproachType = .none
-          }
+        // These synchronous writes are coalesced into a single recompute by the
+        // Observations sequence in Questionnaire.
+        switch flightType {
+          case .VFR:
+            questionnaire.ifrLowCeiling = false
+            questionnaire.ifrLowVisibility = false
+            questionnaire.ifrApproachType = .notApplicable
+          case .IFR:
+            questionnaire.vfrFlightPlan = false
+            questionnaire.vfrFlightFollowing = false
+            questionnaire.vfrCeilingUnder3000 = false
+            questionnaire.vfrVisibilityUnder5 = false
+            questionnaire.ifrApproachType = .none
         }
       }
 

@@ -3,8 +3,8 @@ import SwiftUI
 struct Gauge<Content: View>: View {
   private var gradient: Gradient {
     .init(colors: [
-      Color("LowRisk"), Color("ModerateRisk"), Color("HighRisk"), Color("ModerateRisk"),
-      Color("LowRisk")
+      Color(.lowRisk), Color(.moderateRisk), Color(.highRisk), Color(.moderateRisk),
+      Color(.lowRisk)
     ])
   }
 
@@ -26,7 +26,6 @@ struct Gauge<Content: View>: View {
         contentView()
       }.frame(width: width(geometry))
         .offset(x: thickness(geometry) / 2, y: 0)
-        .animation(.easeInOut(duration: 0.5), value: value)
     }
   }
 
@@ -61,10 +60,10 @@ struct Gauge<Content: View>: View {
       Text("24")
         .font(.system(size: 75))
         .bold()
-        .foregroundColor(Color("ModerateRisk"))
+        .foregroundStyle(Color(.moderateRisk))
       Text("PTS.")
         .bold()
-        .foregroundColor(Color("ModerateRisk"))
+        .foregroundStyle(Color(.moderateRisk))
     }.offset(x: 0, y: -30)
   }
 }
