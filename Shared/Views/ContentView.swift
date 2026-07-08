@@ -30,6 +30,7 @@ struct ContentView: View {
 
   #if !os(macOS)
     @State private var showingAbout = false
+    @State private var selectedTab = AppTab.pilot
   #endif
 
   var body: some View {
@@ -71,8 +72,8 @@ struct ContentView: View {
     }
 
     private var oneColumnLayout: some View {
-      TabView {
-        Tab("Pilot", image: "Pilot") {
+      TabView(selection: $selectedTab) {
+        Tab("Pilot", image: "Pilot", value: AppTab.pilot) {
           NavigationStack {
             PilotProfileView()
               .environment(questionnaire)
@@ -80,7 +81,7 @@ struct ContentView: View {
           }
         }
 
-        Tab("Questions", systemImage: "checklist.checked") {
+        Tab("Questions", systemImage: "checklist.checked", value: AppTab.questions) {
           NavigationStack {
             QuestionnaireView()
               .environment(questionnaire)
@@ -88,7 +89,8 @@ struct ContentView: View {
           }
         }
 
-        Tab("Results", systemImage: "gauge.with.dots.needle.bottom.0percent") {
+        Tab("Results", systemImage: "gauge.with.dots.needle.bottom.0percent", value: AppTab.results)
+        {
           NavigationStack {
             ResultsView()
               .environment(questionnaire)
@@ -96,17 +98,16 @@ struct ContentView: View {
           }
         }
 
-        Tab("About", systemImage: "info.circle") {
+        Tab("About", systemImage: "info.circle", value: AppTab.about) {
           NavigationStack {
             AboutView().navigationTitle("About")
           }
         }
       }
       .tabBarMinimizeBehavior(.onScrollDown)
-      .tabViewBottomAccessory {
-        RiskScoreBadge()
-          .environment(questionnaire)
-      }
+      // Drop the accessory entirely on Results, where the gauge already shows the score and
+      // risk; an empty accessory would still leave a stray capsule behind.
+      .scoreBadgeAccessory(questionnaire, hidden: selectedTab == .results)
     }
 
     private var twoColumnLayout: some View {
@@ -144,6 +145,35 @@ struct ContentView: View {
 }
 
 #if !os(macOS)
+  /// The selectable tabs in the single-column iPhone layout.
+  private enum AppTab {
+    case pilot, questions, results, about
+  }
+
+  private extension View {
+    /// Attaches the risk-score badge as the tab bar's bottom accessory, hiding it when
+    /// `hidden`. The modifier stays applied either way so the `TabView` keeps its identity —
+    /// conditionally applying it would rebuild the tab bar and snap the selection highlight
+    /// back to the first tab on every crossing.
+    @ViewBuilder
+    func scoreBadgeAccessory(_ questionnaire: Questionnaire, hidden: Bool) -> some View {
+      if #available(iOS 26.1, *) {
+        // `isEnabled:` collapses the accessory cleanly, leaving no vacant capsule.
+        tabViewBottomAccessory(isEnabled: !hidden) {
+          RiskScoreBadge()
+            .environment(questionnaire)
+        }
+      } else {
+        // Pre-26.1 has no `isEnabled:`, and emptying the content leaves a stray capsule, so
+        // just keep the badge visible on every tab.
+        tabViewBottomAccessory {
+          RiskScoreBadge()
+            .environment(questionnaire)
+        }
+      }
+    }
+  }
+
   private struct AboutSheet: View {
     @Binding var isPresented: Bool
 

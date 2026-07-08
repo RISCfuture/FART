@@ -41,8 +41,11 @@ struct WeatherView: View {
       }
 
       if flightType == .VFR {
-        Toggle("Ceiling less than \(3000, format: .asFeet) AGL", isOn: $questionnaire.vfrCeilingUnder3000)
-          .accessibilityIdentifier("vfrCeilingUnder3000Toggle")
+        Toggle(
+          "Ceiling less than \(3000, format: .asFeet) AGL",
+          isOn: $questionnaire.vfrCeilingUnder3000
+        )
+        .accessibilityIdentifier("vfrCeilingUnder3000Toggle")
         Toggle("Visibility less than 5 SM", isOn: $questionnaire.vfrVisibilityUnder5)
           .accessibilityIdentifier("vfrVisibilityUnder5Toggle")
         Toggle("Flight plan filed and activated", isOn: $questionnaire.vfrFlightPlan)
@@ -54,7 +57,7 @@ struct WeatherView: View {
           "Ceiling less than \(lowCeiling.rawValue, format: .asFeet) AGL",
           isOn: $questionnaire.ifrLowCeiling
         )
-          .accessibilityIdentifier("ifrLowCeilingToggle")
+        .accessibilityIdentifier("ifrLowCeilingToggle")
         Toggle(
           "Visibility less than \(lowVisibility.stringValue) SM",
           isOn: $questionnaire.ifrLowVisibility

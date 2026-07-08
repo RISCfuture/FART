@@ -18,7 +18,7 @@ struct AirportView: View {
         "Runway length less than \(shortRunway, format: .asFeet)",
         isOn: $questionnaire.shortRunway
       )
-        .accessibilityIdentifier("shortRunwayToggle")
+      .accessibilityIdentifier("shortRunwayToggle")
       Toggle("Wet or soft-field runway", isOn: $questionnaire.wetOrSoftFieldRunway)
         .accessibilityIdentifier("wetOrSoftFieldToggle")
       Toggle("Obstacles on departure/approach", isOn: $questionnaire.runwayObstacles)
