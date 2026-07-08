@@ -8,13 +8,8 @@ import SwiftUI
 @main
 struct Flight_Assessment_of_Risk_ToolApp: App {
   #if os(macOS)
-    private static let aboutWindowID = "about"
-
-    @Environment(\.openWindow)
-    private var openWindow
-
     var body: some Scene {
-      WindowGroup("Flight Assessment of Risk Tool") {
+      WindowGroup("Flight Assessment of Risk Tool", id: FARTWindowID.main) {
         NavigationStack {
           ContentView()
         }
@@ -23,17 +18,23 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       }
       .windowStyle(.titleBar)
       .windowToolbarStyle(.unified)
-      .commands {
-        CommandGroup(replacing: .appInfo) {
-          Button("About Flight Assessment of Risk Tool") {
-            openWindow(id: Self.aboutWindowID)
-          }
-        }
+      .commands { FARTCommands() }
+
+      Settings {
+        PilotProfileView()
+          .formStyle(.grouped)
+          .frame(width: 420)
       }
 
-      Window("About Flight Assessment of Risk Tool", id: Self.aboutWindowID) {
+      Window("About Flight Assessment of Risk Tool", id: FARTWindowID.about) {
         AboutView()
           .frame(width: 420, height: 320)
+      }
+      .windowResizability(.contentSize)
+      .windowBackgroundDragBehavior(.enabled)
+
+      Window("Welcome to FART", id: FARTWindowID.welcome) {
+        WelcomeView()
       }
       .windowResizability(.contentSize)
       .windowBackgroundDragBehavior(.enabled)
@@ -103,3 +104,59 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     }
   }
 }
+
+#if os(macOS)
+  /// The app's menu-bar commands: opening windows, resetting the assessment, printing and
+  /// exporting the report, and Help links. Reset/Print/Export act on the key window's
+  /// questionnaire, exposed through `FocusedValues`.
+  private struct FARTCommands: Commands {
+    @Environment(\.openWindow)
+    private var openWindow
+
+    @FocusedValue(\.questionnaire)
+    private var questionnaire
+
+    var body: some Commands {
+      CommandGroup(replacing: .appInfo) {
+        Button("About Flight Assessment of Risk Tool") {
+          openWindow(id: FARTWindowID.about)
+        }
+      }
+
+      CommandGroup(replacing: .newItem) {
+        Button("New FRAT") { openWindow(id: FARTWindowID.main) }
+          .keyboardShortcut("n")
+      }
+
+      CommandGroup(after: .newItem) {
+        Button("Reset FRAT") { questionnaire?.reset() }
+          .keyboardShortcut(.delete, modifiers: [.command, .shift])
+          .disabled(questionnaire == nil)
+      }
+
+      CommandGroup(replacing: .printItem) {
+        Button("Print FRAT…", action: printReport)
+          .keyboardShortcut("p")
+          .disabled(questionnaire == nil)
+        Button("Export FRAT as PDF…", action: exportPDF)
+          .keyboardShortcut("e", modifiers: [.command, .shift])
+          .disabled(questionnaire == nil)
+      }
+
+      CommandGroup(replacing: .help) {
+        Link("FAA Flight Risk Assessment Guide", destination: ExternalLinks.faaFRAT)
+        Link("FART on GitHub", destination: ExternalLinks.sourceCode)
+      }
+    }
+
+    private func printReport() {
+      guard let questionnaire else { return }
+      FRATReportExporter.printReport(.init(questionnaire: questionnaire, generatedAt: Date()))
+    }
+
+    private func exportPDF() {
+      guard let questionnaire else { return }
+      FRATReportExporter.exportPDF(.init(questionnaire: questionnaire, generatedAt: Date()))
+    }
+  }
+#endif

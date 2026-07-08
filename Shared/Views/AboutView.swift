@@ -15,11 +15,6 @@ struct AboutView: View {
     @State private var webLink: WebLink?
   #endif
 
-  private let moreInfoURL = URL(
-    string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf"
-  )!
-  private let sourceURL = URL(string: "https://github.com/RISCfuture/FART")!
-
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 10) {
@@ -32,7 +27,7 @@ struct AboutView: View {
           .accessibilityIdentifier("aboutDescriptionText")
         }
         Button("More information about FAAST FRAT") {
-          open(moreInfoURL, title: "FAAST FRAT")
+          open(ExternalLinks.faaFRAT, title: "FAAST FRAT")
         }
         .buttonStyle(.glass)
         .accessibilityIdentifier("moreInfoButton")
@@ -40,7 +35,7 @@ struct AboutView: View {
         Text("Copyright ©2021 Tim Morgan. Source code is available under the MIT License.")
           .accessibilityIdentifier("aboutCopyrightText")
         Button("View source code") {
-          open(sourceURL, title: "Source Code")
+          open(ExternalLinks.sourceCode, title: "Source Code")
         }
         .buttonStyle(.glass)
         .accessibilityIdentifier("viewSourceCodeButton")
@@ -150,6 +145,17 @@ private struct AppIconView: View {
         .first
     }
   #endif
+}
+
+/// External web destinations referenced across the app.
+enum ExternalLinks {
+  /// The FAA Safety Briefing article describing the Flight Risk Assessment Tool.
+  static let faaFRAT = URL(
+    string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf"
+  )!
+
+  /// The app's open-source repository.
+  static let sourceCode = URL(string: "https://github.com/RISCfuture/FART")!
 }
 
 #Preview {

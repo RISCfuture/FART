@@ -86,6 +86,38 @@ class Questionnaire {
     observeProfileDefaults()
   }
 
+  // periphery:ignore - invoked only by the macOS "Reset FRAT" menu command
+  /// Clears every answer back to its default, returning the score to baseline. The
+  /// `Observations` pipeline coalesces these writes into a single recompute.
+  func reset() {
+    lessThan50InType = false
+    lessThan15InLast90 = false
+    afterWork = false
+    lessThan8HrSleep = false
+    dualInLast90 = false
+    wingsInLast6Mo = false
+    IFRCurrent = false
+
+    night = false
+    strongWinds = false
+    strongCrosswinds = false
+    mountainous = false
+
+    nontowered = false
+    shortRunway = false
+    wetOrSoftFieldRunway = false
+    runwayObstacles = false
+
+    vfrCeilingUnder3000 = false
+    vfrVisibilityUnder5 = false
+    noDestWx = false
+    vfrFlightPlan = false
+    vfrFlightFollowing = false
+    ifrLowCeiling = false
+    ifrLowVisibility = false
+    ifrApproachType = .notApplicable
+  }
+
   /// Recomputes the score and risk whenever any questionnaire answer changes.
   ///
   /// `Observations` coalesces synchronous mutations into a single emission, so a burst of

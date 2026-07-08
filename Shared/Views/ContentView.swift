@@ -1,31 +1,29 @@
 import SwiftUI
 
 #if os(macOS)
-  enum InputTab: String, CaseIterable, Identifiable {
-    case profile = "Pilot Profile"
-    case questionnaire = "Questionnaire"
+  import Defaults
 
-    var id: String { rawValue }
+  /// Stable identifiers for the app's macOS scenes, used with `openWindow(id:)`.
+  enum FARTWindowID {
+    static let main = "main"
+    static let about = "about"
+    static let welcome = "welcome"
+  }
 
-    var systemImage: String {
-      switch self {
-        case .profile: "person.fill"
-        case .questionnaire: "checklist.checked"
-      }
-    }
-
-    var keyboardShortcut: KeyEquivalent {
-      switch self {
-        case .profile: "1"
-        case .questionnaire: "2"
-      }
-    }
+  extension FocusedValues {
+    /// The questionnaire belonging to the key window, so menu commands (Reset, Print,
+    /// Export) act on the assessment the pilot is currently looking at.
+    @Entry var questionnaire: Questionnaire?
   }
 #endif
 
 struct ContentView: View {
   #if os(macOS)
-    @State private var selectedInput: InputTab = .questionnaire
+    @Environment(\.openWindow)
+    private var openWindow
+
+    @Default(.hasCompletedWelcome)
+    private var hasCompletedWelcome
   #endif
 
   @State private var questionnaire = Questionnaire()
@@ -45,30 +43,17 @@ struct ContentView: View {
   #if os(macOS)
     private var macOSLayout: some View {
       NavigationSplitView {
-        TabView(selection: $selectedInput) {
-          Tab(
-            InputTab.profile.rawValue,
-            systemImage: InputTab.profile.systemImage,
-            value: .profile
-          ) {
-            InputColumn(questionnaire: questionnaire) { PilotProfileView() }
-          }
-
-          Tab(
-            InputTab.questionnaire.rawValue,
-            systemImage: InputTab.questionnaire.systemImage,
-            value: .questionnaire
-          ) {
-            InputColumn(questionnaire: questionnaire) { QuestionnaireView() }
-          }
-        }
-        .navigationSplitViewColumnWidth(min: 320, ideal: 380)
-        .keyboardShortcut(for: .profile, selection: $selectedInput)
-        .keyboardShortcut(for: .questionnaire, selection: $selectedInput)
+        InputColumn(questionnaire: questionnaire) { QuestionnaireView() }
+          .navigationSplitViewColumnWidth(min: 320, ideal: 380)
+          .navigationTitle("Questionnaire")
       } detail: {
         ResultsView()
           .environment(questionnaire)
           .navigationTitle("Results")
+      }
+      .focusedSceneValue(\.questionnaire, questionnaire)
+      .task {
+        if !hasCompletedWelcome { openWindow(id: FARTWindowID.welcome) }
       }
     }
   #endif
@@ -192,21 +177,6 @@ struct ContentView: View {
           .padding()
       }
       .scrollEdgeEffectStyle(.soft, for: .top)
-    }
-  }
-
-  extension View {
-    func keyboardShortcut(
-      for tab: InputTab,
-      selection: Binding<InputTab>
-    ) -> some View {
-      self.background(
-        Button("") {
-          selection.wrappedValue = tab
-        }
-        .keyboardShortcut(tab.keyboardShortcut, modifiers: .command)
-        .hidden()
-      )
     }
   }
 #endif
