@@ -16,10 +16,6 @@ enum Ceiling: Int, CaseIterable, Defaults.Serializable {
   case oneThousandFeet = 1000
   case fiveHundredFeet = 500
   case twoHundredFeet = 200
-
-  var stringValue: String {
-    return ceilingFormatter.string(for: rawValue)!
-  }
 }
 
 enum Visibility: Float, CaseIterable, Defaults.Serializable {

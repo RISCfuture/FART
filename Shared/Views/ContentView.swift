@@ -188,16 +188,15 @@ struct ContentView: View {
     @Environment(Questionnaire.self)
     private var questionnaire
 
-    // Text's `+` concatenation is deprecated in iOS 26, so the colored, heavy, rounded score
-    // run is composed as an AttributedString instead.
+    // The score keeps its own colored, heavy, rounded styling by interpolating a pre-styled
+    // AttributedString run into the localized phrase, so translators control the word order
+    // (and right-to-left layout) around both the score and the risk descriptor.
     private var summary: AttributedString {
       var score = AttributedString(questionnaire.score.formatted(.number))
       score.foregroundColor = questionnaire.risk.color
       score.font = .system(.subheadline, design: .rounded, weight: .heavy)
 
-      let remainder = AttributedString(localized: " pts., \(questionnaire.risk.inlineLabel)")
-
-      return score + remainder
+      return AttributedString(localized: "\(score) pts., \(questionnaire.risk.inlineLabel)")
     }
 
     var body: some View {

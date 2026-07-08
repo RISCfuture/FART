@@ -17,7 +17,7 @@ struct PilotView: View {
         .accessibilityIdentifier("lessThan15InLast90Toggle")
       Toggle("Flight will occur after work", isOn: $questionnaire.afterWork)
         .accessibilityIdentifier("afterWorkToggle")
-      Toggle("Fewer than 8 hours' sleep prior to flight", isOn: $questionnaire.lessThan8HrSleep)
+      Toggle("Fewer than 8 hours’ sleep prior to flight", isOn: $questionnaire.lessThan8HrSleep)
         .accessibilityIdentifier("lessThan8HrSleepToggle")
       Toggle("Dual instruction received in last 90 days", isOn: $questionnaire.dualInLast90)
         .accessibilityIdentifier("dualInLast90Toggle")

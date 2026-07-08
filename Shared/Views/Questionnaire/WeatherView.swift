@@ -13,10 +13,6 @@ struct WeatherView: View {
   @Default(.lowVisibility)
   private var lowVisibility
 
-  private var lowCeilingStr: String {
-    ceilingFormatter.string(from: NSNumber(value: lowCeiling.rawValue))!
-  }
-
   var body: some View {
     @Bindable var questionnaire = questionnaire
 
@@ -45,7 +41,7 @@ struct WeatherView: View {
       }
 
       if flightType == .VFR {
-        Toggle("Ceiling less than 3,000′ AGL", isOn: $questionnaire.vfrCeilingUnder3000)
+        Toggle("Ceiling less than \(3000, format: .asFeet) AGL", isOn: $questionnaire.vfrCeilingUnder3000)
           .accessibilityIdentifier("vfrCeilingUnder3000Toggle")
         Toggle("Visibility less than 5 SM", isOn: $questionnaire.vfrVisibilityUnder5)
           .accessibilityIdentifier("vfrVisibilityUnder5Toggle")
@@ -54,7 +50,10 @@ struct WeatherView: View {
         Toggle("ATC flight following used", isOn: $questionnaire.vfrFlightFollowing)
           .accessibilityIdentifier("vfrFlightFollowingToggle")
       } else {
-        Toggle("Ceiling less than \(lowCeilingStr)′ AGL", isOn: $questionnaire.ifrLowCeiling)
+        Toggle(
+          "Ceiling less than \(lowCeiling.rawValue, format: .asFeet) AGL",
+          isOn: $questionnaire.ifrLowCeiling
+        )
           .accessibilityIdentifier("ifrLowCeilingToggle")
         Toggle(
           "Visibility less than \(lowVisibility.stringValue) SM",
@@ -73,7 +72,7 @@ struct WeatherView: View {
         }
         .accessibilityIdentifier("ifrApproachTypePicker")
       }
-      Toggle("No weather reporting at destination ", isOn: $questionnaire.noDestWx)
+      Toggle("No weather reporting at destination", isOn: $questionnaire.noDestWx)
         .accessibilityIdentifier("noDestWxToggle")
     }
   }

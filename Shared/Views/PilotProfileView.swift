@@ -54,8 +54,10 @@ struct PilotProfileView: View {
           IntegerField("", value: $shortRunway, formatter: runwayLengthFormatter)
             .multilineTextAlignment(.trailing)
             .accessibilityIdentifier("shortRunwayField")
-          Text("ft. or less").foregroundColor(.secondary)
+          Text("ft").foregroundColor(.secondary)
         }
+      } footer: {
+        Text("Runways this length or shorter count as a short runway.")
       }
 
       Section {
@@ -64,22 +66,26 @@ struct PilotProfileView: View {
           IntegerField("", value: $strongWinds, formatter: windSpeedFormatter)
             .multilineTextAlignment(.trailing)
             .accessibilityIdentifier("strongWindsField")
-          Text("kts. or more").foregroundColor(.secondary)
+          Text("kts").foregroundColor(.secondary)
         }
         HStack {
           Text("Strong crosswinds")
           IntegerField("", value: $strongCrosswinds, formatter: windSpeedFormatter)
             .multilineTextAlignment(.trailing)
             .accessibilityIdentifier("strongCrosswindsField")
-          Text("kts. or more").foregroundColor(.secondary)
+          Text("kts").foregroundColor(.secondary)
         }
+      } footer: {
+        Text("Winds or crosswinds at this speed or faster count as strong.")
+      }
 
-        if rating == .IFR {
+      if rating == .IFR {
+        Section {
           HStack {
             Text("Low ceiling")
             Picker("", selection: $lowCeiling) {
               ForEach(Ceiling.allCases, id: \.rawValue) { value in
-                Text("\(value.stringValue)′").tag(value)
+                Text(value.rawValue, format: .asFeet).tag(value)
               }
             }
             .accessibilityIdentifier("lowCeilingPicker")

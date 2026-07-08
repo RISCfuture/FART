@@ -25,11 +25,9 @@
 
     @MainActor
     private static func activeCategories(for questionnaire: Questionnaire) -> [Category] {
-      let windsString = windSpeedFormatter.string(from: .init(value: Defaults[.strongWinds]))!
-      let crosswindsString = windSpeedFormatter.string(
-        from: .init(value: Defaults[.strongCrosswinds])
-      )!
-      let runwayString = runwayLengthFormatter.string(from: .init(value: Defaults[.shortRunway]))!
+      let winds = Defaults[.strongWinds]
+      let crosswinds = Defaults[.strongCrosswinds]
+      let runway = Defaults[.shortRunway]
 
       let groups: [(name: String, factors: [Factor?])] = [
         (
@@ -78,12 +76,12 @@
             factor(questionnaire.night, String(localized: "Twilight or night"), Scores.night),
             factor(
               questionnaire.strongWinds,
-              String(localized: "Surface wind greater than \(windsString) knots"),
+              String(localized: "Surface wind greater than \(winds, format: .asKnots)"),
               Scores.strongWinds
             ),
             factor(
               questionnaire.strongCrosswinds,
-              String(localized: "Crosswind greater than \(crosswindsString) knots"),
+              String(localized: "Crosswind greater than \(crosswinds, format: .asKnots)"),
               Scores.strongCrosswinds
             ),
             factor(
@@ -103,7 +101,7 @@
             ),
             factor(
               questionnaire.shortRunway,
-              String(localized: "Runway length less than \(runwayString)′"),
+              String(localized: "Runway length less than \(runway, format: .asFeet)"),
               Scores.shortRunway
             ),
             factor(
@@ -129,15 +127,13 @@
 
     @MainActor
     private static func weatherFactors(for questionnaire: Questionnaire) -> [Factor?] {
-      let ceilingString = ceilingFormatter.string(
-        from: .init(value: Defaults[.lowCeiling].rawValue)
-      )!
+      let ceiling = Defaults[.lowCeiling].rawValue
       let visibilityString = Defaults[.lowVisibility].stringValue
 
       var factors: [Factor?] = [
         factor(
           questionnaire.vfrCeilingUnder3000,
-          String(localized: "Ceiling less than 3,000′ AGL"),
+          String(localized: "Ceiling less than \(3000, format: .asFeet) AGL"),
           Scores.vfrCeilingUnder3000
         ),
         factor(
@@ -157,7 +153,7 @@
         ),
         factor(
           questionnaire.ifrLowCeiling,
-          String(localized: "Ceiling less than \(ceilingString)′ AGL"),
+          String(localized: "Ceiling less than \(ceiling, format: .asFeet) AGL"),
           Scores.ifrLowCeiling
         ),
         factor(
