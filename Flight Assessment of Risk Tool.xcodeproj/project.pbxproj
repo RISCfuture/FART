@@ -9,54 +9,9 @@
 /* Begin PBXBuildFile section */
 		0159225B2FCA2B45007FB6BB /* XCUITestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0159225A2FCA2B45007FB6BB /* XCUITestKit */; };
 		017F9F5F2EB145E800789538 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 017F9F5E2EB145E800789538 /* Sentry */; };
-		019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
-		019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35A92E860AD500F14F8C /* QuestionnaireData.swift */; };
-		019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
-		019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
-		019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */; };
-		019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */; };
 		019DB8472E8780D8002E7411 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 019DB8462E8780D8002E7411 /* Defaults */; };
-		019DB8492E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
-		019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019DB8482E88ECEE002E7411 /* Icon.icon */; };
-		01A849FA266D8B5600D845CB /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 01A849F9266D8B5600D845CB /* Credits.rtf */; };
-		01BE9C4A266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
-		01BE9C4B266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */; };
-		01BE9C4C266AEBC00026C4ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C38266AEBBE0026C4ED /* ContentView.swift */; };
-		01BE9C4D266AEBC00026C4ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C38266AEBBE0026C4ED /* ContentView.swift */; };
-		01BE9C4E266AEBC00026C4ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01BE9C39266AEBC00026C4ED /* Assets.xcassets */; };
-		01BE9C4F266AEBC00026C4ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01BE9C39266AEBC00026C4ED /* Assets.xcassets */; };
-		01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */; };
-		01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */; };
-		01BE9C68266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
-		01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BE9C67266AFE8A0026C4ED /* Pilot.swift */; };
-		01CDECC9266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
-		01CDECCA266C0F10003051FD /* Gauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECC8266C0F10003051FD /* Gauge.swift */; };
-		01CDECCF266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
-		01CDECD0266C1FEC003051FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CDECCE266C1FEC003051FD /* AboutView.swift */; };
-		01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25064266B1B1C009BECAA /* PilotProfileView.swift */; };
-		01D25066266B1B1C009BECAA /* PilotProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25064266B1B1C009BECAA /* PilotProfileView.swift */; };
-		01D25068266B208F009BECAA /* PilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25067266B208F009BECAA /* PilotView.swift */; };
-		01D25069266B208F009BECAA /* PilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25067266B208F009BECAA /* PilotView.swift */; };
-		01D2506B266B2351009BECAA /* ConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2506A266B2351009BECAA /* ConditionsView.swift */; };
-		01D2506C266B2351009BECAA /* ConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2506A266B2351009BECAA /* ConditionsView.swift */; };
-		01D2506E266B2795009BECAA /* AirportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2506D266B2795009BECAA /* AirportView.swift */; };
-		01D2506F266B2795009BECAA /* AirportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2506D266B2795009BECAA /* AirportView.swift */; };
-		01D25071266B29A2009BECAA /* QuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25070266B29A2009BECAA /* QuestionnaireView.swift */; };
-		01D25072266B29A2009BECAA /* QuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25070266B29A2009BECAA /* QuestionnaireView.swift */; };
-		01D25075266B2D36009BECAA /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25074266B2D36009BECAA /* WeatherView.swift */; };
-		01D25076266B2D36009BECAA /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25074266B2D36009BECAA /* WeatherView.swift */; };
-		01D25078266B3F0E009BECAA /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25077266B3F0E009BECAA /* Formatters.swift */; };
-		01D25079266B3F0E009BECAA /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25077266B3F0E009BECAA /* Formatters.swift */; };
 		01D2507C266B436F009BECAA /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 01D2507B266B436F009BECAA /* Defaults */; };
 		01D2507F266B437B009BECAA /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 01D2507E266B437B009BECAA /* Defaults */; };
-		01D25081266B438C009BECAA /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25080266B438C009BECAA /* Defaults.swift */; };
-		01D25082266B438C009BECAA /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25080266B438C009BECAA /* Defaults.swift */; };
-		01D25084266B4871009BECAA /* IntegerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25083266B4871009BECAA /* IntegerField.swift */; };
-		01D25085266B4871009BECAA /* IntegerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25083266B4871009BECAA /* IntegerField.swift */; };
-		01D25088266B4EED009BECAA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25087266B4EED009BECAA /* String.swift */; };
-		01D25089266B4EED009BECAA /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D25087266B4EED009BECAA /* String.swift */; };
-		01D2508B266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
-		01D2508C266B5290009BECAA /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2508A266B5290009BECAA /* ResultsView.swift */; };
 		01EB02DC2FCA2CEF007C3D1E /* XCUITestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */; };
 		6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 9373A74ADA3745F38306B8B8 /* Sentry */; };
 /* End PBXBuildFile section */
@@ -88,35 +43,9 @@
 /* Begin PBXFileReference section */
 		019A358F2E85FAE100F14F8C /* FARTUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FARTUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		019A359C2E85FAF100F14F8C /* FARTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FARTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		019A35A92E860AD500F14F8C /* QuestionnaireData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireData.swift; sourceTree = "<group>"; };
-		019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FARTScoreCalculator.swift; sourceTree = "<group>"; };
-		019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiskCategorizer.swift; sourceTree = "<group>"; };
 		019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Generate Screenshots.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		019DB8482E88ECEE002E7411 /* Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon.icon; sourceTree = "<group>"; };
-		01A849F9266D8B5600D845CB /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
-		01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight_Assessment_of_Risk_ToolApp.swift; sourceTree = "<group>"; };
-		01BE9C38266AEBBE0026C4ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		01BE9C39266AEBC00026C4ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01BE9C3E266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flight Assessment of Risk Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		01BE9C41266AEBC00026C4ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01BE9C46266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flight Assessment of Risk Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		01BE9C48266AEBC00026C4ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		01BE9C49266AEBC00026C4ED /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
-		01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
-		01BE9C67266AFE8A0026C4ED /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
-		01CDECC8266C0F10003051FD /* Gauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gauge.swift; sourceTree = "<group>"; };
-		01CDECCE266C1FEC003051FD /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		01D25064266B1B1C009BECAA /* PilotProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotProfileView.swift; sourceTree = "<group>"; };
-		01D25067266B208F009BECAA /* PilotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotView.swift; sourceTree = "<group>"; };
-		01D2506A266B2351009BECAA /* ConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsView.swift; sourceTree = "<group>"; };
-		01D2506D266B2795009BECAA /* AirportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportView.swift; sourceTree = "<group>"; };
-		01D25070266B29A2009BECAA /* QuestionnaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireView.swift; sourceTree = "<group>"; };
-		01D25074266B2D36009BECAA /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
-		01D25077266B3F0E009BECAA /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
-		01D25080266B438C009BECAA /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
-		01D25083266B4871009BECAA /* IntegerField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerField.swift; sourceTree = "<group>"; };
-		01D25087266B4EED009BECAA /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		01D2508A266B5290009BECAA /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -126,6 +55,13 @@
 				Extensions.swift,
 			);
 			target = 019A35BD2E861E4C00F14F8C /* Generate Screenshots */;
+		};
+		FA27E12940812A80940FED53 /* Exceptions for "iOS" folder in "FART (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 01BE9C3D266AEBC00026C4ED /* FART (iOS) */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -146,6 +82,24 @@
 		019A35BF2E861E4C00F14F8C /* Generate Screenshots */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Generate Screenshots";
+			sourceTree = "<group>";
+		};
+		01BE9C36266AEBBE0026C4ED /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		01BE9C40266AEBC00026C4ED /* iOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FA27E12940812A80940FED53 /* Exceptions for "iOS" folder in "FART (iOS)" target */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		01BE9C47266AEBC00026C4ED /* macOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = macOS;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -200,21 +154,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		01BE9C36266AEBBE0026C4ED /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				019DB8482E88ECEE002E7411 /* Icon.icon */,
-				01BE9C39266AEBC00026C4ED /* Assets.xcassets */,
-				01D25062266B1AC5009BECAA /* Behaivor */,
-				01D25080266B438C009BECAA /* Defaults.swift */,
-				01D25086266B4EE2009BECAA /* Extensions */,
-				01BE9C37266AEBBE0026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift */,
-				01D25060266B1AAC009BECAA /* Models */,
-				01D25063266B1AD5009BECAA /* Views */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
 		01BE9C3F266AEBC00026C4ED /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,99 +166,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		01BE9C40266AEBC00026C4ED /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				01BE9C41266AEBC00026C4ED /* Info.plist */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
-		01BE9C47266AEBC00026C4ED /* macOS */ = {
-			isa = PBXGroup;
-			children = (
-				01A849F9266D8B5600D845CB /* Credits.rtf */,
-				01BE9C48266AEBC00026C4ED /* Info.plist */,
-				01BE9C49266AEBC00026C4ED /* macOS.entitlements */,
-			);
-			path = macOS;
-			sourceTree = "<group>";
-		};
-		01CDECC6266C0EEF003051FD /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				01D25077266B3F0E009BECAA /* Formatters.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		01CDECC7266C0EF8003051FD /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				01D25083266B4871009BECAA /* IntegerField.swift */,
-				01CDECC8266C0F10003051FD /* Gauge.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		01D25060266B1AAC009BECAA /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				01BE9C67266AFE8A0026C4ED /* Pilot.swift */,
-				019A35A92E860AD500F14F8C /* QuestionnaireData.swift */,
-				01BE9C58266AEC4E0026C4ED /* Questionnaire.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		01D25062266B1AC5009BECAA /* Behaivor */ = {
-			isa = PBXGroup;
-			children = (
-				019A35AC2E860AE100F14F8C /* FARTScoreCalculator.swift */,
-				019A35AD2E860AE100F14F8C /* RiskCategorizer.swift */,
-			);
-			path = Behaivor;
-			sourceTree = "<group>";
-		};
-		01D25063266B1AD5009BECAA /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				01CDECCE266C1FEC003051FD /* AboutView.swift */,
-				01CDECC7266C0EF8003051FD /* Components */,
-				01BE9C38266AEBBE0026C4ED /* ContentView.swift */,
-				01CDECC6266C0EEF003051FD /* Helpers */,
-				01D25064266B1B1C009BECAA /* PilotProfileView.swift */,
-				01D25073266B2D19009BECAA /* Questionnaire */,
-				01D25070266B29A2009BECAA /* QuestionnaireView.swift */,
-				01D2508A266B5290009BECAA /* ResultsView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		01D25073266B2D19009BECAA /* Questionnaire */ = {
-			isa = PBXGroup;
-			children = (
-				01D2506D266B2795009BECAA /* AirportView.swift */,
-				01D2506A266B2351009BECAA /* ConditionsView.swift */,
-				01D25067266B208F009BECAA /* PilotView.swift */,
-				01D25074266B2D36009BECAA /* WeatherView.swift */,
-			);
-			path = Questionnaire;
-			sourceTree = "<group>";
-		};
 		01D2507D266B437B009BECAA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		01D25086266B4EE2009BECAA /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				01D25087266B4EED009BECAA /* String.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,6 +259,10 @@
 			);
 			buildRules = (
 			);
+			fileSystemSynchronizedGroups = (
+				01BE9C36266AEBBE0026C4ED /* Shared */,
+				01BE9C40266AEBC00026C4ED /* iOS */,
+			);
 			name = "FART (iOS)";
 			packageProductDependencies = (
 				01D2507B266B436F009BECAA /* Defaults */,
@@ -427,6 +282,10 @@
 				0140E8A42EB16BD70059C230 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				01BE9C36266AEBBE0026C4ED /* Shared */,
+				01BE9C47266AEBC00026C4ED /* macOS */,
 			);
 			name = "FART (macOS)";
 			packageProductDependencies = (
@@ -513,16 +372,11 @@
 		01BE9C3C266AEBC00026C4ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
-				01BE9C4E266AEBC00026C4ED /* Assets.xcassets in Resources */,
-				019DB84A2E88ECEE002E7411 /* Icon.icon in Resources */,
 			);
 		};
 		01BE9C44266AEBC00026C4ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
-				019DB8492E88ECEE002E7411 /* Icon.icon in Resources */,
-				01BE9C4F266AEBC00026C4ED /* Assets.xcassets in Resources */,
-				01A849FA266D8B5600D845CB /* Credits.rtf in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
@@ -609,51 +463,11 @@
 		01BE9C3A266AEBC00026C4ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
-				01BE9C4C266AEBC00026C4ED /* ContentView.swift in Sources */,
-				01CDECCF266C1FEC003051FD /* AboutView.swift in Sources */,
-				01D2508B266B5290009BECAA /* ResultsView.swift in Sources */,
-				01BE9C68266AFE8A0026C4ED /* Pilot.swift in Sources */,
-				01BE9C4A266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */,
-				01D25075266B2D36009BECAA /* WeatherView.swift in Sources */,
-				01D25078266B3F0E009BECAA /* Formatters.swift in Sources */,
-				01D25068266B208F009BECAA /* PilotView.swift in Sources */,
-				01D2506E266B2795009BECAA /* AirportView.swift in Sources */,
-				01D25084266B4871009BECAA /* IntegerField.swift in Sources */,
-				01D2506B266B2351009BECAA /* ConditionsView.swift in Sources */,
-				01D25071266B29A2009BECAA /* QuestionnaireView.swift in Sources */,
-				01D25065266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
-				01D25081266B438C009BECAA /* Defaults.swift in Sources */,
-				019A35AA2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
-				01CDECC9266C0F10003051FD /* Gauge.swift in Sources */,
-				019A35AE2E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
-				019A35AF2E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
-				01D25088266B4EED009BECAA /* String.swift in Sources */,
-				01BE9C59266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
 		};
 		01BE9C42266AEBC00026C4ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
-				01BE9C4D266AEBC00026C4ED /* ContentView.swift in Sources */,
-				01CDECD0266C1FEC003051FD /* AboutView.swift in Sources */,
-				01D2508C266B5290009BECAA /* ResultsView.swift in Sources */,
-				01BE9C69266AFE8A0026C4ED /* Pilot.swift in Sources */,
-				01BE9C4B266AEBC00026C4ED /* Flight_Assessment_of_Risk_ToolApp.swift in Sources */,
-				01D25076266B2D36009BECAA /* WeatherView.swift in Sources */,
-				01D25079266B3F0E009BECAA /* Formatters.swift in Sources */,
-				01D25069266B208F009BECAA /* PilotView.swift in Sources */,
-				01D2506F266B2795009BECAA /* AirportView.swift in Sources */,
-				01D25085266B4871009BECAA /* IntegerField.swift in Sources */,
-				01D2506C266B2351009BECAA /* ConditionsView.swift in Sources */,
-				01D25072266B29A2009BECAA /* QuestionnaireView.swift in Sources */,
-				01D25066266B1B1C009BECAA /* PilotProfileView.swift in Sources */,
-				01D25082266B438C009BECAA /* Defaults.swift in Sources */,
-				019A35AB2E860AD500F14F8C /* QuestionnaireData.swift in Sources */,
-				01CDECCA266C0F10003051FD /* Gauge.swift in Sources */,
-				019A35B02E860AE100F14F8C /* FARTScoreCalculator.swift in Sources */,
-				019A35B12E860AE100F14F8C /* RiskCategorizer.swift in Sources */,
-				01D25089266B4EED009BECAA /* String.swift in Sources */,
-				01BE9C5A266AEC4E0026C4ED /* Questionnaire.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */
@@ -1032,16 +846,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = macOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Flight ART";
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1062,16 +886,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = macOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Flight ART";
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
