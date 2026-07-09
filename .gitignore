@@ -12,5 +12,5 @@ xcuserdata/
 .swiftlint/RemoteConfigCache
 .swift-format
 
-# Sentry CLI config
-.sentryclirc
+.claude/settings.local.json
+.mcp.json
