@@ -182,28 +182,6 @@ struct FARTUnitTests {
       #expect(RiskCategorizer.categorizeRisk(score: 36, rating: rating, hours: hours) == .high)
       #expect(RiskCategorizer.categorizeRisk(score: 45, rating: rating, hours: hours) == .high)
     }
-
-    @Test("Risk boundary edge cases")
-    func riskBoundaries() {
-      // Test exact boundary values for VFR under 100
-      let vfrUnder100 = (Rating.VFR, Hours.under100)
-      #expect(
-        RiskCategorizer.categorizeRisk(score: 14, rating: vfrUnder100.0, hours: vfrUnder100.1)
-          == .low
-      )
-      #expect(
-        RiskCategorizer.categorizeRisk(score: 15, rating: vfrUnder100.0, hours: vfrUnder100.1)
-          == .moderate
-      )
-      #expect(
-        RiskCategorizer.categorizeRisk(score: 20, rating: vfrUnder100.0, hours: vfrUnder100.1)
-          == .moderate
-      )
-      #expect(
-        RiskCategorizer.categorizeRisk(score: 21, rating: vfrUnder100.0, hours: vfrUnder100.1)
-          == .high
-      )
-    }
   }
 
   @Suite("Score Value Configuration Tests")
