@@ -50,7 +50,7 @@ jobs:
           periphery scan \
             --strict \
             --project "Flight Assessment of Risk Tool.xcodeproj" \
-            --schemes "FART (iOS)" \
+            --schemes FART \
             --exclude-targets "FARTUnitTests,FARTUITests" \
             --exclude-tests \
             --disable-update-check \
