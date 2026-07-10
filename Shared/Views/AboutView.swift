@@ -29,7 +29,7 @@ struct AboutView: View {
         Button("More information about FAAST FRAT") {
           open(ExternalLinks.faaFRAT, title: "FAAST FRAT")
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .accessibilityIdentifier("moreInfoButton")
 
         Text("Copyright ©2021 Tim Morgan. Source code is available under the MIT License.")
@@ -37,7 +37,7 @@ struct AboutView: View {
         Button("View source code") {
           open(ExternalLinks.sourceCode, title: "Source Code")
         }
-        .buttonStyle(.glass)
+        .glassButtonStyle()
         .accessibilityIdentifier("viewSourceCodeButton")
 
         Text("Icons in this application are from The Noun Project:")
@@ -99,6 +99,19 @@ struct AboutView: View {
     }
   }
 #endif
+
+private extension View {
+  /// Applies the glass button style, which is unavailable on visionOS — there the platform's
+  /// default (already glass-like) button style is used instead.
+  @ViewBuilder
+  func glassButtonStyle() -> some View {
+    #if os(visionOS)
+      self
+    #else
+      buttonStyle(.glass)
+    #endif
+  }
+}
 
 /// Displays the running application's own icon, resolved from the bundle.
 private struct AppIconView: View {

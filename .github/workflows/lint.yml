@@ -39,6 +39,10 @@ jobs:
       - name: Download .swift-format config
         run: |
           apt-get update && apt-get install -y wget
-          wget -O .swift-format https://gist.githubusercontent.com/RISCfuture/e0c21afb7bd80a88d128a42bf40d2ecd/raw/.swift-format
+          wget -O .swift-format \
+            https://gist.githubusercontent.com/RISCfuture/e0c21afb7bd80a88d128a42bf40d2ecd/raw/.swift-format
       - name: Run swift-format lint
-        run: swift format lint --strict -r "Flight Assessment of Risk Tool"
+        run: |
+          swift format lint --strict -r \
+            Shared macOS FARTUnitTests FARTUITests \
+            "Generate Screenshots/Generate_Screenshots.swift"

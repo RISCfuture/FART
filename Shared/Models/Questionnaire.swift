@@ -8,12 +8,14 @@ enum Risk {
   case high
 }
 
-enum ApproachType: String {
+/// These raw values are the wire format for a scene's stored answers, so renaming a case
+/// would invalidate the answers of every window awaiting restoration.
+enum ApproachType: String, Codable {
   case precision
   case nonprecision
   case none
   case circling
-  case notApplicable  // for VFR flights
+  case notApplicable = "not_applicable"  // for VFR flights
 }
 
 @MainActor
@@ -53,7 +55,8 @@ class Questionnaire {
   var score = 0
   var risk = Risk.low
 
-  private var currentData: QuestionnaireData {
+  /// Every answer as a plain value, for scoring and for scene-storage restoration.
+  var answers: QuestionnaireData {
     QuestionnaireData(
       lessThan50InType: lessThan50InType,
       lessThan15InLast90: lessThan15InLast90,
@@ -89,33 +92,45 @@ class Questionnaire {
   // periphery:ignore - invoked only by the macOS "Reset FRAT" menu command
   /// Clears every answer back to its default, returning the score to baseline. The
   /// `Observations` pipeline coalesces these writes into a single recompute.
-  func reset() {
-    lessThan50InType = false
-    lessThan15InLast90 = false
-    afterWork = false
-    lessThan8HrSleep = false
-    dualInLast90 = false
-    wingsInLast6Mo = false
-    IFRCurrent = false
+  func reset() { apply(QuestionnaireData()) }
 
-    night = false
-    strongWinds = false
-    strongCrosswinds = false
-    mountainous = false
+  /// Restores answers the scene stored before it was terminated, leaving the questionnaire
+  /// untouched when the scene is new or its stored answers no longer decode.
+  func restoreAnswers(from stored: Data?) {
+    guard let stored,
+      let restored = try? JSONDecoder().decode(QuestionnaireData.self, from: stored)
+    else { return }
 
-    nontowered = false
-    shortRunway = false
-    wetOrSoftFieldRunway = false
-    runwayObstacles = false
+    apply(restored)
+  }
 
-    vfrCeilingUnder3000 = false
-    vfrVisibilityUnder5 = false
-    noDestWx = false
-    vfrFlightPlan = false
-    vfrFlightFollowing = false
-    ifrLowCeiling = false
-    ifrLowVisibility = false
-    ifrApproachType = .notApplicable
+  private func apply(_ data: QuestionnaireData) {
+    lessThan50InType = data.lessThan50InType
+    lessThan15InLast90 = data.lessThan15InLast90
+    afterWork = data.afterWork
+    lessThan8HrSleep = data.lessThan8HrSleep
+    dualInLast90 = data.dualInLast90
+    wingsInLast6Mo = data.wingsInLast6Mo
+    IFRCurrent = data.ifrCurrent
+
+    night = data.night
+    strongWinds = data.strongWinds
+    strongCrosswinds = data.strongCrosswinds
+    mountainous = data.mountainous
+
+    nontowered = data.nontowered
+    shortRunway = data.shortRunway
+    wetOrSoftFieldRunway = data.wetOrSoftFieldRunway
+    runwayObstacles = data.runwayObstacles
+
+    vfrCeilingUnder3000 = data.vfrCeilingUnder3000
+    vfrVisibilityUnder5 = data.vfrVisibilityUnder5
+    noDestWx = data.noDestWx
+    vfrFlightPlan = data.vfrFlightPlan
+    vfrFlightFollowing = data.vfrFlightFollowing
+    ifrLowCeiling = data.ifrLowCeiling
+    ifrLowVisibility = data.ifrLowVisibility
+    ifrApproachType = data.ifrApproachType
   }
 
   /// Recomputes the score and risk whenever any questionnaire answer changes.
@@ -124,7 +139,7 @@ class Questionnaire {
   /// related answer changes (e.g. switching between VFR and IFR) recomputes only once.
   private func observeInputs() {
     Task {
-      for await data in Observations({ self.currentData }) {
+      for await data in Observations({ self.answers }) {
         recompute(from: data)
       }
     }
@@ -135,7 +150,7 @@ class Questionnaire {
   private func observeProfileDefaults() {
     Task {
       for await _ in Defaults.updates([.hours, .rating]) {
-        recompute(from: currentData)
+        recompute(from: answers)
       }
     }
   }

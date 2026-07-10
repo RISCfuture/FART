@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 #if os(macOS)
@@ -36,8 +37,10 @@ struct ContentView: View {
   var body: some View {
     #if os(macOS)
       macOSLayout
+        .restoringAnswers(of: questionnaire)
     #else
       iOSLayout
+        .restoringAnswers(of: questionnaire)
     #endif
   }
 
@@ -104,10 +107,9 @@ struct ContentView: View {
           }
         }
       }
-      .tabBarMinimizeBehavior(.onScrollDown)
       // Drop the accessory entirely on Results, where the gauge already shows the score and
       // risk; an empty accessory would still leave a stray capsule behind.
-      .scoreBadgeAccessory(questionnaire, hidden: selectedTab == .results)
+      .iPhoneTabBarChrome(questionnaire, hideScoreBadge: selectedTab == .results)
     }
 
     private var twoColumnLayout: some View {
@@ -144,6 +146,32 @@ struct ContentView: View {
   #endif
 }
 
+/// Keeps a questionnaire's answers in the scene's storage, so a window the system brings
+/// back after terminating the app returns to the assessment it was showing rather than a
+/// blank form. Each scene stores its own answers, so two windows restore independently.
+private struct AnswerRestoration: ViewModifier {
+  let questionnaire: Questionnaire
+
+  @SceneStorage("answers")
+  private var storedAnswers: Data?
+
+  func body(content: Content) -> some View {
+    content
+      .task { questionnaire.restoreAnswers(from: storedAnswers) }
+      .onChange(of: questionnaire.answers) { _, answers in
+        storedAnswers = try? JSONEncoder().encode(answers)
+      }
+  }
+}
+
+private extension View {
+  /// Ties `questionnaire` to the scene's storage, so its answers survive the scene being
+  /// terminated and restored.
+  func restoringAnswers(of questionnaire: Questionnaire) -> some View {
+    modifier(AnswerRestoration(questionnaire: questionnaire))
+  }
+}
+
 #if !os(macOS)
   /// The selectable tabs in the single-column iPhone layout.
   private enum AppTab {
@@ -151,27 +179,42 @@ struct ContentView: View {
   }
 
   private extension View {
-    /// Attaches the risk-score badge as the tab bar's bottom accessory, hiding it when
-    /// `hidden`. The modifier stays applied either way so the `TabView` keeps its identity —
-    /// conditionally applying it would rebuild the tab bar and snap the selection highlight
-    /// back to the first tab on every crossing.
+    /// Applies the iPhone tab bar's chrome: auto-minimizing on scroll and the score-badge
+    /// bottom accessory (hidden when `hideScoreBadge`). Both APIs exist only on iOS, so on
+    /// visionOS the tab bar is shown without them.
     @ViewBuilder
-    func scoreBadgeAccessory(_ questionnaire: Questionnaire, hidden: Bool) -> some View {
-      if #available(iOS 26.1, *) {
-        // `isEnabled:` collapses the accessory cleanly, leaving no vacant capsule.
-        tabViewBottomAccessory(isEnabled: !hidden) {
-          RiskScoreBadge()
-            .environment(questionnaire)
-        }
-      } else {
-        // Pre-26.1 has no `isEnabled:`, and emptying the content leaves a stray capsule, so
-        // just keep the badge visible on every tab.
-        tabViewBottomAccessory {
-          RiskScoreBadge()
-            .environment(questionnaire)
+    func iPhoneTabBarChrome(_ questionnaire: Questionnaire, hideScoreBadge: Bool) -> some View {
+      #if os(iOS)
+        tabBarMinimizeBehavior(.onScrollDown)
+          .scoreBadgeAccessory(questionnaire, hidden: hideScoreBadge)
+      #else
+        self
+      #endif
+    }
+
+    #if os(iOS)
+      /// Attaches the risk-score badge as the tab bar's bottom accessory, hiding it when
+      /// `hidden`. The modifier stays applied either way so the `TabView` keeps its identity —
+      /// conditionally applying it would rebuild the tab bar and snap the selection highlight
+      /// back to the first tab on every crossing.
+      @ViewBuilder
+      func scoreBadgeAccessory(_ questionnaire: Questionnaire, hidden: Bool) -> some View {
+        if #available(iOS 26.1, *) {
+          // `isEnabled:` collapses the accessory cleanly, leaving no vacant capsule.
+          tabViewBottomAccessory(isEnabled: !hidden) {
+            RiskScoreBadge()
+              .environment(questionnaire)
+          }
+        } else {
+          // Pre-26.1 has no `isEnabled:`, and emptying the content leaves a stray capsule, so
+          // just keep the badge visible on every tab.
+          tabViewBottomAccessory {
+            RiskScoreBadge()
+              .environment(questionnaire)
+          }
         }
       }
-    }
+    #endif
   }
 
   private struct AboutSheet: View {
@@ -211,7 +254,7 @@ struct ContentView: View {
   }
 #endif
 
-#if !os(macOS)
+#if os(iOS)
   /// A compact, live readout of the current FART score and risk level, shown in the tab
   /// bar's bottom accessory so the score stays visible across the Pilot and Questions tabs.
   private struct RiskScoreBadge: View {

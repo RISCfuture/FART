@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 
 @testable import Flight_Assessment_of_Risk_Tool
@@ -247,6 +248,63 @@ struct FARTUnitTests {
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.none) == 4)
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.circling) == 7)
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.notApplicable) == 0)
+    }
+  }
+
+  @Suite("Answer Restoration Tests")
+  struct RestorationTests {
+
+    /// Every boolean answer, so restoring one at a time proves each lands back on the
+    /// property it came from rather than on a neighbour.
+    static let booleanAnswers: [any WritableKeyPath<QuestionnaireData, Bool> & Sendable] = [
+      \.lessThan50InType, \.lessThan15InLast90, \.afterWork, \.lessThan8HrSleep,
+      \.dualInLast90, \.wingsInLast6Mo, \.ifrCurrent,
+      \.night, \.strongWinds, \.strongCrosswinds, \.mountainous,
+      \.nontowered, \.shortRunway, \.wetOrSoftFieldRunway, \.runwayObstacles,
+      \.vfrCeilingUnder3000, \.vfrVisibilityUnder5, \.noDestWx, \.vfrFlightPlan,
+      \.vfrFlightFollowing, \.ifrLowCeiling, \.ifrLowVisibility
+    ]
+
+    @MainActor
+    @Test("Each answer restores onto its own property", arguments: booleanAnswers)
+    func booleanAnswerRestores(
+      answer: any WritableKeyPath<QuestionnaireData, Bool> & Sendable
+    ) throws {
+      var stored = QuestionnaireData()
+      stored[keyPath: answer] = true
+      let encoded = try JSONEncoder().encode(stored)
+
+      let questionnaire = Questionnaire()
+      questionnaire.restoreAnswers(from: encoded)
+
+      #expect(questionnaire.answers == stored)
+    }
+
+    @MainActor
+    @Test(
+      "The approach type restores",
+      arguments: [ApproachType.precision, .nonprecision, .none, .circling]
+    )
+    func approachTypeRestores(approachType: ApproachType) throws {
+      var stored = QuestionnaireData()
+      stored.ifrApproachType = approachType
+      let encoded = try JSONEncoder().encode(stored)
+
+      let questionnaire = Questionnaire()
+      questionnaire.restoreAnswers(from: encoded)
+
+      #expect(questionnaire.answers == stored)
+    }
+
+    @MainActor
+    @Test("Answers are left alone when the scene has none stored")
+    func missingAnswersLeaveQuestionnaireUntouched() {
+      let questionnaire = Questionnaire()
+      questionnaire.night = true
+
+      questionnaire.restoreAnswers(from: nil)
+
+      #expect(questionnaire.answers.night)
     }
   }
 }

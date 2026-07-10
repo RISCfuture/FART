@@ -8,18 +8,67 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
-  ci:
+  ios:
     uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@main
     with:
-      scheme: "FART (iOS)"
+      scheme: FART
       unit-test-plan: "Unit Tests"
       ui-test-plan: "UI Tests"
       build-matrix: |
-        {"include":[
-          {"ios-label":"latest","runner":"macos-26","device":"iPhone 17 Pro","device-type":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","os-version":"","xcode-version":"latest-stable"}
-        ]}
+        {
+          "include": [
+            {
+              "ios-label": "latest",
+              "runner": "macos-26",
+              "device": "iPhone 17 Pro",
+              "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+              "os-version": "",
+              "xcode-version": "latest-stable"
+            }
+          ]
+        }
       ui-matrix: |
-        {"include":[
-          {"ios-label":"latest","runner":"macos-26","device":"iPhone 17 Pro","device-type":"com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro","os-version":"","xcode-version":"latest-stable"},
-          {"ios-label":"latest","runner":"macos-26","device":"iPad Pro 13-inch (M5)","device-type":"com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB","os-version":"","xcode-version":"latest-stable"}
-        ]}
+        {
+          "include": [
+            {
+              "ios-label": "latest",
+              "runner": "macos-26",
+              "device": "iPhone 17 Pro",
+              "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+              "os-version": "",
+              "xcode-version": "latest-stable"
+            },
+            {
+              "ios-label": "latest",
+              "runner": "macos-26",
+              "device": "iPad Pro 13-inch (M5)",
+              "device-type": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB",
+              "os-version": "",
+              "xcode-version": "latest-stable"
+            }
+          ]
+        }
+
+  macos:
+    name: macOS Build and Test
+    runs-on: macos-26
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
+      # required to open project file format 100.
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.3"
+      - uses: actions/checkout@v6
+      - name: Enable macros
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Build and test (macOS)
+        run: |
+          xcodebuild test \
+            -project "Flight Assessment of Risk Tool.xcodeproj" \
+            -scheme FART \
+            -destination "platform=macOS" \
+            -testPlan "Unit Tests" \
+            CODE_SIGNING_ALLOWED=NO

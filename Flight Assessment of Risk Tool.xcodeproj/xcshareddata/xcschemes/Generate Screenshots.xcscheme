@@ -17,7 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "01BE9C3D266AEBC00026C4ED"
                BuildableName = "Flight Assessment of Risk Tool.app"
-               BlueprintName = "FART (iOS)"
+               BlueprintName = "FART"
                ReferencedContainer = "container:Flight Assessment of Risk Tool.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

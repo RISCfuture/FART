@@ -2,7 +2,7 @@ import Foundation
 
 /// Pure data structure containing all questionnaire inputs
 /// This struct has no dependencies and can be easily created and tested
-struct QuestionnaireData: Equatable {
+struct QuestionnaireData: Equatable, Codable {
   // MARK: - Pilot Experience & Condition
   var lessThan50InType: Bool = false
   var lessThan15InLast90: Bool = false

@@ -1,6 +1,6 @@
 project: Flight Assessment of Risk Tool.xcodeproj
 schemes:
-  - FART (iOS)
+  - FART
 exclude_tests: true
 exclude_targets:
   - FARTUnitTests

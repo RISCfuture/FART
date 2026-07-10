@@ -81,10 +81,13 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       options.tracesSampleRate = 1.0
 
       // Configure profiling. Visit https://docs.sentry.io/platforms/apple/profiling/ to learn more.
-      options.configureProfiling = {
-        $0.sessionSampleRate = 1.0  // We recommend adjusting this value in production.
-        $0.lifecycle = .trace
-      }
+      // Sentry's profiling API is unavailable on visionOS.
+      #if !os(visionOS)
+        options.configureProfiling = {
+          $0.sessionSampleRate = 1.0  // We recommend adjusting this value in production.
+          $0.lifecycle = .trace
+        }
+      #endif
 
       // Uncomment the following lines to add more data to your events
       // options.attachScreenshot = true // This adds a screenshot to the error events
