@@ -1,1 +1,6 @@
 parent_config: https://gist.githubusercontent.com/RISCfuture/c57d132e5e0160a768df1625e20ae3b8/raw/.swiftlint.yml
+
+# SnapshotHelper.swift is fastlane's verbatim vendored helper — keep it in step with upstream rather
+# than reformatting it to satisfy our rules.
+excluded:
+  - Generate Screenshots/SnapshotHelper.swift
