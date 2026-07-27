@@ -3,7 +3,6 @@ import XCTest
 // swiftlint:disable prefer_nimble
 final class AboutTests: FARTUITestCase {
 
-  @MainActor
   func testAboutViewDisplaysCorrectContent() throws {
     let about = tabBar.goToAbout()
 

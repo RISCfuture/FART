@@ -3,7 +3,6 @@ import XCUITestKit
 
 final class QuestionnaireTests: FARTUITestCase {
 
-  @MainActor
   func testFlightTypeSwitchShowsCorrectFields() throws {
     let q = tabBar.goToQuestionnaire()
 
@@ -52,7 +51,6 @@ final class QuestionnaireTests: FARTUITestCase {
     weather.ifrApproachTypePicker.assertNeverAppears()
   }
 
-  @MainActor
   func testVFRToIFRClearsVFRFieldsAndResetsScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()
@@ -85,7 +83,6 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "5", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testIFRToVFRClearsIFRFieldsAndResetsScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()
@@ -114,7 +111,6 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "9", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testPilotTogglesAffectScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()
@@ -137,7 +133,6 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "10", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testConditionTogglesAffectScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()
@@ -157,7 +152,6 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "17", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testAirportTogglesAffectScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()
@@ -177,7 +171,6 @@ final class QuestionnaireTests: FARTUITestCase {
       .assertResults(score: "14", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testWeatherTogglesAffectScore() throws {
     // VFR >100h
     tabBar.goToPilotProfile()

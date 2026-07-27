@@ -4,7 +4,6 @@ import XCTest
 // "Generate Screenshots" targets. The screenshot target does not link
 // XCUITestKit, so `isVisible`/`makeVisible`/`toggleOn`/`toggleOff` must live
 // here rather than be sourced from the package.
-@MainActor
 extension XCUIElement {
   var isVisible: Bool {
     guard self.exists && !self.frame.isEmpty else { return false }

@@ -2,7 +2,6 @@ import XCTest
 import XCUITestKit
 
 // swiftlint:disable final_test_case test_case_accessibility
-@MainActor
 class FARTUITestCase: XCTestCase {
   var app: XCUIApplication!
   var tabBar: TabBarPage!
