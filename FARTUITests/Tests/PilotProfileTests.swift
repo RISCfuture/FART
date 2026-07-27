@@ -4,7 +4,6 @@ import XCUITestKit
 // swiftlint:disable prefer_nimble
 final class PilotProfileTests: FARTUITestCase {
 
-  @MainActor
   func testIFRConditionalFieldsVisibility() throws {
     let profile = tabBar.goToPilotProfile()
 
@@ -24,7 +23,6 @@ final class PilotProfileTests: FARTUITestCase {
     XCTAssertTrue(profile.isLowVisibilityPickerVisible())
   }
 
-  @MainActor
   func testRatingAffectsRiskCategorization() throws {
     // VFR <100h (defaults). Score 18 → VFR<100h MODERATE (>14)
     let q = tabBar.goToQuestionnaire()
@@ -45,7 +43,6 @@ final class PilotProfileTests: FARTUITestCase {
       .assertResults(score: "18", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testHoursAffectsRiskCategorization() throws {
     // VFR <100h (defaults). Score 18 → VFR<100h MODERATE (>14)
     let q = tabBar.goToQuestionnaire()

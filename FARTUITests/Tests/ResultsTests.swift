@@ -3,7 +3,6 @@ import XCTest
 // swiftlint:disable prefer_nimble
 final class ResultsTests: FARTUITestCase {
 
-  @MainActor
   func testDefaultScoreAndRiskLevel() throws {
     let results = tabBar.goToResults()
     results.assertResults(score: "0", riskLevel: "LOW RISK")
@@ -15,7 +14,6 @@ final class ResultsTests: FARTUITestCase {
     )
   }
 
-  @MainActor
   func testIFRApproachTypesAffectScore() throws {
     // IFR >100h
     tabBar.goToPilotProfile()
@@ -52,7 +50,6 @@ final class ResultsTests: FARTUITestCase {
       .assertResults(score: "9", riskLevel: "LOW RISK")
   }
 
-  @MainActor
   func testModerateRiskShowsCorrectDescription() throws {
     // VFR >100h, score 21 → MODERATE
     tabBar.goToPilotProfile()
@@ -77,7 +74,6 @@ final class ResultsTests: FARTUITestCase {
     )
   }
 
-  @MainActor
   func testHighRiskShowsCorrectDescription() throws {
     // VFR >100h, score 27 → HIGH
     tabBar.goToPilotProfile()

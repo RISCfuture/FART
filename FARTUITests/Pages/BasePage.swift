@@ -1,7 +1,6 @@
 import XCTest
 import XCUITestKit
 
-@MainActor
 class BasePage {
   let app: XCUIApplication
 
