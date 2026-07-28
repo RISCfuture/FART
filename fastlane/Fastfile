@@ -12,20 +12,97 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+require "fileutils"
+require "json"
+require "shellwords"
+require "tmpdir"
+require "xcodeproj"
+
+# Xcode 26 writes a multi-line build-phase script as a list of lines, a format xcodeproj 1.28.1
+# rejects: it type-checks `shellScript` as a String and raises on an Array. gym parses the project to
+# enumerate its build configurations, so without this an archive dies before xcodebuild is ever
+# reached. Joining the lines back together yields exactly the script the attribute expects. Remove
+# this once xcodeproj understands the newer format.
+module JoinsMultiLineShellScripts
+  def shell_script=(value)
+    super(value.is_a?(Array) ? value.join("\n") : value)
+  end
+end
+Xcodeproj::Project::Object::PBXShellScriptBuildPhase.prepend(JoinsMultiLineShellScripts)
 
 default_platform :ios
 
-platform :ios do
-  before_all do
-    app_store_connect_api_key(
-      key_id:       "5HJ4894LJ5",
-      issuer_id:    "69a6de7f-1ffd-47e3-e053-5b8c7c11a4d1",
-      key_filepath: "./fastlane/AuthKey_5HJ4894LJ5.p8"
-    )
-  end
+APP_IDENTIFIER = "codes.tim.FART"
+SCHEME = "FART"
+XCODEPROJ = "Flight Assessment of Risk Tool.xcodeproj"
 
+# Where archives and dSYMs land, so a CI run can collect them as artifacts.
+OUTPUT_DIRECTORY = "build"
+
+# Each platform this app ships. `destination` selects the SDK to archive against; `deliver` is the
+# name App Store Connect knows the platform by; `match` is the platform whose stored App Store profile
+# the export signs with — a profile is platform-specific, and exportArchive rejects one built for
+# another. The app target also builds for visionOS, but there is no visionOS App Store listing, so it
+# is not released here.
+PLATFORMS = {
+  "iOS"   => { destination: "generic/platform=iOS",   deliver: "ios", match: "ios" },
+  # A Mac App Store submission ships as a .pkg, which the Apple Distribution certificate cannot
+  # sign — that takes the separate Mac Installer Distribution certificate.
+  "macOS" => { destination: "generic/platform=macOS", deliver: "osx", match: "macos",
+               sdk: "macosx", additional_cert_types: ["mac_installer_distribution"] }
+}.freeze
+
+# The Sentry project the release lanes upload dSYMs and sources to. `sentry-cli` reads
+# SENTRY_AUTH_TOKEN from the environment itself; `.sentryclirc` is committed and so holds only the
+# project's identity.
+SENTRY_ORG = "timcodes"
+SENTRY_PROJECT = "fart"
+
+# Signing credentials live in a private repository, everything in it encrypted under one
+# MATCH_PASSWORD: the Apple Distribution certificate (managed by _match_) and the App Store Connect
+# API key (decrypted by that repository's own `bin/api-key`). Neither is ever written to this
+# working tree. CI checks the repository out and sets CERTIFICATES_REPO; a local run falls back to a
+# clone alongside the other repositories.
+DEFAULT_CERTIFICATES_REPO = File.expand_path("~/Repositories/certificates")
+
+def certificates_repo
+  path = ENV.fetch("CERTIFICATES_REPO", DEFAULT_CERTIFICATES_REPO)
+  return path if Dir.exist?(path)
+
+  UI.user_error!("No signing credentials at #{path} — clone the certificates repository there, " \
+                 "or point CERTIFICATES_REPO at an existing checkout.")
+end
+
+# Secrets reach every lane through the environment, and only through the environment: repository
+# secrets on CI, and `fastlane/.env` — which fastlane loads on startup and git ignores — locally.
+def required_env(name)
+  value = ENV.fetch(name, nil)
+  return value unless value.nil? || value.empty?
+
+  UI.user_error!("#{name} is not set. Put it in fastlane/.env (git-ignored, loaded automatically; " \
+                 "see fastlane/.env.example) or export it before running this lane.")
+end
+
+# gym never hands App Store Connect credentials to xcodebuild, so `-allowProvisioningUpdates` on its
+# own has no account to authenticate with and automatic signing cannot fetch a distribution profile.
+# xcodebuild takes the key directly through its own flags. They want a path, so the key is written to
+# a private temp file that goes away when the process exits — it never lands in the working tree.
+def provisioning_authentication_args
+  key = Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::APP_STORE_CONNECT_API_KEY]
+  UI.user_error!("ensure_api_key has to run before an archive can be signed.") if key.nil?
+
+  directory = Dir.mktmpdir("asc-api-key")
+  at_exit { FileUtils.remove_entry(directory, true) }
+  path = File.join(directory, "AuthKey_#{key[:key_id]}.p8")
+  File.write(path, key[:key])
+  FileUtils.chmod(0o600, path)
+
+  "-authenticationKeyPath #{path.shellescape} " \
+    "-authenticationKeyID #{key[:key_id].shellescape} " \
+    "-authenticationKeyIssuerID #{key[:issuer_id].shellescape}"
+end
+
+platform :ios do
   desc "Generate new localized screenshots"
   lane :screenshots do
     capture_screenshots scheme:           "Generate Screenshots",
@@ -34,8 +111,9 @@ platform :ios do
 
   desc "Upload screenshots to App Store Connect"
   lane :upload_screenshots do
+    ensure_api_key
     upload_to_app_store(
-      app_identifier:                       "codes.tim.FART",
+      app_identifier:                       APP_IDENTIFIER,
       screenshots_path:                     "./fastlane/screenshots",
       overwrite_screenshots:                true,
       skip_binary_upload:                   true,
@@ -55,27 +133,158 @@ platform :ios do
 
   desc "Build and upload to TestFlight"
   lane :beta do
-    increment_build_number xcodeproj: "Flight Assessment of Risk Tool.xcodeproj"
-    build_app(
-      scheme:        "FART (iOS)",
-      export_method: "app-store"
-    )
+    ensure_signing
+    increment_build_number xcodeproj: XCODEPROJ
+    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY
     upload_to_testflight
+    upload_debug_symbols
   end
 
   desc "Build and upload to App Store"
   lane :release do
-    increment_build_number xcodeproj: "Flight Assessment of Risk Tool.xcodeproj"
-    build_app scheme:        "FART (iOS)",
-              export_method: "app-store"
+    ensure_signing
+    increment_build_number xcodeproj: XCODEPROJ
+    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY
     upload_to_app_store skip_metadata:     false,
                         skip_screenshots:  false,
                         submit_for_review: false
+    upload_debug_symbols
+  end
 
-    sentry_cli(
-      org_slug:        "timcodes",
-      project_slug:    "fart",
-      include_sources: true
+  desc "Resolve the next build number and write it where CI can read it"
+  lane :ci_next_build_number do
+    ensure_api_key
+
+    # App Store Connect is the authority, not the project file: the checked-in build number drifts
+    # behind whatever was last uploaded, and every platform of a release shares one number.
+    latest = PLATFORMS.each_value.map do |platform|
+      latest_testflight_build_number(app_identifier:       APP_IDENTIFIER,
+                                     platform:             platform[:deliver],
+                                     initial_build_number: 0)
+    end.max
+
+    next_build_number = latest + 1
+    UI.success("Next build number: #{next_build_number}")
+
+    # Only CI needs the value in a file to hand to the next job; a local run just wants to see it.
+    build_number_file = ENV.fetch("BUILD_NUMBER_FILE", nil)
+    File.write(build_number_file, next_build_number) if build_number_file
+  end
+
+  desc "Archive one platform and upload it to App Store Connect (CI)"
+  lane :ci_release do |options|
+    platform = PLATFORMS.fetch(options[:platform]) do
+      UI.user_error!("Unknown platform #{options[:platform].inspect}. " \
+                     "This app ships #{PLATFORMS.keys.join(', ')}.")
+    end
+
+    setup_ci # No-op off CI; elsewhere it keeps match out of the login keychain.
+    ensure_signing(match_platform:       platform.fetch(:match),
+                   additional_cert_types: platform.fetch(:additional_cert_types, []))
+
+    # One temp key file, shared by the archive and the export.
+    authentication_args = provisioning_authentication_args
+
+    build_app(
+      scheme:           SCHEME,
+      destination:      platform[:destination],
+      # The destination decides what gets built; the SDK decides what gym packages. For a
+      # multiplatform target it reaches for a .pkg only when the SDK is macosx, so without this the
+      # macOS leg archives and exports correctly and then fails looking for an .ipa that a Mac App
+      # Store submission never produces.
+      sdk:              platform[:sdk],
+      export_method:    "app-store",
+      output_directory: OUTPUT_DIRECTORY,
+      # Passing the version on the command line rather than writing it into the project keeps a
+      # release from leaving a commit behind, and stamps every target in the archive alike.
+      #
+      # The archive signs automatically, exactly as it does in Xcode: `-allowProvisioningUpdates`
+      # plus the API key lets it resolve a profile, and the certificate comes from the certificates
+      # repository. The export cannot do the same — cloud signing is refused for distribution — so it
+      # consumes the stored match profiles instead, which build_app puts into its export options from
+      # match's mapping. Hence automatic signing here and managed profiles there.
+      xcargs:           "MARKETING_VERSION=#{options.fetch(:version)} " \
+                        "CURRENT_PROJECT_VERSION=#{options.fetch(:build)} " \
+                        "-allowProvisioningUpdates #{authentication_args}"
     )
+
+    upload_to_app_store(
+      app_identifier:             APP_IDENTIFIER,
+      platform:                   platform[:deliver],
+      skip_metadata:              true,
+      skip_screenshots:           true,
+      submit_for_review:          false,
+      run_precheck_before_submit: false
+    )
+
+    upload_debug_symbols
+  end
+
+  # Loads the App Store Connect API key. Kept out of `before_all` so `screenshots`, which runs
+  # entirely against local simulators, needs no credentials at all.
+  private_lane :ensure_api_key do
+    required_env("MATCH_PASSWORD") # Decrypts the key; bin/api-key would otherwise fail obscurely.
+    key = JSON.parse(sh(File.join(certificates_repo, "bin", "api-key"), "--stdout", log: false))
+    app_store_connect_api_key(
+      key_id:      key["key_id"],
+      issuer_id:   key["issuer_id"],
+      key_content: key["key"]
+    )
+  end
+
+  # Everything an archive needs to be signed and accepted.
+  #
+  # Two certificates, because an archive and its export sign differently: `xcodebuild archive` uses a
+  # development identity, just as Xcode does locally, and `exportArchive` re-signs the payload for
+  # distribution. Keeping the development certificate here means a runner installs it instead of
+  # minting a throwaway one every release — a team holds only a few, and automatic signing will
+  # exhaust the quota.
+  #
+  # Skipping profiles on that first call keeps it platform-agnostic: the archive gets its profile
+  # from `-allowProvisioningUpdates`, and the certificate is all match is being asked for. It must
+  # come first, because match records a profile mapping whether or not it synced any — the
+  # development call maps every bundle identifier to nil, so the App Store call has to be the one
+  # that wins. The export signs with that mapping, which is why the second call is told which
+  # platform's profile to sync: the export rejects a profile built for a different one.
+  private_lane :ensure_signing do |options|
+    ensure_api_key
+    match(type: "development", readonly: true, skip_provisioning_profiles: true)
+    match(readonly: true,
+          platform:              options.fetch(:match_platform, "ios"),
+          additional_cert_types: options.fetch(:additional_cert_types, []))
+  end
+
+  # Uploads dSYMs and source context so Sentry can symbolicate the build that was just shipped.
+  # The Xcode run-script phase does this too, but only when `sentry-cli` happens to be installed
+  # on the archiving machine; doing it here makes symbolication a property of the release instead.
+  #
+  # `sentry-cli` is invoked directly rather than through a `sentry_cli` action, which does not
+  # exist — Sentry ships no built-in fastlane action, and no plugin is installed.
+  private_lane :upload_debug_symbols do
+    dsym_path = lane_context[SharedValues::DSYM_OUTPUT_PATH]
+    if dsym_path.nil?
+      UI.important("No dSYM archive was produced, so there is nothing to symbolicate.")
+      next
+    end
+
+    # By the time this runs the binary is already in App Store Connect, so nothing here is allowed to
+    # fail the release — a missing token or a rejected upload costs symbolication, not the build, and
+    # `sentry-cli debug-files upload` can be re-run by hand afterwards.
+    token = ENV.fetch("SENTRY_AUTH_TOKEN", nil)
+    if token.nil? || token.empty?
+      UI.important("SENTRY_AUTH_TOKEN is not set; skipping the Sentry upload of #{dsym_path}.")
+      next
+    end
+
+    begin
+      sh("sentry-cli", "debug-files", "upload",
+         "--org", SENTRY_ORG,
+         "--project", SENTRY_PROJECT,
+         "--include-sources",
+         dsym_path)
+    rescue StandardError => error
+      UI.error("Sentry rejected the dSYM upload: #{error.message}")
+      UI.important("The build itself uploaded fine; re-run sentry-cli once the token is valid.")
+    end
   end
 end

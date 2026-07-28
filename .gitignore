@@ -14,3 +14,8 @@ xcuserdata/
 
 .claude/settings.local.json
 .mcp.json
+
+# fastlane secrets — fastlane loads fastlane/.env automatically
+fastlane/.env
+fastlane/.env.*
+!fastlane/.env.example
