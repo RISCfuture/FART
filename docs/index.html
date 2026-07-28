@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flight Assessment of Risk Tool — a FRAT for iPhone, iPad, Mac</title>
+    <meta
+      name="description"
+      content="The FAA’s Flight Risk Assessment Tool as a free, open-source app. Score a flight against your rating, your hours, and your own minimums."
+    />
+    <meta name="author" content="Tim Morgan" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="https://riscfuture.github.io/FART/" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f0f6ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-itunes-app" content="app-id=1570992859" />
+    <link rel="preload" href="fonts/archivo-expanded.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Flight Assessment of Risk Tool" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Flight Assessment of Risk Tool" />
+    <meta
+      property="og:description"
+      content="The FAA Safety Team’s Flight Risk Assessment Tool, as an app for iPhone, iPad, and Mac."
+    />
+    <meta property="og:url" content="https://riscfuture.github.io/FART/" />
+    <meta property="og:image" content="https://riscfuture.github.io/FART/images/og-card.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Add up the risk before you add power. A green-to-red scale with the marker sitting in moderate risk."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Flight Assessment of Risk Tool" />
+    <meta
+      name="twitter:description"
+      content="The FAA Safety Team’s Flight Risk Assessment Tool, as an app for iPhone, iPad, and Mac."
+    />
+    <meta name="twitter:image" content="https://riscfuture.github.io/FART/images/og-card.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Add up the risk before you add power. A green-to-red scale with the marker sitting in moderate risk."
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://riscfuture.github.io/FART/#website",
+            "url": "https://riscfuture.github.io/FART/",
+            "name": "Flight Assessment of Risk Tool",
+            "description": "The FAA’s Flight Risk Assessment Tool as a free, open-source app. Score a flight against your rating, your hours, and your own minimums.",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://riscfuture.github.io/FART/#author" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://riscfuture.github.io/FART/#author",
+            "name": "Tim Morgan",
+            "url": "https://github.com/RISCfuture"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://riscfuture.github.io/FART/#app",
+            "name": "Flight Assessment of Risk Tool",
+            "alternateName": "FART",
+            "description": "An app version of the FAA Safety Team's Flight Risk Assessment Tool. Answer a short questionnaire about a planned flight and get a score and a risk category, read against your rating, your hours, and your own personal minimums.",
+            "applicationCategory": "UtilitiesApplication",
+            "applicationSubCategory": "Aviation",
+            "operatingSystem": "iOS 26, iPadOS 26, macOS 26",
+            "url": "https://riscfuture.github.io/FART/",
+            "downloadUrl": "https://apps.apple.com/us/app/flight-assessment-of-risk-tool/id1570992859",
+            "image": "https://riscfuture.github.io/FART/images/og-card.png",
+            "screenshot": [
+              "https://riscfuture.github.io/FART/images/iphone-questionnaire.png",
+              "https://riscfuture.github.io/FART/images/iphone-results.png",
+              "https://riscfuture.github.io/FART/images/ipad-results.png",
+              "https://riscfuture.github.io/FART/images/mac-window.png"
+            ],
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "license": "https://github.com/RISCfuture/FART/blob/main/LICENSE",
+            "codeRepository": "https://github.com/RISCfuture/FART",
+            "author": { "@id": "https://riscfuture.github.io/FART/#author" },
+            "featureList": [
+              "Scores a flight from the FAA FRAT's risk factors",
+              "Risk bands set by rating and total flight hours",
+              "Personal minimums for runway length, wind, ceiling, and visibility",
+              "Printable and exportable report on macOS",
+              "Works offline, with no account"
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <script src="main.js" type="module"></script>
+
+    <noscript>
+      <style>
+        /* The tabs need script to switch. Without it, stack every platform's
+           screenshots and drop the buttons that would do nothing. */
+        .tab-list {
+          display: none;
+        }
+
+        .tab-panel[hidden] {
+          display: block;
+        }
+
+        .tab-panel + .tab-panel {
+          margin-top: 2.5rem;
+        }
+      </style>
+    </noscript>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <nav class="site-nav wrap" aria-label="Primary">
+        <a class="wordmark" href="#top">
+          <img src="images/app-icon.png" alt="" width="30" height="30" />
+          <span>FART</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#scale">The scale</a></li>
+          <li><a href="#questions">The questions</a></li>
+          <li><a href="#screens">Screens</a></li>
+          <li><a href="#source">Source</a></li>
+        </ul>
+        <a
+          class="button button-primary"
+          href="https://apps.apple.com/us/app/flight-assessment-of-risk-tool/id1570992859"
+        >
+          App&nbsp;Store
+        </a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" data-band="low">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Pre-flight self-briefing</p>
+            <h1>Add up the risk before you add power.</h1>
+            <p class="lede">
+              Flight Assessment of Risk Tool is the FAA Safety Team’s Flight Risk Assessment Tool,
+              written as an app. Answer a short questionnaire about the flight you’re planning. It
+              totals the points and tells you which band you landed in.
+            </p>
+            <div class="cta-row">
+              <a
+                class="button button-primary"
+                href="https://apps.apple.com/us/app/flight-assessment-of-risk-tool/id1570992859"
+              >
+                Download on the App Store
+              </a>
+              <a class="button button-secondary" href="https://github.com/RISCfuture/FART">
+                Read the source
+              </a>
+            </div>
+            <p class="fine-print">
+              Free and open source. For iPhone, iPad, and Mac. Requires iOS&nbsp;26 or macOS&nbsp;26.
+            </p>
+          </div>
+
+          <figure class="tally" data-band="low">
+            <figcaption class="tally-head">
+              <span class="eyebrow">A flight, scored</span>
+              <span class="tally-pilot">VFR &middot; under 100 hours</span>
+            </figcaption>
+
+            <ol class="tally-items">
+              <li style="--i: 0" data-points="5">
+                <span class="tally-item">Fewer than 8 hours’ sleep</span>
+                <span class="pts pts-up" style="--lvl: 5">+5</span>
+              </li>
+              <li style="--i: 1" data-points="4">
+                <span class="tally-item">Flight will occur after work</span>
+                <span class="pts pts-up" style="--lvl: 4">+4</span>
+              </li>
+              <li style="--i: 2" data-points="5">
+                <span class="tally-item">Twilight or night</span>
+                <span class="pts pts-up" style="--lvl: 5">+5</span>
+              </li>
+              <li style="--i: 3" data-points="4">
+                <span class="tally-item">Surface wind greater than 15 knots</span>
+                <span class="pts pts-up" style="--lvl: 4">+4</span>
+              </li>
+              <li style="--i: 4" data-points="4">
+                <span class="tally-item">Mountainous terrain</span>
+                <span class="pts pts-up" style="--lvl: 4">+4</span>
+              </li>
+              <li style="--i: 5" data-points="-3">
+                <span class="tally-item">WINGS phase in the last 6 months</span>
+                <span class="pts pts-down" style="--lvl: 3">&minus;3</span>
+              </li>
+            </ol>
+
+            <div class="tally-total" aria-hidden="true">
+              <span class="score" data-score>19</span>
+              <span class="score-unit">pts.</span>
+              <span class="band-name" data-band-name>Moderate risk</span>
+            </div>
+
+            <div class="meter" style="--scale: 30" aria-hidden="true">
+              <div class="meter-track">
+                <span class="meter-zone" data-band="low" style="--from: 0; --to: 14"></span>
+                <span class="meter-zone" data-band="moderate" style="--from: 14; --to: 20"></span>
+                <span class="meter-zone" data-band="high" style="--from: 20; --to: 30"></span>
+                <span class="meter-marker" data-marker style="--at: 19"></span>
+              </div>
+              <ol class="meter-ticks">
+                <li style="--at: 0">0</li>
+                <li style="--at: 14">14</li>
+                <li style="--at: 20">20</li>
+                <li style="--at: 30">30</li>
+              </ol>
+            </div>
+
+            <p class="sr-only">
+              Six answers totalling 19 points, which is moderate risk for a VFR pilot with under 100
+              hours: moderate begins above 14 and high begins above 20.
+            </p>
+          </figure>
+        </div>
+      </section>
+
+      <section id="scale" data-band="low" aria-labelledby="scale-heading">
+        <div class="wrap">
+          <p class="eyebrow">The bands</p>
+          <h2 id="scale-heading">The same score means different things to different pilots.</h2>
+          <p class="section-lede">
+            An instrument-rated pilot with a thousand hours can absorb risk that a fresh private
+            pilot can’t. The FAA draws the lines in different places for each. Set your rating and
+            your hours once, and every score after that is read against your row.
+          </p>
+
+          <table class="bands">
+            <caption class="sr-only">
+              Score thresholds by rating and total flight hours
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Pilot</th>
+                <th scope="col"><span class="chip" data-band="low">Low</span></th>
+                <th scope="col"><span class="chip" data-band="moderate">Moderate</span></th>
+                <th scope="col"><span class="chip" data-band="high">High</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">VFR, under 100 hours</th>
+                <td>0&ndash;14</td>
+                <td>15&ndash;20</td>
+                <td>21 and up</td>
+              </tr>
+              <tr>
+                <th scope="row">VFR, 100 hours or more</th>
+                <td>0&ndash;20</td>
+                <td>21&ndash;25</td>
+                <td>26 and up</td>
+              </tr>
+              <tr>
+                <th scope="row">IFR, under 100 hours</th>
+                <td>0&ndash;20</td>
+                <td>21&ndash;30</td>
+                <td>31 and up</td>
+              </tr>
+              <tr>
+                <th scope="row">IFR, 100 hours or more</th>
+                <td>0&ndash;30</td>
+                <td>31&ndash;35</td>
+                <td>36 and up</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="questions" data-band="moderate" aria-labelledby="questions-heading">
+        <div class="wrap">
+          <p class="eyebrow">The questions</p>
+          <h2 id="questions-heading">Four categories. Every answer is a switch.</h2>
+          <p class="section-lede">
+            Nothing to type and nothing to look up. A full run-through takes about a minute, and the
+            score moves as you go.
+          </p>
+
+          <ul class="cards">
+            <li class="card">
+              <h3>Pilot</h3>
+              <ul class="factors">
+                <li><span>Fewer than 50 hours in type</span><span class="pts pts-up" style="--lvl: 5">+5</span></li>
+                <li><span>Fewer than 8 hours’ sleep</span><span class="pts pts-up" style="--lvl: 5">+5</span></li>
+                <li><span>Flight will occur after work</span><span class="pts pts-up" style="--lvl: 4">+4</span></li>
+              </ul>
+            </li>
+            <li class="card">
+              <h3>Flight conditions</h3>
+              <ul class="factors">
+                <li><span>Twilight or night</span><span class="pts pts-up" style="--lvl: 5">+5</span></li>
+                <li><span>Surface wind over 15 knots</span><span class="pts pts-up" style="--lvl: 4">+4</span></li>
+                <li><span>Mountainous terrain</span><span class="pts pts-up" style="--lvl: 4">+4</span></li>
+              </ul>
+            </li>
+            <li class="card">
+              <h3>Airport</h3>
+              <ul class="factors">
+                <li><span>Nontowered field</span><span class="pts pts-up" style="--lvl: 5">+5</span></li>
+                <li><span>Short runway</span><span class="pts pts-up" style="--lvl: 3">+3</span></li>
+                <li><span>Obstacles on departure</span><span class="pts pts-up" style="--lvl: 3">+3</span></li>
+              </ul>
+            </li>
+            <li class="card">
+              <h3>Weather</h3>
+              <ul class="factors">
+                <li><span>No weather at the destination</span><span class="pts pts-up" style="--lvl: 4">+4</span></li>
+                <li><span>Ceiling below your minimum</span><span class="pts pts-up" style="--lvl: 2">+2</span></li>
+                <li><span>Visibility below your minimum</span><span class="pts pts-up" style="--lvl: 2">+2</span></li>
+              </ul>
+            </li>
+            <li class="card card-credit" data-band="low">
+              <h3>And six ways to bring it down</h3>
+              <ul class="factors">
+                <li><span>WINGS phase in the last 6 months</span><span class="pts pts-down" style="--lvl: 3">&minus;3</span></li>
+                <li><span>Instrument current and proficient</span><span class="pts pts-down" style="--lvl: 3">&minus;3</span></li>
+                <li><span>VFR flight following</span><span class="pts pts-down" style="--lvl: 3">&minus;3</span></li>
+                <li><span>VFR flight plan filed</span><span class="pts pts-down" style="--lvl: 2">&minus;2</span></li>
+                <li><span>Precision approach available</span><span class="pts pts-down" style="--lvl: 2">&minus;2</span></li>
+                <li><span>Dual instruction in the last 90 days</span><span class="pts pts-down" style="--lvl: 1">&minus;1</span></li>
+              </ul>
+            </li>
+          </ul>
+
+          <p class="section-note">
+            Short runway, strong wind, strong crosswind, low ceiling, low visibility &mdash; you
+            decide what those mean. Set your own numbers in the pilot profile, and the questions ask
+            about them.
+          </p>
+        </div>
+      </section>
+
+      <section id="screens" data-band="moderate" aria-labelledby="screens-heading">
+        <div class="wrap">
+          <p class="eyebrow">Screens</p>
+          <h2 id="screens-heading">One app, at home on all three.</h2>
+
+          <div class="tabs">
+            <div class="tab-list" role="tablist" aria-label="Screenshots by platform">
+              <button
+                id="tab-iphone"
+                class="tab"
+                role="tab"
+                type="button"
+                aria-controls="panel-iphone"
+                aria-selected="true"
+              >
+                iPhone
+              </button>
+              <button
+                id="tab-ipad"
+                class="tab"
+                role="tab"
+                type="button"
+                aria-controls="panel-ipad"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                iPad
+              </button>
+              <button
+                id="tab-mac"
+                class="tab"
+                role="tab"
+                type="button"
+                aria-controls="panel-mac"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                Mac
+              </button>
+            </div>
+
+            <div id="panel-iphone" class="tab-panel" role="tabpanel" aria-labelledby="tab-iphone">
+              <ul class="shot-row">
+                <li>
+                  <figure>
+                    <img
+                      src="images/iphone-questionnaire.png"
+                      alt="The questionnaire on iPhone"
+                      width="660"
+                      height="1434"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The questionnaire.</figcaption>
+                  </figure>
+                </li>
+                <li>
+                  <figure>
+                    <img
+                      src="images/iphone-results.png"
+                      alt="The risk score on iPhone"
+                      width="660"
+                      height="1434"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The score and risk category.</figcaption>
+                  </figure>
+                </li>
+                <li>
+                  <figure>
+                    <img
+                      src="images/iphone-profile.png"
+                      alt="The pilot profile on iPhone"
+                      width="660"
+                      height="1434"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The pilot profile.</figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+
+            <div id="panel-ipad" class="tab-panel" role="tabpanel" aria-labelledby="tab-ipad" hidden>
+              <ul class="shot-row shot-row-wide">
+                <li>
+                  <figure>
+                    <img
+                      src="images/ipad-questionnaire.png"
+                      alt="The questionnaire on iPad"
+                      width="1000"
+                      height="1333"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The questionnaire.</figcaption>
+                  </figure>
+                </li>
+                <li>
+                  <figure>
+                    <img
+                      src="images/ipad-results.png"
+                      alt="The risk score on iPad"
+                      width="1000"
+                      height="1333"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The results.</figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+
+            <div id="panel-mac" class="tab-panel" role="tabpanel" aria-labelledby="tab-mac" hidden>
+              <ul class="shot-row shot-row-wide">
+                <li>
+                  <figure>
+                    <img
+                      src="images/mac-window.png"
+                      alt="The main window on macOS"
+                      width="1200"
+                      height="787"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>The main window.</figcaption>
+                  </figure>
+                </li>
+                <li>
+                  <figure>
+                    <img
+                      src="images/mac-report.png"
+                      alt="A printed flight risk report"
+                      width="900"
+                      height="863"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption>An exported report.</figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="section-note">
+            On the Mac, a finished assessment becomes a report listing every answer, the score, and
+            the risk category. Print it, or export it as a PDF for the flight bag.
+          </p>
+        </div>
+      </section>
+
+      <section id="frat" data-band="high" aria-labelledby="frat-heading">
+        <div class="wrap">
+          <p class="eyebrow">Where the number comes from</p>
+          <h2 id="frat-heading">The FAA’s worksheet, minus the worksheet.</h2>
+          <p class="section-lede">
+            The FAA Safety Team publishes a Flight Risk Assessment Tool: a sheet that assigns points
+            to the things that get pilots hurt &mdash; inexperience in type, a night flight over
+            mountains, a short wet runway, an approach you haven’t flown in months. This app is that
+            sheet, in a form you’ll actually fill out.
+          </p>
+          <p>
+            <a class="link-out" href="https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf">
+              Read the FAA Safety Briefing article on the FRAT
+            </a>
+          </p>
+          <p class="disclaimer">
+            <strong>A score is not a go/no-go decision.</strong> It’s a way to see the risk you’re
+            accepting, so you can mitigate it, get a second opinion, or stay on the ground. The
+            decision stays yours.
+          </p>
+        </div>
+      </section>
+
+      <section id="source" data-band="high" aria-labelledby="source-heading">
+        <div class="wrap">
+          <p class="eyebrow">Privacy and source</p>
+          <h2 id="source-heading">Nothing leaks.</h2>
+          <p class="section-lede">
+            Every assessment stays on your device. There’s no account, no sign-in, and no network
+            connection needed to score a flight. The app reports anonymous crash and performance
+            diagnostics, unlinked to your identity, and nothing else.
+          </p>
+          <p>
+            The whole thing is on GitHub under the MIT license &mdash; read it, build it, or open a
+            pull request.
+          </p>
+          <div class="cta-row">
+            <a class="button button-secondary" href="https://github.com/RISCfuture/FART">
+              Source on GitHub
+            </a>
+            <a class="button button-secondary" href="privacy.html">Privacy policy</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing" data-band="low" aria-labelledby="closing-heading">
+        <div class="wrap closing-grid">
+          <div class="closing-copy">
+            <p class="eyebrow">Before the next one</p>
+            <h2 id="closing-heading">Score it on the ground.</h2>
+            <p class="section-lede">
+              A minute of switches, and you know what you’re carrying into the airplane with you.
+            </p>
+            <div class="cta-row">
+              <a
+                class="button button-primary"
+                href="https://apps.apple.com/us/app/flight-assessment-of-risk-tool/id1570992859"
+              >
+                Download on the App Store
+              </a>
+            </div>
+          </div>
+          <figure class="closing-shot">
+            <img
+              src="images/hero.png"
+              alt="A finished assessment on iPhone showing 11 points and a low risk result"
+              width="900"
+              height="1955"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <ul class="footer-links">
+          <li>
+            <a href="https://apps.apple.com/us/app/flight-assessment-of-risk-tool/id1570992859">
+              App Store
+            </a>
+          </li>
+          <li><a href="https://github.com/RISCfuture/FART">GitHub</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="https://github.com/RISCfuture/FART/blob/main/LICENSE">MIT License</a></li>
+        </ul>
+        <p class="copyright">
+          Copyright &copy; <span data-current-year>2021</span> Tim Morgan. Not affiliated with or
+          endorsed by the Federal Aviation Administration.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

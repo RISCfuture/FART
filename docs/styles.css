@@ -1,0 +1,867 @@
+@font-face {
+  font-family: "Archivo Expanded";
+  src: url("fonts/archivo-expanded.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("fonts/public-sans.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tokens ------------------------------------------------------------------ */
+
+:root {
+  --display: "Archivo Expanded", ui-sans-serif, system-ui, sans-serif;
+  --text: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --measure: 60ch;
+  --page-width: 70rem;
+  --gutter: clamp(1.15rem, 4vw, 2.75rem);
+  --section-gap: clamp(3.5rem, 8vw, 6.5rem);
+  --radius: 0.7rem;
+  --radius-lg: 1.25rem;
+
+  /* The app's own risk colors, from Shared/Assets.xcassets. */
+  --low: #369d1e;
+  --moderate: #daba2c;
+  --high: #b41834;
+
+  --low-ink: #22690f;
+  --moderate-ink: #7a6206;
+  --high-ink: #97122a;
+
+  --paper: #fcfbf8;
+  --surface: #ffffff;
+  --ink: #1a1712;
+  --ink-2: #5f584d;
+  --rule: #e3ddd1;
+  --shadow: 210deg 10% 40%;
+
+  --hills: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0 48 V41 H290 C378 41 398 5 522 5 C572 5 592 20 600 27 C608 20 628 5 678 5 C802 5 822 41 910 41 H1200 V48 Z'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --low-ink: #62c847;
+    --moderate-ink: #e6cb56;
+    --high-ink: #f4808f;
+
+    --paper: #131210;
+    --surface: #1b1916;
+    --ink: #f3efe7;
+    --ink-2: #a89f91;
+    --rule: #302c26;
+    --shadow: 30deg 8% 4%;
+  }
+}
+
+/* Every banded thing — a section, the tally, a chip, a meter zone — reads its
+   colour from the band it is in, so the page and the app agree on what green,
+   yellow, and red mean. */
+
+[data-band] {
+  --wash: color-mix(in oklab, var(--band) var(--wash-strength, 7%), var(--paper));
+  --edge: color-mix(in oklab, var(--band) 22%, var(--paper));
+}
+
+[data-band="low"] {
+  --band: var(--low);
+  --band-ink: var(--low-ink);
+}
+
+[data-band="moderate"] {
+  --band: var(--moderate);
+  --band-ink: var(--moderate-ink);
+}
+
+[data-band="high"] {
+  --band: var(--high);
+  --band-ink: var(--high-ink);
+  --wash-strength: 4.5%;
+}
+
+/* Base -------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+  text-wrap: balance;
+  margin: 0 0 0.55em;
+}
+
+h1 {
+  font-size: clamp(2.35rem, 4.6vw, 3.55rem);
+  line-height: 0.99;
+  letter-spacing: -0.022em;
+  max-width: 15ch;
+}
+
+h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  max-width: 22ch;
+}
+
+h3 {
+  font-size: 1.02rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+
+p {
+  margin: 0 0 1.1em;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--ink);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--edge, var(--rule));
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Utilities --------------------------------------------------------------- */
+
+.wrap {
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: var(--gutter);
+  top: 0.5rem;
+  z-index: 10;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--band-ink, var(--ink-2));
+  margin-bottom: 1.15em;
+}
+
+.pts {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0.15em 0.45em;
+  border-radius: 0.35rem;
+  white-space: nowrap;
+}
+
+/* A pill is tinted by how much it moves the score: a two-pointer sits in the
+   yellow, a five-pointer in the red, and anything that subtracts is green. */
+
+.pts-up {
+  --level: calc((var(--lvl) - 2) / 3);
+  color: color-mix(in oklab, var(--high-ink) calc(var(--level) * 100%), var(--moderate-ink));
+  background: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--high) calc(var(--level) * 100%), var(--moderate)) 20%,
+    var(--paper)
+  );
+}
+
+.pts-down {
+  --level: calc((var(--lvl) - 1) / 2);
+  color: var(--low-ink);
+  background: color-mix(in oklab, var(--low) calc(9% + var(--level) * 11%), var(--paper));
+}
+
+.chip {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--band-ink);
+  padding: 0.2em 0.6em;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--band) 16%, var(--paper));
+}
+
+/* Header ------------------------------------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 4vw, 2.5rem);
+  padding-block: 0.7rem;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.wordmark img {
+  border-radius: 0.42rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: clamp(0.85rem, 2.4vw, 1.9rem);
+  margin-inline-end: auto;
+  font-size: 0.92rem;
+}
+
+.nav-links a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 46rem) {
+  .nav-links {
+    display: none;
+  }
+
+  .wordmark {
+    margin-inline-end: auto;
+  }
+}
+
+/* Buttons ----------------------------------------------------------------- */
+
+.button {
+  display: inline-block;
+  padding: 0.62rem 1.15rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-weight: 650;
+  font-size: 0.95rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, border-color 0.14s ease;
+}
+
+.button-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button-primary:hover {
+  background: color-mix(in oklab, var(--ink) 86%, var(--paper));
+}
+
+.button-secondary {
+  border-color: var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.button-secondary:hover {
+  border-color: var(--ink-2);
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-block: 1.6rem 1rem;
+}
+
+/* Sections ---------------------------------------------------------------- */
+
+main > section {
+  position: relative;
+  padding-block: var(--section-gap);
+  background: var(--wash);
+}
+
+/* Where the band changes, the seam between two sections rises into a pair of
+   low hills — the same silhouette the app icon draws across its dial. */
+main > section + section::before,
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 100% 0;
+  height: clamp(22px, 3.2vw, 40px);
+  background: var(--wash);
+  -webkit-mask: var(--hills) 50% 100% / 100% 100% no-repeat;
+  mask: var(--hills) 50% 100% / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.section-lede {
+  font-size: 1.15rem;
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+
+.section-note {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+
+/* Hero -------------------------------------------------------------------- */
+
+.hero {
+  padding-top: clamp(2.75rem, 6vw, 5rem);
+}
+
+.hero-grid {
+  display: grid;
+  gap: clamp(2.25rem, 5vw, 4rem);
+  align-items: center;
+}
+
+@media (min-width: 58rem) {
+  .hero-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+.fine-print {
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  margin-bottom: 0;
+}
+
+/* The tally --------------------------------------------------------------- */
+
+.tally {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem clamp(1.1rem, 3vw, 1.6rem) 1.7rem;
+  box-shadow:
+    0 1px 2px hsl(var(--shadow) / 0.07),
+    0 20px 45px -30px hsl(var(--shadow) / 0.45);
+}
+
+.tally-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tally-head .eyebrow {
+  margin-bottom: 0;
+  color: var(--ink-2);
+}
+
+.tally-pilot {
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.tally-items li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.62rem 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--rule) 55%, transparent);
+  animation: deal 0.42s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  animation-delay: calc(var(--i) * 0.36s + 0.35s);
+}
+
+.tally-item {
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+}
+
+.tally-total {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.score {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(3.4rem, 9vw, 4.75rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--band-ink);
+  transition: color 0.35s ease;
+}
+
+.score-unit {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--band-ink);
+  transition: color 0.35s ease;
+  margin-inline-end: auto;
+}
+
+.band-name {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--band-ink);
+  transition: color 0.35s ease;
+}
+
+/* The meter --------------------------------------------------------------- */
+
+.meter {
+  position: relative;
+  margin-top: 1.15rem;
+}
+
+.meter-track {
+  position: relative;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--rule);
+}
+
+.meter-zone {
+  position: absolute;
+  inset-block: 0;
+  left: calc(var(--from) / var(--scale) * 100%);
+  width: calc((var(--to) - var(--from)) / var(--scale) * 100%);
+  background: var(--band);
+}
+
+.meter-zone:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.meter-zone:nth-child(3) {
+  border-radius: 0 999px 999px 0;
+}
+
+.meter-marker {
+  position: absolute;
+  top: -6px;
+  height: 21px;
+  width: 3px;
+  left: calc(var(--at) / var(--scale) * 100%);
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px var(--surface);
+  transition: left 0.36s cubic-bezier(0.3, 0.8, 0.4, 1);
+}
+
+.meter-ticks {
+  position: relative;
+  height: 1.6rem;
+  margin-top: 0.7rem;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+.meter-ticks li {
+  position: absolute;
+  left: calc(var(--at) / var(--scale) * 100%);
+  transform: translateX(-50%);
+}
+
+.meter-ticks li:first-child {
+  transform: none;
+}
+
+.meter-ticks li:last-child {
+  transform: translateX(-100%);
+}
+
+/* Bands table ------------------------------------------------------------- */
+
+.bands {
+  width: 100%;
+  margin-top: 2.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.bands th,
+.bands td {
+  text-align: left;
+  padding: 0.85rem 1rem 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.bands thead th {
+  padding-bottom: 0.7rem;
+  font-weight: 400;
+}
+
+.bands thead th:first-child {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.bands tbody th {
+  font-weight: 450;
+  color: var(--ink-2);
+}
+
+.bands tbody th,
+.bands thead th:first-child {
+  width: 38%;
+}
+
+.bands td {
+  font-family: var(--display);
+  font-weight: 650;
+  font-size: 0.98rem;
+}
+
+.bands td:nth-child(2) {
+  color: var(--low-ink);
+}
+
+.bands td:nth-child(3) {
+  color: var(--moderate-ink);
+}
+
+.bands td:nth-child(4) {
+  color: var(--high-ink);
+}
+
+@media (max-width: 40rem) {
+  .bands {
+    font-size: 0.9rem;
+  }
+
+  .bands th,
+  .bands td {
+    padding-inline-end: 0.5rem;
+  }
+}
+
+/* Question cards ---------------------------------------------------------- */
+
+.cards {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.35rem 1.4rem;
+}
+
+.card h3 {
+  margin-bottom: 0.9rem;
+}
+
+.factors li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.48rem 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--ink-2);
+  border-bottom: 1px solid color-mix(in oklab, var(--rule) 55%, transparent);
+}
+
+.factors li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.card-credit {
+  border-color: var(--edge);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--low) 6%, var(--surface)),
+    var(--surface) 60%
+  );
+}
+
+.card-credit h3 {
+  color: var(--low-ink);
+}
+
+@media (min-width: 62rem) {
+  .card-credit {
+    grid-column: span 2;
+  }
+
+  .card-credit .factors {
+    columns: 2;
+    column-gap: 2rem;
+  }
+
+  .card-credit .factors li {
+    break-inside: avoid;
+  }
+}
+
+/* Screenshot tabs --------------------------------------------------------- */
+
+.tab-list {
+  display: flex;
+  gap: 0.4rem;
+  margin-block: 2rem;
+}
+
+.tab {
+  padding: 0.45rem 1rem;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--paper);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.shot-row {
+  display: grid;
+  gap: clamp(1rem, 3vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  align-items: start;
+}
+
+.shot-row-wide {
+  grid-template-columns: repeat(auto-fit, minmax(min(21rem, 100%), 1fr));
+}
+
+.shot-row img {
+  border-radius: 0.9rem;
+  box-shadow:
+    0 1px 2px hsl(var(--shadow) / 0.08),
+    0 22px 45px -32px hsl(var(--shadow) / 0.5);
+}
+
+figcaption {
+  margin-top: 0.8rem;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+/* Long-form --------------------------------------------------------------- */
+
+.link-out {
+  font-weight: 600;
+}
+
+.disclaimer {
+  margin-top: 2rem;
+  padding: 1.15rem 1.35rem;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-left: 3px solid var(--band);
+  border-radius: var(--radius);
+  font-size: 0.97rem;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+
+.disclaimer strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+/* Closing ----------------------------------------------------------------- */
+
+.closing-grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+
+@media (min-width: 52rem) {
+  .closing-grid {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.closing-shot img {
+  width: min(13rem, 55vw);
+  border-radius: 1.6rem;
+  box-shadow:
+    0 1px 2px hsl(var(--shadow) / 0.08),
+    0 26px 50px -34px hsl(var(--shadow) / 0.55);
+}
+
+/* Footer ------------------------------------------------------------------ */
+
+.site-footer {
+  position: relative;
+  padding-block: 2.75rem 3.5rem;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  --wash: var(--paper);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.footer-links a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.copyright {
+  max-width: var(--measure);
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
