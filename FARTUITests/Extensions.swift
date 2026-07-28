@@ -1,60 +1,55 @@
 import XCTest
+import XCUITestKit
 
-// App-specific UI-test helpers shared between the FARTUITests and
-// "Generate Screenshots" targets. The screenshot target does not link
-// XCUITestKit, so `isVisible`/`makeVisible`/`toggleOn`/`toggleOff` must live
-// here rather than be sourced from the package.
+// App-specific UI-test helpers shared between the FARTUITests and "Generate Screenshots" targets,
+// both of which link XCUITestKit. Anything general enough to serve another app belongs there
+// instead; this is only what the questionnaire's switches need.
 extension XCUIElement {
-  var isVisible: Bool {
-    guard self.exists && !self.frame.isEmpty else { return false }
-    let app = XCUIApplication()
-    guard let firstWindow = app.windows.allElementsBoundByIndex.first else { return false }
-    return firstWindow.frame.contains(self.frame)
-  }
+  /// Sets this switch on or off, returning whether it ended up in the wanted state.
+  ///
+  /// A SwiftUI switch publishes the state it is *leaving* as a child element, so that child
+  /// disappearing is what proves the tap registered — reading `value` straight back races the
+  /// update. Taps are plain `tap()`s because `forceTap()`'s coordinate fallback does not flip a
+  /// SwiftUI switch on iOS 26. Each attempt first nudges the row clear of the translucent
+  /// navigation and tab bars, which report an element as hittable while swallowing its taps.
+  @discardableResult
+  func setSwitch(to value: Bool, in app: XCUIApplication, maxAttempts: UInt = 5) -> Bool {
+    let leaving = value ? "0" : "1"
+    let wanted = NSPredicate(format: "value == %@", value ? "1" : "0")
 
-  func toggleOn() {
-    guard switches["0"].exists else { return }
-    switches["0"].firstMatch.tap()
-  }
+    for _ in 0..<maxAttempts {
+      guard switches[leaving].exists else { return true }
 
-  func toggleOff() {
-    guard switches["1"].exists else { return }
-    switches["1"].firstMatch.tap()
-  }
-
-  func makeVisible(element: XCUIElement) -> XCUIElement? {
-    if self.elementType == .scrollView || self.elementType == .collectionView
-      || self.elementType == .table
-    {
-      let visible = self.scroll(to: element) || self.swipe(to: element)
-      return visible ? element : nil
-    }
-    return self.swipe(to: element) ? element : nil
-  }
-
-  // Use the collection view's scrollToItem method via coordinate-based scrolling
-  private func scroll(to element: XCUIElement) -> Bool {
-    var attempts = 0
-
-    while !element.isVisible && attempts < 10 {
-      let startCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
-      let endCoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2))
-      startCoordinate.press(forDuration: 0.01, thenDragTo: endCoordinate)
-      attempts += 1
+      app.scrollIntoSafeBand(self)
+      waitForStableFrame()
+      switches[leaving].firstMatch.tap()
+      if waitFor(wanted, timeout: ScaledTimeouts.short) { return true }
     }
 
-    return element.isVisible
+    return !switches[leaving].exists
   }
 
-  // Fallback to swipe-based scrolling with limits
-  private func swipe(to element: XCUIElement) -> Bool {
-    var attempts = 0
+  /// Polls until this element's frame stops moving.
+  ///
+  /// Scrolling a row into place leaves the form decelerating, and a tap issued into a moving list
+  /// lands on whichever row slides under it instead — the switch never flips, and nothing about
+  /// the tap reports a failure.
+  private func waitForStableFrame(timeout: TimeInterval = 2, pollInterval: TimeInterval = 0.1) {
+    let requiredStableReads = 2
+    let deadline = Date().addingTimeInterval(timeout)
+    var previous = CGRect.null
+    var stableReads = 0
 
-    while !element.isVisible && attempts < 10 {
-      swipeUp()
-      attempts += 1
+    while Date() < deadline {
+      let current = frame
+      if current == previous {
+        stableReads += 1
+        if stableReads >= requiredStableReads { return }
+      } else {
+        stableReads = 0
+        previous = current
+      }
+      Thread.sleep(forTimeInterval: pollInterval)
     }
-
-    return element.isVisible
   }
 }

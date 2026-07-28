@@ -186,42 +186,8 @@ class BasePage {
   }
 
   /// Toggle a switch to the desired state using the child switch control.
-  /// Retries with scroll nudges if the tap doesn't register (iOS 26 Liquid Glass).
   private func toggleSwitch(_ element: XCUIElement, to value: Bool) {
-    let targetValue = value ? "0" : "1"
-    let childSwitch = element.switches[targetValue]
-    guard childSwitch.exists else { return }
-
-    // Try standard tap first
-    childSwitch.firstMatch.tap()
-
-    // If tap registered, we're done
-    guard element.switches[targetValue].exists else { return }
-
-    // Tap didn't register — nudge content to move element away from Liquid Glass overlay
-    let collectionView = app.collectionViews.firstMatch
-    guard collectionView.exists else { return }
-    let windowMidY = app.windows.firstMatch.frame.height / 2
-
-    for _ in 0..<3 {
-      let elementMidY = element.frame.midY
-      if elementMidY < windowMidY {
-        // Element in top half — nudge content down
-        let start = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
-        let end = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        start.press(forDuration: 0.01, thenDragTo: end)
-      } else {
-        // Element in bottom half — nudge content up
-        let start = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
-        let end = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        start.press(forDuration: 0.01, thenDragTo: end)
-      }
-
-      // Retry with standard tap (forceTap doesn't toggle SwiftUI switches on iOS 26)
-      guard element.switches[targetValue].exists else { return }
-      element.switches[targetValue].firstMatch.tap()
-      guard element.switches[targetValue].exists else { return }
-    }
+    element.setSwitch(to: value, in: app)
   }
 
   /// Scrolls to an element in the collection view.
