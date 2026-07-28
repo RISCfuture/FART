@@ -8,25 +8,34 @@ extension XCUIElement {
   /// Sets this switch on or off, returning whether it ended up in the wanted state.
   ///
   /// A SwiftUI switch publishes the state it is *leaving* as a child element, so that child
-  /// disappearing is what proves the tap registered — reading `value` straight back races the
-  /// update. Taps are plain `tap()`s because `forceTap()`'s coordinate fallback does not flip a
-  /// SwiftUI switch on iOS 26. Each attempt first nudges the row clear of the translucent
-  /// navigation and tab bars, which report an element as hittable while swallowing its taps.
+  /// disappearing is what proves the gesture registered — reading `value` straight back races the
+  /// update. Each attempt first nudges the row clear of the translucent navigation and tab bars,
+  /// which report an element as hittable while swallowing its taps.
   @discardableResult
   func setSwitch(to value: Bool, in app: XCUIApplication, maxAttempts: UInt = 5) -> Bool {
     let leaving = value ? "0" : "1"
     let wanted = NSPredicate(format: "value == %@", value ? "1" : "0")
 
-    for _ in 0..<maxAttempts {
+    for attempt in 0..<maxAttempts {
       guard switches[leaving].exists else { return true }
 
       app.scrollIntoSafeBand(self)
       waitForStableFrame()
-      switches[leaving].firstMatch.tap()
+      switches[leaving].firstMatch.press(forDuration: holdDuration(forAttempt: attempt))
       if waitFor(wanted, timeout: ScaledTimeouts.short) { return true }
     }
 
     return !switches[leaving].exists
+  }
+
+  /// How long to hold the touch down on a given attempt, in seconds.
+  ///
+  /// An iOS 26 SwiftUI switch drops a synthesized touch that goes down and up in the same instant,
+  /// and how long it needs held varies from row to row, so each retry holds longer than the last.
+  /// Every value stays under the half-second that would turn the gesture into a long press.
+  private func holdDuration(forAttempt attempt: UInt) -> TimeInterval {
+    let durations: [TimeInterval] = [0.1, 0.2, 0.35, 0.45]
+    return durations[min(Int(attempt), durations.count - 1)]
   }
 
   /// Polls until this element's frame stops moving.
