@@ -1,0 +1,31 @@
+name: Release
+
+# Pushing a version tag archives the app and uploads it to App Store Connect, where it waits to be
+# attached to a version and submitted by hand. Nothing here re-runs the tests: tag a commit CI has
+# already passed.
+on:
+  push:
+    tags: ["[0-9]+.[0-9]+*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Marketing version to build and upload.
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.version || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-release.yml@main
+    with:
+      # The app target also builds for visionOS, but there is no visionOS App Store listing.
+      platforms: '["iOS","macOS"]'
+      version: ${{ inputs.version || github.ref_name }}
+      certificates-repo: RISCfuture/certificates
+    secrets:
+      certificates-token: ${{ secrets.CERTIFICATES_TOKEN }}
+      match-password: ${{ secrets.MATCH_PASSWORD }}
+      sentry-auth-token: ${{ secrets.SENTRY_AUTH_TOKEN }}

@@ -55,6 +55,22 @@ Build and upload to TestFlight
 
 Build and upload to App Store
 
+### ios ci_next_build_number
+
+```sh
+[bundle exec] fastlane ios ci_next_build_number
+```
+
+Resolve the next build number and write it where CI can read it
+
+### ios ci_release
+
+```sh
+[bundle exec] fastlane ios ci_release
+```
+
+Archive one platform and upload it to App Store Connect (CI)
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
