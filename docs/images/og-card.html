@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Social card source</title>
+
+    <!--
+      Renders og-card.png. Serve docs/ and screenshot this page at exactly
+      1200x630 with a device pixel ratio of 1:
+
+        cd docs && python3 -m http.server 8000
+        # then capture http://localhost:8000/images/og-card.html
+    -->
+
+    <style>
+      @font-face {
+        font-family: "Archivo Expanded";
+        src: url("../fonts/archivo-expanded.woff2") format("woff2-variations");
+        font-weight: 100 900;
+      }
+
+      @font-face {
+        font-family: "Public Sans";
+        src: url("../fonts/public-sans.woff2") format("woff2-variations");
+        font-weight: 100 900;
+      }
+
+      :root {
+        --low: #369d1e;
+        --moderate: #daba2c;
+        --high: #b41834;
+        --ink: #1a1712;
+        --ink-2: #5f584d;
+        --paper: #fcfbf8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        padding: 68px 72px 60px;
+        display: flex;
+        flex-direction: column;
+        font-family: "Public Sans", sans-serif;
+        color: var(--ink);
+        background: color-mix(in oklab, var(--low) 7%, var(--paper));
+        overflow: hidden;
+      }
+
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: "Archivo Expanded", sans-serif;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.04em;
+      }
+
+      .wordmark img {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        margin-top: auto;
+        font-family: "Archivo Expanded", sans-serif;
+        font-weight: 700;
+        font-size: 78px;
+        line-height: 0.98;
+        letter-spacing: -0.025em;
+        max-width: 14ch;
+      }
+
+      .lede {
+        margin-top: 22px;
+        font-size: 25px;
+        line-height: 1.4;
+        color: var(--ink-2);
+        max-width: 42ch;
+      }
+
+      .meter {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .track {
+        position: relative;
+        flex: 1;
+        height: 14px;
+        border-radius: 999px;
+        background: linear-gradient(
+          to right,
+          var(--low) 0 46.7%,
+          var(--moderate) 46.7% 66.7%,
+          var(--high) 66.7% 100%
+        );
+      }
+
+      .marker {
+        position: absolute;
+        top: -8px;
+        left: 63.3%;
+        width: 5px;
+        height: 30px;
+        border-radius: 3px;
+        background: var(--ink);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--low) 7%, var(--paper));
+      }
+
+      .band {
+        font-family: "Archivo Expanded", sans-serif;
+        font-weight: 700;
+        font-size: 21px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: #7a6206;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p class="wordmark"><img src="app-icon.png" alt="" />FART</p>
+
+    <h1>Add up the risk before you add power.</h1>
+    <p class="lede">
+      The FAA Safety Team’s Flight Risk Assessment Tool, as an app for iPhone, iPad, and Mac.
+    </p>
+
+    <div class="meter">
+      <div class="track"><span class="marker"></span></div>
+      <span class="band">Moderate risk</span>
+    </div>
+  </body>
+</html>
