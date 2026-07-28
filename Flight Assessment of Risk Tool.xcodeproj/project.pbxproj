@@ -45,16 +45,6 @@
 		01BE9C3E266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flight Assessment of Risk Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0136708E2E8759D30098F3D1 /* Exceptions for "FARTUITests" folder in "Generate Screenshots" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Extensions.swift,
-			);
-			target = 019A35BD2E861E4C00F14F8C /* Generate Screenshots */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		019A35902E85FAE100F14F8C /* FARTUnitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -63,9 +53,6 @@
 		};
 		019A359D2E85FAF100F14F8C /* FARTUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0136708E2E8759D30098F3D1 /* Exceptions for "FARTUITests" folder in "Generate Screenshots" target */,
-			);
 			path = FARTUITests;
 			sourceTree = "<group>";
 		};
