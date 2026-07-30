@@ -36,13 +36,13 @@ class BasePage {
     if element.waitForExistence(timeout: 2) {
       let collectionView = app.collectionViews.firstMatch
       if let control = collectionView.makeVisible(element: element) {
-        toggleSwitch(control, to: value)
+        toggleSwitch(control, to: value, named: identifier)
         return self
       }
       // Element exists but makeVisible failed — scroll to top and retry
       scrollToTop()
       if let control = collectionView.makeVisible(element: element) {
-        toggleSwitch(control, to: value)
+        toggleSwitch(control, to: value, named: identifier)
         return self
       }
       XCTFail("Could not scroll to toggle: \(identifier)")
@@ -53,14 +53,14 @@ class BasePage {
     let collectionView = app.collectionViews.firstMatch
     if collectionView.exists {
       if let control = collectionView.makeVisible(element: element) {
-        toggleSwitch(control, to: value)
+        toggleSwitch(control, to: value, named: identifier)
         return self
       }
 
       // Try from the top
       scrollToTop()
       if let control = collectionView.makeVisible(element: element) {
-        toggleSwitch(control, to: value)
+        toggleSwitch(control, to: value, named: identifier)
         return self
       }
     }
@@ -186,8 +186,13 @@ class BasePage {
   }
 
   /// Toggle a switch to the desired state using the child switch control.
-  private func toggleSwitch(_ element: XCUIElement, to value: Bool) {
-    element.setSwitch(to: value, in: app)
+  ///
+  /// A switch that never flips would otherwise surface much later as a wrong score, naming
+  /// neither the toggle nor the step that lost it.
+  private func toggleSwitch(_ element: XCUIElement, to value: Bool, named identifier: String) {
+    if !element.setSwitch(to: value, in: app) {
+      XCTFail("Could not set toggle \(identifier) to \(value)")
+    }
   }
 
   /// Scrolls to an element in the collection view.
