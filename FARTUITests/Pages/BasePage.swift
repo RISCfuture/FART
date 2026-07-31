@@ -75,79 +75,10 @@ class BasePage {
     return element.value as? String == "1"
   }
 
+  /// Chooses an option from a menu-style picker, keeping the page object's chaining return.
   @discardableResult
-  func selectPickerOption(picker: String, option: String, optionLabel: String? = nil) -> Self {
-    let pickerButton = app.buttons[picker]
-
-    // If picker is already in the tree, scroll to it
-    if pickerButton.waitForExistence(timeout: 2) {
-      let collectionView = app.collectionViews.firstMatch
-      if collectionView.exists {
-        _ = collectionView.makeVisible(element: pickerButton)
-        ensureHittable(pickerButton, in: collectionView)
-      }
-    } else {
-      // Picker not in tree — scroll down to find it (lazy-loaded off-screen)
-      let collectionView = app.collectionViews.firstMatch
-      if collectionView.exists {
-        if collectionView.makeVisible(element: pickerButton) == nil {
-          scrollToTop()
-          _ = collectionView.makeVisible(element: pickerButton)
-        }
-        ensureHittable(pickerButton, in: collectionView)
-      }
-
-      guard pickerButton.exists else {
-        XCTFail("Could not find picker: \(picker)")
-        return self
-      }
-    }
-
-    // Tap picker and find option — retry once if menu doesn't open
-    for attempt in 0..<2 {
-      if attempt > 0 {
-        // Dismiss any partial state, then retry once the picker is tappable again
-        // (the partial menu overlay blocks hittability until it clears).
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1)).tap()
-        pickerButton.waitUntilHittable()
-        pickerButton.forceTap()
-      } else {
-        pickerButton.forceTap()
-      }
-
-      // Find and tap the option — try buttons first, then any element type
-      let allButtons = app.buttons.matching(identifier: option)
-      if allButtons.firstMatch.waitForExistence(timeout: 5) {
-        for i in 0..<allButtons.count {
-          let button = allButtons.element(boundBy: i)
-          if button.exists && button.isHittable {
-            button.tap()
-            return self
-          }
-        }
-        allButtons.firstMatch.forceTap()
-        return self
-      }
-
-      // Fallback: match any element type by identifier
-      let anyOption = app.descendants(matching: .any)[option]
-      if anyOption.waitForExistence(timeout: 3) {
-        anyOption.forceTap()
-        return self
-      }
-
-      // Fallback: match by label text (iOS 26 picker menus may not carry identifiers)
-      if let label = optionLabel {
-        let labelPredicate = NSPredicate(format: "label == %@", label)
-        let labelButton = app.buttons.matching(labelPredicate).firstMatch
-        if labelButton.waitForExistence(timeout: 3) {
-          labelButton.forceTap()
-          return self
-        }
-      }
-    }
-
-    XCTFail("Could not find picker option: \(option)")
+  func selectPickerOption(picker: String, option: String) -> Self {
+    app.selectPickerOption(option, in: picker)
     return self
   }
 
@@ -158,32 +89,6 @@ class BasePage {
   }
 
   // MARK: - Private
-
-  /// Nudge content to make an element hittable.
-  /// Handles two cases on iOS 26:
-  /// - Top: Liquid Glass nav bar overlays elements near the top → nudge content down
-  /// - Bottom: Tab bar/home indicator overlays elements near the bottom → nudge content up
-  func ensureHittable(_ element: XCUIElement, in collectionView: XCUIElement) {
-    guard element.exists, !element.isHittable else { return }
-    let windowHeight = app.windows.firstMatch.frame.height
-
-    for _ in 0..<3 {
-      if element.frame.minY < windowHeight * 0.35 {
-        // Element near top — nudge content down
-        let start = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
-        let end = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
-        start.press(forDuration: 0.01, thenDragTo: end)
-      } else if element.frame.maxY > windowHeight * 0.75 {
-        // Element near bottom — nudge content up
-        let start = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
-        let end = collectionView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
-        start.press(forDuration: 0.01, thenDragTo: end)
-      } else {
-        break
-      }
-      if element.isHittable || !element.exists { return }
-    }
-  }
 
   /// Toggle a switch to the desired state using the child switch control.
   ///

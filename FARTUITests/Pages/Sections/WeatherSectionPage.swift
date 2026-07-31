@@ -16,7 +16,7 @@ class WeatherSectionPage: BasePage {
 
   @discardableResult
   func selectVFR() -> Self {
-    selectPickerOption(picker: "flightTypePicker", option: "flightTypeVFR", optionLabel: "VFR")
+    selectPickerOption(picker: "flightTypePicker", option: "flightTypeVFR")
     // Wait for VFR-specific fields to render after flight type switch
     _ = app.switches["vfrCeilingUnder3000Toggle"].waitForExistence(timeout: 5)
     return self
@@ -24,7 +24,7 @@ class WeatherSectionPage: BasePage {
 
   @discardableResult
   func selectIFR() -> Self {
-    selectPickerOption(picker: "flightTypePicker", option: "flightTypeIFR", optionLabel: "IFR")
+    selectPickerOption(picker: "flightTypePicker", option: "flightTypeIFR")
     // Wait for IFR-specific fields to render after flight type switch
     _ = app.switches["ifrLowCeilingToggle"].waitForExistence(timeout: 5)
     return self
@@ -77,8 +77,7 @@ class WeatherSectionPage: BasePage {
   func selectApproachPrecision() -> Self {
     selectPickerOption(
       picker: "ifrApproachTypePicker",
-      option: "approachPrecision",
-      optionLabel: "Precision"
+      option: "approachPrecision"
     )
   }
 
@@ -86,8 +85,7 @@ class WeatherSectionPage: BasePage {
   func selectApproachNonprecision() -> Self {
     selectPickerOption(
       picker: "ifrApproachTypePicker",
-      option: "approachNonprecision",
-      optionLabel: "Non-precision"
+      option: "approachNonprecision"
     )
   }
 
@@ -95,8 +93,7 @@ class WeatherSectionPage: BasePage {
   func selectApproachCircling() -> Self {
     selectPickerOption(
       picker: "ifrApproachTypePicker",
-      option: "approachCircling",
-      optionLabel: "Circling only"
+      option: "approachCircling"
     )
   }
 
@@ -104,8 +101,7 @@ class WeatherSectionPage: BasePage {
   func selectApproachNone() -> Self {
     selectPickerOption(
       picker: "ifrApproachTypePicker",
-      option: "approachNone",
-      optionLabel: "No IFR approaches"
+      option: "approachNone"
     )
   }
 

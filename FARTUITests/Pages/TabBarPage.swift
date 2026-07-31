@@ -75,13 +75,7 @@ class TabBarPage: BasePage {
 
     // iOS 26 Liquid Glass: nudge the form content down so top-of-form
     // pickers clear the translucent navigation bar overlay.
-    let collectionView = app.collectionViews.firstMatch
-    if collectionView.waitForExistence(timeout: 5) {
-      let ratingPicker = app.buttons["ratingPicker"]
-      if ratingPicker.exists {
-        ensureHittable(ratingPicker, in: collectionView)
-      }
-    }
+    app.scrollIntoSafeBand(app.buttons["ratingPicker"])
 
     return PilotProfilePage(app: app)
   }

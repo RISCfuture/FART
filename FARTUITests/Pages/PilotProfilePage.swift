@@ -7,22 +7,22 @@ class PilotProfilePage: BasePage {
 
   @discardableResult
   func selectVFR() -> Self {
-    selectPickerOption(picker: "ratingPicker", option: "ratingVFR", optionLabel: "VFR")
+    selectPickerOption(picker: "ratingPicker", option: "ratingVFR")
   }
 
   @discardableResult
   func selectIFR() -> Self {
-    selectPickerOption(picker: "ratingPicker", option: "ratingIFR", optionLabel: "IFR")
+    selectPickerOption(picker: "ratingPicker", option: "ratingIFR")
   }
 
   @discardableResult
   func selectUnder100Hours() -> Self {
-    selectPickerOption(picker: "hoursPicker", option: "hoursUnder100", optionLabel: "< 100")
+    selectPickerOption(picker: "hoursPicker", option: "hoursUnder100")
   }
 
   @discardableResult
   func selectOver100Hours() -> Self {
-    selectPickerOption(picker: "hoursPicker", option: "hoursOver100", optionLabel: "> 100")
+    selectPickerOption(picker: "hoursPicker", option: "hoursOver100")
   }
 
   func isLowCeilingPickerVisible() -> Bool {
