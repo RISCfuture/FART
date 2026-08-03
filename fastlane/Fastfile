@@ -102,6 +102,49 @@ def provisioning_authentication_args
     "-authenticationKeyIssuerID #{key[:issuer_id].shellescape}"
 end
 
+# `upload_to_app_store` clears every slot it uploads into, so an empty directory would strip the
+# screenshots from the product page rather than leave the ones already there alone. A screenshots run
+# that was interrupted, or that captured nothing, has to stop before publishing its silence.
+#
+# The path is anchored to this file so it names the same folder however the lane was invoked.
+def verify_screenshots_present
+  directory = File.expand_path("screenshots", __dir__)
+  return if Dir.glob(File.join(directory, "**", "*.png")).any?
+
+  UI.user_error!("No screenshots under #{directory} — run the screenshots lane first. Uploading an " \
+                 "empty set would clear the screenshots already on the App Store.")
+end
+
+# Every screenshot set on the version currently open for editing.
+def editable_screenshot_sets(platform)
+  app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
+  version = app.get_edit_app_store_version(platform: platform)
+  UI.user_error!("No editable #{platform} version of #{APP_IDENTIFIER} to hold screenshots.") unless version
+
+  version.get_app_store_version_localizations.flat_map(&:get_app_screenshot_sets)
+end
+
+# Empties those sets before an upload refills them.
+#
+# A set holds at most ten images, and deliver's sync uploads before it deletes, so a set already at
+# that ceiling has no room to work in and the sync fails outright. Clearing it first also spares the
+# sync from reconciling screenshots that are about to be replaced anyway.
+#
+# The count is re-read from App Store Connect rather than inferred from the deletions: deliver's own
+# overwrite path checks the objects it already holds, which is why it reports having removed
+# screenshots that are still there.
+def purge_remote_screenshots(platform)
+  editable_screenshot_sets(platform).each do |set|
+    set.app_screenshots.each(&:delete!)
+  end
+
+  remaining = editable_screenshot_sets(platform).sum { |set| set.app_screenshots.count }
+  return if remaining.zero?
+
+  UI.user_error!("#{remaining} screenshot(s) are still on App Store Connect after being deleted. " \
+                 "Uploading now would leave the set a mix of old and new.")
+end
+
 platform :ios do
   desc "Generate new localized screenshots"
   lane :screenshots do
@@ -111,11 +154,17 @@ platform :ios do
 
   desc "Upload screenshots to App Store Connect"
   lane :upload_screenshots do
+    verify_screenshots_present
     ensure_api_key
+    purge_remote_screenshots(Spaceship::ConnectAPI::Platform::IOS)
     upload_to_app_store(
       app_identifier:                       APP_IDENTIFIER,
       screenshots_path:                     "./fastlane/screenshots",
-      overwrite_screenshots:                true,
+      # `overwrite_screenshots` deletes the remote sets and then verifies the deletion against the
+      # objects it already held rather than App Store Connect, so it reports success while the old
+      # screenshots survive — and the new upload lands beside them until the set hits its ten-image
+      # ceiling. Syncing reconciles against what is actually there and confirms the counts agree.
+      sync_screenshots:                     true,
       skip_binary_upload:                   true,
       skip_metadata:                        true,
       languages:                            %w[en-US],
