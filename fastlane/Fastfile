@@ -307,12 +307,20 @@ platform :ios do
   # The Xcode run-script phase does this too, but only when `sentry-cli` happens to be installed
   # on the archiving machine; doing it here makes symbolication a property of the release instead.
   #
-  # `sentry-cli` is invoked directly rather than through a `sentry_cli` action, which does not
-  # exist — Sentry ships no built-in fastlane action, and no plugin is installed.
+  # The archive's dSYMs directory is the source, not DSYM_OUTPUT_PATH: build_app does not read that
+  # path back from gym, it reconstructs it by substituting an extension onto the exported binary's
+  # path. The macOS leg exports a .pkg, for which it derives `<name>.dSYM.zip` — while gym writes
+  # `<name>.app.dSYM.zip`. That path never exists, so DSYM_OUTPUT_PATH stays nil and the Mac build
+  # would ship unsymbolicated every release. The archive directory needs no such guess, and holds
+  # every dSYM the build produced.
+  #
+  # `sentry-cli` is invoked directly rather than through an action: the built-in
+  # `upload_symbols_to_sentry` is deprecated to a hard error, and Sentry's replacement plugin is not
+  # installed.
   private_lane :upload_debug_symbols do
-    dsym_path = lane_context[SharedValues::DSYM_OUTPUT_PATH]
-    if dsym_path.nil?
-      UI.important("No dSYM archive was produced, so there is nothing to symbolicate.")
+    dsym_path = File.join(lane_context[SharedValues::XCODEBUILD_ARCHIVE].to_s, "dSYMs")
+    unless Dir.exist?(dsym_path)
+      UI.important("The archive carries no dSYMs, so there is nothing to symbolicate.")
       next
     end
 
