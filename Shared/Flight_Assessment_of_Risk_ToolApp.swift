@@ -70,21 +70,24 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
     SentrySDK.start { options in
       options.dsn =
         "https://ca34bdbb2d92e968036855adc9831fa1@o4510156629475328.ingest.us.sentry.io/4510160946200576"
-      options.debug = true  // Enabled debug when first installing is always helpful
+      // The SDK's own logging is for whoever is working on the app, not for a device in the field.
+      #if DEBUG
+        options.debug = true
+      #endif
 
       // There are no accounts here, and the privacy manifest declares diagnostics as not linked to
       // identity — so never attach the user's IP address or other identifying context to an event.
       options.sendDefaultPii = false
 
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-      // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0
+      // A fifth of the traffic is enough to spot a performance regression in an app this size, and
+      // it leaves the quota and the device's battery for the crashes that actually matter.
+      options.tracesSampleRate = 0.2
 
       // Configure profiling. Visit https://docs.sentry.io/platforms/apple/profiling/ to learn more.
       // Sentry's profiling API is unavailable on visionOS.
       #if !os(visionOS)
         options.configureProfiling = {
-          $0.sessionSampleRate = 1.0  // We recommend adjusting this value in production.
+          $0.sessionSampleRate = 0.2
           $0.lifecycle = .trace
         }
       #endif
