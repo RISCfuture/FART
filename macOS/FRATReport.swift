@@ -127,13 +127,15 @@
 
     @MainActor
     private static func weatherFactors(for questionnaire: Questionnaire) -> [Factor?] {
-      let ceiling = Defaults[.lowCeiling].rawValue
+      let ceiling = Defaults[.lowCeiling].height
       let visibilityString = Defaults[.lowVisibility].stringValue
 
       var factors: [Factor?] = [
         factor(
           questionnaire.vfrCeilingUnder3000,
-          String(localized: "Ceiling less than \(3000, format: .asFeet) AGL"),
+          String(
+            localized: "Ceiling less than \(RegulatoryThresholds.vfrCeiling, format: .asFeet) AGL"
+          ),
           Scores.vfrCeilingUnder3000
         ),
         factor(

@@ -42,7 +42,7 @@ struct WeatherView: View {
 
       if flightType == .VFR {
         Toggle(
-          "Ceiling less than \(3000, format: .asFeet) AGL",
+          "Ceiling less than \(RegulatoryThresholds.vfrCeiling, format: .asFeet) AGL",
           isOn: $questionnaire.vfrCeilingUnder3000
         )
         .accessibilityIdentifier("vfrCeilingUnder3000Toggle")
@@ -54,7 +54,7 @@ struct WeatherView: View {
           .accessibilityIdentifier("vfrFlightFollowingToggle")
       } else {
         Toggle(
-          "Ceiling less than \(lowCeiling.rawValue, format: .asFeet) AGL",
+          "Ceiling less than \(lowCeiling.height, format: .asFeet) AGL",
           isOn: $questionnaire.ifrLowCeiling
         )
         .accessibilityIdentifier("ifrLowCeilingToggle")
