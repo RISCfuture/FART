@@ -15,8 +15,22 @@ class BasePage {
 
   @discardableResult
   func scrollTo(_ identifier: String) -> XCUIElement? {
-    let element = app.descendants(matching: .any)[identifier]
-    return scrollToElement(element)
+    scrollTo(app.descendants(matching: .any)[identifier])
+  }
+
+  /// Scrolls to an element in the collection view.
+  /// First tries from current position, then from top.
+  @discardableResult
+  func scrollTo(_ element: XCUIElement) -> XCUIElement? {
+    let collectionView = app.collectionViews.firstMatch
+    guard collectionView.waitForExistence(timeout: 10) else { return nil }
+
+    if let result = collectionView.makeVisible(element: element) {
+      return result
+    }
+
+    scrollToTop()
+    return collectionView.makeVisible(element: element)
   }
 
   func scrollToTop() {
@@ -82,6 +96,12 @@ class BasePage {
     return self
   }
 
+  /// The digits in `text`, so an assertion can name the number it expects without minding the
+  /// locale's grouping separator.
+  func digits(in text: String) -> String {
+    text.filter(\.isNumber)
+  }
+
   func textLabel(_ identifier: String) -> String? {
     let element = app.staticTexts[identifier]
     guard element.waitForExistence(timeout: 5) else { return nil }
@@ -98,19 +118,5 @@ class BasePage {
     if !element.setSwitch(to: value, in: app) {
       XCTFail("Could not set toggle \(identifier) to \(value)")
     }
-  }
-
-  /// Scrolls to an element in the collection view.
-  /// First tries from current position, then from top.
-  private func scrollToElement(_ element: XCUIElement) -> XCUIElement? {
-    let collectionView = app.collectionViews.firstMatch
-    guard collectionView.waitForExistence(timeout: 10) else { return nil }
-
-    if let result = collectionView.makeVisible(element: element) {
-      return result
-    }
-
-    scrollToTop()
-    return collectionView.makeVisible(element: element)
   }
 }

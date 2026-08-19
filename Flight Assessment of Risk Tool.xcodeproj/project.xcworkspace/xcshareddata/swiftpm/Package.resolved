@@ -1,13 +1,22 @@
 {
-  "originHash" : "3cab6df893e12a6c4e878212091d9dbb7987ae1378f5364dcc45bf3e4a84164b",
+  "originHash" : "ee6083012df93f38fab59077afe81540593c07c740d99145847af24d0ad6b3e0",
   "pins" : [
     {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Defaults",
+      "location" : "https://github.com/sindresorhus/Defaults.git",
       "state" : {
         "revision" : "00a7465a0668a87fa159e779b9d80f1f9652357e",
         "version" : "9.0.9"
+      }
+    },
+    {
+      "identity" : "measurementkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RISCfuture/MeasurementKit",
+      "state" : {
+        "revision" : "d04642c96f5406ed3b504334593a268d698d47ca",
+        "version" : "1.0.0"
       }
     },
     {
@@ -17,6 +26,15 @@
       "state" : {
         "revision" : "d3562ee73e56a7b0b8319ec613db3c529924f07a",
         "version" : "9.19.1"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics.git",
+      "state" : {
+        "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
+        "version" : "1.1.1"
       }
     },
     {

@@ -1,4 +1,5 @@
 import Defaults
+import MeasurementKitUI
 import SwiftUI
 
 struct PilotProfileView: View {
@@ -51,8 +52,14 @@ struct PilotProfileView: View {
       Section {
         HStack {
           Text("Short runway")
-          MeasurementField(value: $shortRunway, in: .feet, formatter: runwayLengthFormatter)
-            .accessibilityIdentifier("shortRunwayField")
+          MeasurementField(
+            "Short runway",
+            value: $shortRunway,
+            in: .feet,
+            format: runwayLengthFormat,
+            keypad: .whole
+          )
+          .accessibilityIdentifier("shortRunwayField")
         }
       } footer: {
         Text("Runways this length or shorter count as a short runway.")
@@ -61,13 +68,25 @@ struct PilotProfileView: View {
       Section {
         HStack {
           Text("Strong winds")
-          MeasurementField(value: $strongWinds, in: .knots, formatter: windSpeedFormatter)
-            .accessibilityIdentifier("strongWindsField")
+          MeasurementField(
+            "Strong winds",
+            value: $strongWinds,
+            in: .knots,
+            format: windSpeedFormat,
+            keypad: .whole
+          )
+          .accessibilityIdentifier("strongWindsField")
         }
         HStack {
           Text("Strong crosswinds")
-          MeasurementField(value: $strongCrosswinds, in: .knots, formatter: windSpeedFormatter)
-            .accessibilityIdentifier("strongCrosswindsField")
+          MeasurementField(
+            "Strong crosswinds",
+            value: $strongCrosswinds,
+            in: .knots,
+            format: windSpeedFormat,
+            keypad: .whole
+          )
+          .accessibilityIdentifier("strongCrosswindsField")
         }
       } footer: {
         Text("Winds or crosswinds at this speed or faster count as strong.")
@@ -97,6 +116,11 @@ struct PilotProfileView: View {
         }
       }
     }
+    // The threshold fields sit inline beside their labels, where the platform's bordered field
+    // would box the digits and leave the unit outside the box. iOS draws them unadorned already.
+    #if !os(iOS)
+      .textFieldStyle(.plain)
+    #endif
   }
 }
 

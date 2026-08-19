@@ -23,6 +23,27 @@ final class PilotProfileTests: FARTUITestCase {
     XCTAssertTrue(profile.isLowVisibilityPickerVisible())
   }
 
+  /// The thresholds are the one place in the app a pilot types a number rather than tapping one,
+  /// and each is bound to a preference that echoes the write back asynchronously. A field that
+  /// rewrote itself from that lagging value would mangle what was being typed, and one that never
+  /// wrote would leave the questionnaire asking about the old threshold — neither of which shows
+  /// up anywhere but here.
+  func testShortRunwayThresholdSurvivesTypingAndNavigation() throws {
+    let profile = tabBar.goToPilotProfile()
+    profile.enter("4550", into: profile.shortRunwayField)
+    XCTAssertEqual(profile.enteredNumber(in: profile.shortRunwayField), "4550")
+
+    // The threshold's whole purpose is the question it writes, so it has to have reached
+    // preferences and not just the field it was typed into.
+    let questionnaire = tabBar.goToQuestionnaire()
+    XCTAssertEqual(questionnaire.airportSection.shortRunwayThreshold(), "4550")
+
+    XCTAssertEqual(
+      tabBar.goToPilotProfile().enteredNumber(in: profile.shortRunwayField),
+      "4550"
+    )
+  }
+
   func testRatingAffectsRiskCategorization() throws {
     // VFR <100h (defaults). Score 18 → VFR<100h MODERATE (>14)
     let q = tabBar.goToQuestionnaire()

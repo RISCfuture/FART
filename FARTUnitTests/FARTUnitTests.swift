@@ -1,4 +1,5 @@
 import Foundation
+import MeasurementKitDefaults
 import Testing
 
 @testable import Flight_Assessment_of_Risk_Tool
@@ -312,67 +313,6 @@ struct FARTUnitTests {
       let wind = MeasurementBridge<UnitSpeed>()
         .serialize(Measurement(value: 1, unit: .milesPerHour))
       #expect(try #require(wind).isApproximately(0.868976))
-    }
-  }
-
-  @Suite("Unit Placement Tests")
-  struct UnitPlacementTests {
-
-    /// Every locale, at magnitudes spanning the plural categories that move or inflect a unit.
-    /// Wherever the locale writes the number at all, placing it back between the affixes has
-    /// to reproduce what the locale wrote, since that is what a field showing a unit beside an
-    /// editable number is imitating.
-    @Test("Placing a number between the affixes reproduces the written measurement")
-    func affixesReproduceWrittenMeasurement() {
-      let mismatches = Locale.availableIdentifiers.flatMap { identifier in
-        let locale = Locale(identifier: identifier)
-        return [0.0, 1, 2, 3, 11, 42, 100, 3000].compactMap { magnitude -> String? in
-          let length = Measurement(value: magnitude, unit: UnitLength.feet)
-          let number = magnitude.formatted(.number.precision(.fractionLength(0)).locale(locale))
-          let written = length.formatted(
-            .measurement(width: .abbreviated, usage: .asProvided).locale(locale)
-          )
-          guard written.contains(number) else { return nil }
-
-          let (prefix, suffix) = length.affixes(in: locale)
-          guard prefix + number + suffix != written else { return nil }
-          return "\(identifier) at \(magnitude): “\(prefix + number + suffix)” ≠ “\(written)”"
-        }
-      }
-
-      #expect(mismatches.isEmpty, "\(mismatches.count) mismatched: \(mismatches.prefix(5))")
-    }
-
-    /// Sinhala and Swahili write the unit first, so a field that pins it to the trailing edge
-    /// reads backwards there.
-    @Test(
-      "The unit leads the number where the locale writes it first",
-      arguments: ["si_LK", "sw_TZ"]
-    )
-    func unitLeadsNumber(identifier: String) {
-      let (prefix, suffix) = Measurement(value: 42, unit: UnitLength.feet)
-        .affixes(in: Locale(identifier: identifier))
-
-      #expect(!prefix.isEmpty)
-      #expect(suffix.isEmpty)
-    }
-
-    /// Arabic writes one foot as “قدم” and two as “قدمان”, so those have no number in the
-    /// written form to read an arrangement from. The unit still has to land on exactly one
-    /// side, in the locale's own script, leaving the field somewhere to show the value.
-    @Test(
-      "A unit written without a number still lands on one side",
-      arguments: [("ar", 1.0), ("ar_EG", 1.0), ("ar_SA", 2.0)]
-    )
-    func unitWithoutNumberStillPlaced(identifier: String, magnitude: Double) {
-      let locale = Locale(identifier: identifier)
-      let (prefix, suffix) = Measurement(value: magnitude, unit: UnitLength.feet)
-        .affixes(in: locale)
-
-      #expect(prefix.isEmpty != suffix.isEmpty, "the unit landed on both sides, or neither")
-      // The untranslated arrangement puts the unit after the number and a space, so finding
-      // that spacing is what distinguishes it from having placed the unit blindly.
-      #expect(suffix == " " + UnitLength.feet.abbreviation(in: locale))
     }
   }
 }

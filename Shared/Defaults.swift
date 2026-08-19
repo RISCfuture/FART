@@ -1,5 +1,6 @@
 import Defaults
 import Foundation
+import MeasurementKitDefaults
 
 extension Defaults.Keys {
   // periphery:ignore - used only in the macOS welcome flow, invisible to the iOS scan

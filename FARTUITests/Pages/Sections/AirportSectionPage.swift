@@ -2,6 +2,13 @@ import XCTest
 
 class AirportSectionPage: BasePage {
 
+  /// The runway length the short-runway question asks about, which is the pilot's own threshold
+  /// written into the question.
+  func shortRunwayThreshold() -> String {
+    guard let toggle = scrollTo(app.switches["shortRunwayToggle"]) else { return "" }
+    return digits(in: toggle.label)
+  }
+
   @discardableResult
   func setNontowered(_ value: Bool) -> Self {
     setToggle("nontoweredToggle", to: value)
