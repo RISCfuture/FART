@@ -4,7 +4,7 @@
   import SwiftUI
 
   /// First-launch onboarding that invites the pilot to set up their profile before assessing
-  /// a flight. Shown once, gated by ``Defaults/Keys/hasCompletedWelcome``.
+  /// a flight. Shown once, gated by the `hasCompletedWelcome` default.
   struct WelcomeView: View {
     @Default(.hasCompletedWelcome)
     private var hasCompletedWelcome

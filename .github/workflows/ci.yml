@@ -74,3 +74,33 @@ jobs:
             -destination "platform=macOS" \
             -testPlan "Unit Tests" \
             CODE_SIGNING_ALLOWED=NO
+
+  docs:
+    name: Documentation Build
+    runs-on: macos-26
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
+      # required to open project file format 100.
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.3"
+      - uses: actions/checkout@v6
+      - name: Enable macros
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Build documentation (macOS)
+        # docbuild documents the package dependencies too, and their DocC
+        # warnings are upstream's to fix, so the strict flag is looked up by
+        # target name and only FART has a value to find.
+        run: |
+          # shellcheck disable=SC2016 # xcodebuild, not the shell, expands these
+          xcodebuild docbuild \
+            -project "Flight Assessment of Risk Tool.xcodeproj" \
+            -scheme FART \
+            -destination "platform=macOS" \
+            -derivedDataPath "$RUNNER_TEMP/docs" \
+            CODE_SIGNING_ALLOWED=NO \
+            'OTHER_DOCC_FLAGS=$(DOCC_STRICT_$(TARGET_NAME))' \
+            DOCC_STRICT_FART="--warnings-as-errors"
