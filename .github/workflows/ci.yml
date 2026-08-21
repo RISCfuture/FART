@@ -11,7 +11,7 @@ jobs:
   ios:
     # Pinned to the same XCUITestKit revision as Package.resolved, so the workflow driving the
     # tests and the helpers the tests call always move together. Bump both at once.
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@7a1bc32856e327356f95a5cd914914f850fcf565
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@797d5d183a67b0bb3034250d34d27f838f6cbab5
     with:
       scheme: FART
       unit-test-plan: "Unit Tests"

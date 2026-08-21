@@ -4,7 +4,7 @@
     {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Defaults.git",
+      "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "revision" : "00a7465a0668a87fa159e779b9d80f1f9652357e",
         "version" : "9.0.9"
@@ -24,14 +24,14 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa/",
       "state" : {
-        "revision" : "d3562ee73e56a7b0b8319ec613db3c529924f07a",
-        "version" : "9.19.1"
+        "revision" : "cd213f98af160e6497eeff0707bc3f6a205b159c",
+        "version" : "9.26.0"
       }
     },
     {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics.git",
+      "location" : "https://github.com/apple/swift-numerics",
       "state" : {
         "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
         "version" : "1.1.1"
@@ -52,7 +52,7 @@
       "location" : "https://github.com/RISCfuture/XCUITestKit",
       "state" : {
         "branch" : "main",
-        "revision" : "7a1bc32856e327356f95a5cd914914f850fcf565"
+        "revision" : "797d5d183a67b0bb3034250d34d27f838f6cbab5"
       }
     }
   ],
