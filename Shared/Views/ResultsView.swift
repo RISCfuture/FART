@@ -30,6 +30,18 @@ struct ResultsView: View {
     }
   }
 
+  /// The score as VoiceOver speaks it.
+  ///
+  /// ``animateToModel()`` steps the score through intermediate values and VoiceOver
+  /// re-announces the value at each one, so this stays to a number and a unit. The risk
+  /// level is its own element directly below, and the dial's normalizer is a display scale
+  /// rather than a maximum, so neither belongs here.
+  private var spokenScore: String {
+    String(localized: "\(displayedScore) points")
+  }
+
+  /// The dial and the score reading inside it, merged into a single accessibility element
+  /// so the two read as one instrument rather than as an unrelated number and “PTS.”.
   private var gauge: some View {
     Gauge(value: normalizedScore) {
       HStack(alignment: .firstTextBaseline) {
@@ -37,13 +49,16 @@ struct ResultsView: View {
           .font(.system(size: 75, weight: .bold, design: .rounded))
           .foregroundStyle(displayedRisk.color)
           .contentTransition(.numericText())
-          .accessibilityIdentifier("scoreText")
         Text("PTS.")
           .bold()
           .foregroundStyle(displayedRisk.color)
       }.offset(x: 0, y: -30)
     }.padding(.top, 10)
       .frame(maxWidth: 500, maxHeight: 500)
+      .accessibilityElement(children: .ignore)
+      .accessibilityLabel("Flight risk score")
+      .accessibilityValue(spokenScore)
+      .accessibilityIdentifier("scoreText")
   }
 
   private var riskTitle: some View {
