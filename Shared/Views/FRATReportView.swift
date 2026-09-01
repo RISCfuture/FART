@@ -93,7 +93,6 @@ private struct FactorRow: View {
 }
 
 extension FRATReport {
-  // periphery:ignore - rendered only by the macOS export commands, invisible to the iOS scan
   /// The report rendered as a one-page vector PDF, or `nil` if nothing was drawn.
   ///
   /// `ImageRenderer` draws ``FRATReportView`` straight into a Core Graphics PDF context, so the

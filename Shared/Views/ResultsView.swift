@@ -71,6 +71,12 @@ struct ResultsView: View {
     }
   }
 
+  /// A snapshot of the current results, built fresh on each render so a shared report is dated
+  /// when the results were last shown rather than when the view first appeared.
+  private var report: FRATReport {
+    .init(questionnaire: questionnaire, generatedAt: .now)
+  }
+
   var body: some View {
     VStack {
       Spacer()
@@ -85,6 +91,11 @@ struct ResultsView: View {
     }
     .padding()
     .background(RiskMeshBackground(risk: displayedRisk))
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        ShareReportButton(report: report)
+      }
+    }
     .onAppear {
       onScreen = true
       withAnimation { syncToModel() }
@@ -104,6 +115,24 @@ struct ResultsView: View {
   private func animateToModel() {
     guard onScreen else { return }
     withAnimation { syncToModel() }
+  }
+}
+
+/// Shares the results as a one-page PDF. On macOS this sits alongside the Print and Export
+/// commands; on iOS and visionOS it is the only way a report leaves the app.
+private struct ShareReportButton: View {
+  let report: FRATReport
+
+  /// Names the shared file in the share sheet by what a pilot would recognize it by: the
+  /// outcome, and the day it was assessed.
+  private var previewTitle: String {
+    let date = report.generatedAt.formatted(date: .abbreviated, time: .omitted)
+    return String(localized: "\(report.risk.label) — \(date)")
+  }
+
+  var body: some View {
+    ShareLink(item: report, preview: SharePreview(previewTitle))
+      .accessibilityIdentifier("shareReportButton")
   }
 }
 

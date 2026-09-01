@@ -6,7 +6,10 @@ import Foundation
 /// The report enumerates only the risk factors the pilot actually answered “yes” to,
 /// grouped by the same sections used in the questionnaire, so a printed record shows what
 /// drove the score rather than the full checklist.
-struct FRATReport {
+///
+/// The report is `Sendable` so it can be handed to a share sheet: `Transferable` refines
+/// `Sendable`, and that conformance has to be declared alongside the type.
+struct FRATReport: Sendable {
   private typealias Scores = FARTScoreCalculator.ScoreValues
 
   private static let fileNameDateStyle = Date.ISO8601FormatStyle(timeZone: .current)
@@ -19,7 +22,6 @@ struct FRATReport {
   let risk: Risk
   let categories: [Category]
 
-  // periphery:ignore - read only by the macOS save panel, invisible to the iOS scan
   /// The name a save panel or share sheet proposes for the exported PDF.
   ///
   /// The date is ISO 8601 so exported reports sort chronologically in the Finder, but
@@ -29,7 +31,6 @@ struct FRATReport {
     "FRAT \(generatedAt.formatted(Self.fileNameDateStyle)).pdf"
   }
 
-  // periphery:ignore - built only by the macOS export commands, invisible to the iOS scan
   @MainActor
   init(questionnaire: Questionnaire, generatedAt: Date) {
     self.generatedAt = generatedAt
