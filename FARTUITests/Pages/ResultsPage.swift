@@ -2,12 +2,9 @@ import XCTest
 
 class ResultsPage: BasePage {
 
-  func scoreValue() -> String {
-    let element = app.staticTexts["scoreText"]
-    // swiftlint:disable:next prefer_nimble
-    XCTAssertTrue(element.waitForExistence(timeout: 5), "Score text not found")
-    return element.label
-  }
+  /// The score readout is one merged accessibility element, so its number is the element's
+  /// value rather than its label.
+  private var scoreElement: XCUIElement { app.descendants(matching: .any)["scoreText"] }
 
   func riskLevel() -> String {
     let element = app.staticTexts["riskLevelText"]
@@ -24,14 +21,14 @@ class ResultsPage: BasePage {
   }
 
   func assertResults(score: String, riskLevel expectedRisk: String) {
-    let scoreElement = app.staticTexts["scoreText"]
     // swiftlint:disable:next prefer_nimble
-    XCTAssertTrue(scoreElement.waitForExistence(timeout: 5), "Score text not found")
+    XCTAssertTrue(scoreElement.waitForExistence(timeout: 5), "Score gauge not found")
+    let spokenScore = scoreElement.value as? String ?? ""
     // swiftlint:disable:next prefer_nimble
     XCTAssertEqual(
-      scoreElement.label,
+      digits(in: spokenScore),
       score,
-      "Expected score \(score) but got \(scoreElement.label)"
+      "Expected score \(score) but got \(spokenScore)"
     )
 
     let riskElement = app.staticTexts["riskLevelText"]
