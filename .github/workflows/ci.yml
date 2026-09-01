@@ -66,6 +66,21 @@ jobs:
       - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Record toolchain version
+        id: toolchain
+        run: echo "xcode=$(xcodebuild -version | tr '\n' '-')" >> "$GITHUB_OUTPUT"
+      - name: Cache SwiftPM dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+      - name: Cache Xcode build products
+        uses: actions/cache@v6
+        with:
+          path: DerivedData
+          key: derived-macos-test-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
       - name: Build and test (macOS)
         run: |
           xcodebuild test \
@@ -73,6 +88,7 @@ jobs:
             -scheme FART \
             -destination "platform=macOS" \
             -testPlan "Unit Tests" \
+            -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
   docs:
@@ -90,6 +106,21 @@ jobs:
       - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: Record toolchain version
+        id: toolchain
+        run: echo "xcode=$(xcodebuild -version | tr '\n' '-')" >> "$GITHUB_OUTPUT"
+      - name: Cache SwiftPM dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/Library/Caches/org.swift.swiftpm
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+      - name: Cache Xcode build products
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/docs
+          key: derived-docs-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
       - name: Build documentation (macOS)
         # docbuild documents the package dependencies too, and their DocC
         # warnings are upstream's to fix, so the strict flag is looked up by
