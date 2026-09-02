@@ -67,6 +67,10 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
       return
     }
 
+    // Last session's exported PDFs are safe to clear only when no export can be in flight,
+    // which holds for a real launch but not for a test host running alongside others.
+    FRATReport.removeStaleExports()
+
     SentrySDK.start { options in
       options.dsn =
         "https://ca34bdbb2d92e968036855adc9831fa1@o4510156629475328.ingest.us.sentry.io/4510160946200576"

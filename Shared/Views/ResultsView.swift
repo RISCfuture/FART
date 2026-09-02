@@ -12,6 +12,14 @@ struct ResultsView: View {
   @State private var displayedRisk = Risk.low
   @State private var onScreen = false
 
+  /// A snapshot of the results, taken when the view appears and again whenever the score or
+  /// risk changes.
+  ///
+  /// Holding the snapshot in state rather than deriving it during a render keeps the view
+  /// from observing every questionnaire answer, and dates a shared report by the assessment
+  /// it describes rather than by whenever SwiftUI last evaluated the body.
+  @State private var report: FRATReport?
+
   private var normalizedScore: Float {
     Float(displayedScore) / 64.0
   }
@@ -84,13 +92,20 @@ struct ResultsView: View {
     }
     .padding()
     .background(RiskMeshBackground(risk: displayedRisk))
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        if let report {
+          ShareReportButton(report: report)
+        }
+      }
+    }
     .onAppear {
       onScreen = true
-      withAnimation { syncToModel() }
+      showCurrentResults()
     }
     .onDisappear { onScreen = false }
-    .onChange(of: questionnaire.score) { animateToModel() }
-    .onChange(of: questionnaire.risk) { animateToModel() }
+    .onChange(of: questionnaire.score) { applyModelChange() }
+    .onChange(of: questionnaire.risk) { applyModelChange() }
   }
 
   private func syncToModel() {
@@ -98,11 +113,38 @@ struct ResultsView: View {
     displayedRisk = questionnaire.risk
   }
 
+  private func refreshReport() {
+    report = .init(questionnaire: questionnaire, generatedAt: .now)
+  }
+
+  private func showCurrentResults() {
+    refreshReport()
+    withAnimation { syncToModel() }
+  }
+
   /// Ignore changes that arrive while off screen; they'll be applied in one animation on
   /// the next appear rather than queued to replay.
-  private func animateToModel() {
+  private func applyModelChange() {
     guard onScreen else { return }
-    withAnimation { syncToModel() }
+    showCurrentResults()
+  }
+}
+
+/// Shares the results as a one-page PDF. On macOS this sits alongside the Print and Export
+/// commands; on iOS and visionOS it is the only way a report leaves the app.
+private struct ShareReportButton: View {
+  let report: FRATReport
+
+  /// Names the shared file in the share sheet by what a pilot would recognize it by: the
+  /// outcome, and the day it was assessed.
+  private var previewTitle: String {
+    let date = report.generatedAt.formatted(date: .abbreviated, time: .omitted)
+    return String(localized: "\(report.risk.label) — \(date)")
+  }
+
+  var body: some View {
+    ShareLink(item: report, preview: SharePreview(previewTitle))
+      .accessibilityIdentifier("shareReportButton")
   }
 }
 

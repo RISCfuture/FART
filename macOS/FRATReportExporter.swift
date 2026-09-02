@@ -9,8 +9,11 @@
   @MainActor
   enum FRATReportExporter {
     static func printReport(_ report: FRATReport) {
-      guard let data = report.pdfData,
-        let document = PDFDocument(data: data),
+      guard let data = report.pdfData else {
+        present(.renderingFailed)
+        return
+      }
+      guard let document = PDFDocument(data: data),
         let operation = document.printOperation(
           for: .shared,
           scalingMode: .pageScaleDownToFit,
@@ -23,7 +26,10 @@
     }
 
     static func exportPDF(_ report: FRATReport) {
-      guard let data = report.pdfData else { return }
+      guard let data = report.pdfData else {
+        present(.renderingFailed)
+        return
+      }
 
       let panel = NSSavePanel()
       panel.allowedContentTypes = [.pdf]
@@ -31,6 +37,11 @@
       guard panel.runModal() == .OK, let url = panel.url else { return }
 
       try? data.write(to: url)
+    }
+
+    /// Reports a failure the pilot would otherwise experience as the command doing nothing.
+    private static func present(_ error: FRATReportError) {
+      NSAlert(error: error).runModal()
     }
   }
 #endif

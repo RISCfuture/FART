@@ -1,5 +1,6 @@
 import Foundation
 import MeasurementKitDefaults
+import PDFKit
 import Testing
 
 @testable import Flight_Assessment_of_Risk_Tool
@@ -313,6 +314,46 @@ struct FARTUnitTests {
       let wind = MeasurementBridge<UnitSpeed>()
         .serialize(Measurement(value: 1, unit: .milesPerHour))
       #expect(try #require(wind).isApproximately(0.868976))
+    }
+  }
+
+  @Suite("FRAT Report Sharing Tests")
+  @MainActor
+  struct ReportSharingTests {
+
+    @Test("An exported report is a one-page PDF named as the report suggests")
+    func writesReadablePDF() throws {
+      let report = FRATReport(questionnaire: Questionnaire(), generatedAt: .now)
+      let url = try report.writeTemporaryPDF()
+      defer { removeExport(at: url) }
+      let document = try #require(PDFDocument(url: url))
+
+      #expect(url.lastPathComponent == report.suggestedFileName)
+      #expect(document.pageCount == 1)
+    }
+
+    /// Two reports assessed the same day share a suggested file name, so only the enclosing
+    /// directory keeps a second export from overwriting a file the system is still copying.
+    @Test("Each export gets its own directory")
+    func exportsDoNotCollide() throws {
+      let questionnaire = Questionnaire()
+      let generatedAt = Date.now
+      let first = try FRATReport(questionnaire: questionnaire, generatedAt: generatedAt)
+        .writeTemporaryPDF()
+      defer { removeExport(at: first) }
+      let second = try FRATReport(questionnaire: questionnaire, generatedAt: generatedAt)
+        .writeTemporaryPDF()
+      defer { removeExport(at: second) }
+
+      #expect(first.lastPathComponent == second.lastPathComponent)
+      #expect(first != second)
+      #expect(FileManager.default.fileExists(atPath: first.path(percentEncoded: false)))
+    }
+
+    /// Each export gets a directory of its own, so cleaning up after one means removing the
+    /// directory that holds it rather than just the file.
+    private func removeExport(at url: URL) {
+      try? FileManager.default.removeItem(at: url.deletingLastPathComponent())
     }
   }
 }
