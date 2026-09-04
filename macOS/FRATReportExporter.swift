@@ -1,6 +1,7 @@
 #if os(macOS)
   import AppKit
   import PDFKit
+  import UniformTypeIdentifiers
 
   /// Prints or saves a ``FRATReport`` using native macOS facilities.
   ///

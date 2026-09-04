@@ -2,9 +2,10 @@ import XCTest
 import XCUITestKit
 
 // swiftlint:disable prefer_nimble
+@MainActor
 final class Generate_Screenshots: XCTestCase {
 
-  override func setUpWithError() throws {
+  override func setUp() async throws {
     // In UI tests it is usually best to stop immediately when a failure occurs.
     continueAfterFailure = false
   }

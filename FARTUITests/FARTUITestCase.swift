@@ -2,6 +2,7 @@ import XCTest
 import XCUITestKit
 
 // swiftlint:disable final_test_case test_case_accessibility
+@MainActor
 class FARTUITestCase: XCTestCase {
   var app: XCUIApplication!
   var tabBar: TabBarPage!
@@ -9,7 +10,7 @@ class FARTUITestCase: XCTestCase {
   /// True when running on iPad (two-column NavigationSplitView layout).
   var isIPad: Bool { tabBar.isIPad }
 
-  override func setUpWithError() throws {
+  override func setUp() async throws {
     continueAfterFailure = false
     app = XCUIApplication()
     app.disableLogStderrMirroring()
