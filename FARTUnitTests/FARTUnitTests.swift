@@ -6,29 +6,29 @@ import Testing
 @testable import Flight_Assessment_of_Risk_Tool
 
 // swiftlint:disable convenience_type
-@Suite("FART Score and Risk Tests")
-struct FARTUnitTests {
+@Suite
+struct `FART Score and Risk Tests` {
 
-  @Suite("FARTScoreCalculator Tests")
-  struct CalculatorTests {
+  @Suite
+  struct `FARTScoreCalculator Tests` {
 
-    @Test("Empty data returns zero score")
-    func emptyDataReturnsZero() {
+    @Test
+    func `empty data scores zero`() {
       let data = QuestionnaireData()
       let score = FARTScoreCalculator.calculateScore(from: data)
       #expect(score == 0)
     }
 
-    @Test("Single risk factor calculates correctly")
-    func singleRiskFactor() {
+    @Test
+    func `scores a single risk factor`() {
       var data = QuestionnaireData()
       data.lessThan50InType = true
       let score = FARTScoreCalculator.calculateScore(from: data)
       #expect(score == 5)
     }
 
-    @Test("Multiple risk factors sum correctly")
-    func multipleRiskFactors() {
+    @Test
+    func `sums multiple risk factors`() {
       var data = QuestionnaireData()
       data.lessThan50InType = true  // +5
       data.night = true  // +5
@@ -37,8 +37,8 @@ struct FARTUnitTests {
       #expect(score == 14)
     }
 
-    @Test("Mitigating factors reduce score")
-    func mitigatingFactors() {
+    @Test
+    func `subtracts mitigating factors`() {
       var data = QuestionnaireData()
       data.lessThan50InType = true  // +5
       data.night = true  // +5
@@ -48,8 +48,8 @@ struct FARTUnitTests {
       #expect(score == 6)
     }
 
-    @Test("Score cannot go negative")
-    func scoreCannotGoNegative() {
+    @Test
+    func `never scores below zero`() {
       var data = QuestionnaireData()
       data.dualInLast90 = true  // -1
       data.wingsInLast6Mo = true  // -3
@@ -60,8 +60,8 @@ struct FARTUnitTests {
       #expect(score == 0)
     }
 
-    @Test("Approach type affects score")
-    func approachTypeScore() {
+    @Test
+    func `scores each approach type`() {
       var data = QuestionnaireData()
       data.ifrApproachType = .circling
       var score = FARTScoreCalculator.calculateScore(from: data)
@@ -77,8 +77,8 @@ struct FARTUnitTests {
       #expect(score == 8)
     }
 
-    @Test("Maximum realistic score")
-    func maximumRealisticScore() {
+    @Test
+    func `scores every factor answered at once`() {
       var data = QuestionnaireData()
       // Pilot factors
       data.lessThan50InType = true  // +5
@@ -111,11 +111,11 @@ struct FARTUnitTests {
     }
   }
 
-  @Suite("RiskCategorizer Tests")
-  struct CategorizerTests {
+  @Suite
+  struct `RiskCategorizer Tests` {
 
-    @Test("VFR under 100 hours risk thresholds")
-    func vfrUnder100Categories() {
+    @Test
+    func `categorizes VFR risk under 100 hours`() {
       let rating = Rating.VFR
       let hours = Hours.under100
 
@@ -132,8 +132,8 @@ struct FARTUnitTests {
       #expect(RiskCategorizer.categorizeRisk(score: 30, rating: rating, hours: hours) == .high)
     }
 
-    @Test("VFR over 100 hours risk thresholds")
-    func vfrOver100Categories() {
+    @Test
+    func `categorizes VFR risk over 100 hours`() {
       let rating = Rating.VFR
       let hours = Hours.over100
 
@@ -150,8 +150,8 @@ struct FARTUnitTests {
       #expect(RiskCategorizer.categorizeRisk(score: 35, rating: rating, hours: hours) == .high)
     }
 
-    @Test("IFR under 100 hours risk thresholds")
-    func ifrUnder100Categories() {
+    @Test
+    func `categorizes IFR risk under 100 hours`() {
       let rating = Rating.IFR
       let hours = Hours.under100
 
@@ -168,8 +168,8 @@ struct FARTUnitTests {
       #expect(RiskCategorizer.categorizeRisk(score: 40, rating: rating, hours: hours) == .high)
     }
 
-    @Test("IFR over 100 hours risk thresholds")
-    func ifrOver100Categories() {
+    @Test
+    func `categorizes IFR risk over 100 hours`() {
       let rating = Rating.IFR
       let hours = Hours.over100
 
@@ -187,11 +187,11 @@ struct FARTUnitTests {
     }
   }
 
-  @Suite("Score Value Configuration Tests")
-  struct ScoreValueTests {
+  @Suite
+  struct `Score Value Configuration Tests` {
 
-    @Test("All score values are correctly configured")
-    func verifyScoreValues() {
+    @Test
+    func `configures every score value`() {
       // Verify all score values match expected values
       #expect(FARTScoreCalculator.ScoreValues.lessThan50InType == 5)
       #expect(FARTScoreCalculator.ScoreValues.lessThan15InLast90 == 3)
@@ -221,8 +221,8 @@ struct FARTUnitTests {
       #expect(FARTScoreCalculator.ScoreValues.ifrLowVisibility == 2)
     }
 
-    @Test("Approach type scores are correct")
-    func verifyApproachScores() {
+    @Test
+    func `configures the approach type scores`() {
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.precision) == -2)
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.nonprecision) == 3)
       #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.none) == 4)
@@ -231,8 +231,8 @@ struct FARTUnitTests {
     }
   }
 
-  @Suite("Answer Restoration Tests")
-  struct RestorationTests {
+  @Suite
+  struct `Answer Restoration Tests` {
 
     /// Every boolean answer, so restoring one at a time proves each lands back on the
     /// property it came from rather than on a neighbour.
@@ -246,8 +246,8 @@ struct FARTUnitTests {
     ]
 
     @MainActor
-    @Test("Each answer restores onto its own property", arguments: booleanAnswers)
-    func booleanAnswerRestores(
+    @Test(arguments: booleanAnswers)
+    func `restores each answer onto its own property`(
       answer: any WritableKeyPath<QuestionnaireData, Bool> & Sendable
     ) throws {
       var stored = QuestionnaireData()
@@ -261,11 +261,8 @@ struct FARTUnitTests {
     }
 
     @MainActor
-    @Test(
-      "The approach type restores",
-      arguments: [ApproachType.precision, .nonprecision, .none, .circling]
-    )
-    func approachTypeRestores(approachType: ApproachType) throws {
+    @Test(arguments: [ApproachType.precision, .nonprecision, .none, .circling])
+    func `restores the approach type`(approachType: ApproachType) throws {
       var stored = QuestionnaireData()
       stored.ifrApproachType = approachType
       let encoded = try JSONEncoder().encode(stored)
@@ -277,8 +274,8 @@ struct FARTUnitTests {
     }
 
     @MainActor
-    @Test("Answers are left alone when the scene has none stored")
-    func missingAnswersLeaveQuestionnaireUntouched() {
+    @Test
+    func `leaves the answers alone when the scene has none stored`() {
       let questionnaire = Questionnaire()
       questionnaire.night = true
 
@@ -288,13 +285,13 @@ struct FARTUnitTests {
     }
   }
 
-  @Suite("Threshold Storage Tests")
-  struct ThresholdStorageTests {
+  @Suite
+  struct `Threshold Storage Tests` {
 
     /// Thresholds are stored as bare numbers, so preferences written before they became
     /// measurements have to keep reading back as the same quantity.
-    @Test("A threshold stored as a bare number reads back in its canonical unit")
-    func bareNumberReadsBack() throws {
+    @Test
+    func `reads a bare threshold back in its canonical unit`() throws {
       let runway = try #require(MeasurementBridge<UnitLength>().deserialize(3000))
       #expect(runway == Measurement(value: 3000, unit: .feet))
 
@@ -305,8 +302,8 @@ struct FARTUnitTests {
     /// Storing the raw value without converting first would write, say, a count of meters
     /// under a key everything else reads as feet, so the unit has to be normalized on the
     /// way down rather than assumed.
-    @Test("A threshold in another unit is normalized before it is stored")
-    func otherUnitsNormalizeOnWrite() throws {
+    @Test
+    func `normalizes a threshold in another unit before storing it`() throws {
       let runway = MeasurementBridge<UnitLength>()
         .serialize(Measurement(value: 1, unit: .miles))
       #expect(try #require(runway).isApproximately(5280))
@@ -317,12 +314,12 @@ struct FARTUnitTests {
     }
   }
 
-  @Suite("FRAT Report Sharing Tests")
+  @Suite
   @MainActor
-  struct ReportSharingTests {
+  struct `FRAT Report Sharing Tests` {
 
-    @Test("An exported report is a one-page PDF named as the report suggests")
-    func writesReadablePDF() throws {
+    @Test
+    func `exports a one-page PDF named as the report suggests`() throws {
       let report = FRATReport(questionnaire: Questionnaire(), generatedAt: .now)
       let url = try report.writeTemporaryPDF()
       defer { removeExport(at: url) }
@@ -334,8 +331,8 @@ struct FARTUnitTests {
 
     /// Two reports assessed the same day share a suggested file name, so only the enclosing
     /// directory keeps a second export from overwriting a file the system is still copying.
-    @Test("Each export gets its own directory")
-    func exportsDoNotCollide() throws {
+    @Test
+    func `gives each export its own directory`() throws {
       let questionnaire = Questionnaire()
       let generatedAt = Date.now
       let first = try FRATReport(questionnaire: questionnaire, generatedAt: generatedAt)
