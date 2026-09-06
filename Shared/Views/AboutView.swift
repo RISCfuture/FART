@@ -121,7 +121,7 @@ private struct AppIconView: View {
     #if os(macOS)
       Image(nsImage: NSApplication.shared.applicationIconImage)
         .resizable()
-        .aspectRatio(contentMode: .fit)
+        .scaledToFit()
         .frame(width: Self.side, height: Self.side)
         .accessibilityLabel("Application icon")
         .accessibilityIdentifier("appIconImage")
@@ -129,7 +129,7 @@ private struct AppIconView: View {
       if let icon = bundleIcon {
         Image(uiImage: icon)
           .resizable()
-          .aspectRatio(contentMode: .fit)
+          .scaledToFit()
           .frame(width: Self.side, height: Self.side)
           .clipShape(RoundedRectangle(cornerRadius: Self.side * 0.2237, style: .continuous))
           .accessibilityLabel("Application icon")

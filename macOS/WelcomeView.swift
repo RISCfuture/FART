@@ -35,7 +35,7 @@
       VStack(spacing: 8) {
         Image(nsImage: NSApplication.shared.applicationIconImage)
           .resizable()
-          .aspectRatio(contentMode: .fit)
+          .scaledToFit()
           .frame(width: 64, height: 64)
           .accessibilityLabel("Application icon")
         Text("Welcome to FART")
