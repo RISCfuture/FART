@@ -150,6 +150,7 @@ end
 
 
 
+
 # App Store Connect's ceiling on a "What's New" entry.
 RELEASE_NOTES_LIMIT = 4000
 
@@ -234,15 +235,15 @@ end
 # Stops a release from changing which binary a version points at once that version has left the
 # developer's hands. Attaching is otherwise unattended, so a tag moved while a version sits in
 # review would silently swap the build under a submission Apple is already looking at.
-def refuse_unsafe_attach(store_version, name:, version:, build:)
+def refuse_unsafe_attach(store_version, name:, version:, build_number:)
   state = store_version.app_version_state || store_version.app_store_state
   return if ATTACHABLE_VERSION_STATES.include?(state)
 
   UI.user_error!(
-    "#{name} #{version} is #{state}, so this run will not attach build #{build.version} to it. " \
+    "#{name} #{version} is #{state}, so this run will not attach build #{build_number} to it. " \
     "The version has been submitted, and swapping its build now would change what Apple is " \
     "reviewing without anyone saying so.\n\n" \
-    "Build #{build.version} is uploaded and will stay there. If it is the one that should ship, " \
+    "Build #{build_number} is uploaded and will stay there. If it is the one that should ship, " \
     "withdraw the submission and attach it by hand, then resubmit."
   )
 end
@@ -462,6 +463,12 @@ platform :ios do
 
     store_versions.each do |name, store_version|
       platform = PLATFORMS.fetch(name)
+      # Before the wait, not after: there is no sense spending up to forty-five minutes waiting on
+      # a build that will be refused the moment it arrives. The check reads the version's state and
+      # needs no build object — only the message names one — so a number is enough to run it early.
+      refuse_unsafe_attach(store_version, name: name, version: version,
+                           build_number: number || "the newest")
+
       build = if number
                 await_build(app: app, version: version, platform: platform.fetch(:connect),
                             number: number, name: name)
@@ -475,7 +482,6 @@ platform :ios do
                 await_processing(newest, name: name)
               end
 
-      refuse_unsafe_attach(store_version, name: name, version: version, build: build)
       store_version.select_build(build_id: build.id)
       UI.success("#{name} #{version} now ships build #{build.version}.")
     end
