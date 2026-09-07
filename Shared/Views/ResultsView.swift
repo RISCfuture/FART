@@ -135,6 +135,10 @@ struct ResultsView: View {
 private struct ShareReportButton: View {
   let report: FRATReport
 
+  /// Rendered once the view appears rather than during a render pass, so drawing the
+  /// page never blocks the results screen from showing.
+  @State private var thumbnail: Image?
+
   /// Names the shared file in the share sheet by what a pilot would recognize it by: the
   /// outcome, and the day it was assessed.
   private var previewTitle: String {
@@ -143,8 +147,18 @@ private struct ShareReportButton: View {
   }
 
   var body: some View {
-    ShareLink(item: report, preview: SharePreview(previewTitle))
-      .accessibilityIdentifier("shareReportButton")
+    // Until the page has drawn there is nothing truthful to preview, so the sheet shows
+    // the title alone rather than a stand-in glyph that misrepresents the report.
+    Group {
+      if let thumbnail {
+        ShareLink(item: report, preview: SharePreview(previewTitle, image: thumbnail))
+          .accessibilityIdentifier("shareReportButton")
+      } else {
+        ShareLink(item: report, preview: SharePreview(previewTitle))
+          .accessibilityIdentifier("shareReportButton")
+      }
+    }
+    .task(id: report.generatedAt) { thumbnail = report.previewImage }
   }
 }
 

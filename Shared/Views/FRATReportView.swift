@@ -93,6 +93,19 @@ private struct FactorRow: View {
 }
 
 extension FRATReport {
+  /// The report's page rendered as an image, or `nil` if nothing was drawn.
+  ///
+  /// A `SharePreview` carrying only a title leaves the share sheet drawing a generic
+  /// document glyph, which tells a pilot nothing about what is on its way out. Rendering
+  /// through `cgImage` rather than the platform image types keeps this one implementation
+  /// for every platform the share sheet appears on.
+  @MainActor var previewImage: Image? {
+    let renderer = ImageRenderer(content: FRATReportView(report: self))
+    renderer.scale = 2
+    guard let page = renderer.cgImage else { return nil }
+    return Image(decorative: page, scale: 2)
+  }
+
   /// The report rendered as a one-page vector PDF, or `nil` if nothing was drawn.
   ///
   /// `ImageRenderer` draws ``FRATReportView`` straight into a Core Graphics PDF context, so the
