@@ -30,7 +30,6 @@ struct ContentView: View {
   @State private var questionnaire = Questionnaire()
 
   #if !os(macOS)
-    @State private var showingAbout = false
     @State private var selectedTab = AppTab.pilot
   #endif
 
@@ -121,25 +120,15 @@ struct ContentView: View {
           Tab("Questions", systemImage: "checklist.checked") {
             QuestionnaireView().environment(questionnaire)
           }
+          Tab("About", systemImage: "info.circle") {
+            NavigationStack {
+              AboutView().navigationTitle("About")
+            }
+          }
         }
       } detail: {
         NavigationStack {
-          ResultsView()
-            .environment(questionnaire)
-            .toolbar {
-              ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                  showingAbout = true
-                } label: {
-                  Label("About", systemImage: "info.circle")
-                }
-                .accessibilityIdentifier("aboutButton")
-              }
-            }
-        }
-        .sheet(isPresented: $showingAbout) {
-          AboutSheet(isPresented: $showingAbout)
-            .presentationSizing(.form)
+          ResultsView().environment(questionnaire)
         }
       }
     }
@@ -215,22 +204,6 @@ private extension View {
         }
       }
     #endif
-  }
-
-  private struct AboutSheet: View {
-    @Binding var isPresented: Bool
-
-    var body: some View {
-      NavigationStack {
-        AboutView()
-          .navigationTitle("About")
-          .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-              Button("Done") { isPresented = false }
-            }
-          }
-      }
-    }
   }
 #endif
 

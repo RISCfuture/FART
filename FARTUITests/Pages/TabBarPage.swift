@@ -39,7 +39,7 @@ class TabBarPage: BasePage {
       }
     }
 
-    if isIPad && (tab == .pilot || tab == .questions) {
+    if isIPad && tab != .results {
       // Sidebar might be hidden — try showing it
       showSidebar()
 
@@ -107,21 +107,7 @@ class TabBarPage: BasePage {
   }
 
   func goToAbout() -> AboutPage {
-    if isIPad {
-      // iPad shows About via toolbar button → sheet
-      let aboutButton = app.buttons["aboutButton"]
-      if !aboutButton.waitForExistence(timeout: 5) {
-        // Button might be in the navigation bar — try the detail column's nav bar
-        let navBarButton = app.navigationBars.buttons["aboutButton"]
-        if navBarButton.waitForExistence(timeout: 3) {
-          navBarButton.tap()
-        }
-      } else {
-        aboutButton.tap()
-      }
-    } else {
-      goTo(tab: .about)
-    }
+    goTo(tab: .about)
     _ = waitForElement("aboutDescriptionText", timeout: 10)
     return AboutPage(app: app)
   }
