@@ -149,6 +149,7 @@ def purge_remote_screenshots(platform)
 end
 
 
+
 # App Store Connect's ceiling on a "What's New" entry.
 RELEASE_NOTES_LIMIT = 4000
 
@@ -244,6 +245,35 @@ def refuse_unsafe_attach(store_version, name:, version:, build:)
     "Build #{build.version} is uploaded and will stay there. If it is the one that should ship, " \
     "withdraw the submission and attach it by hand, then resubmit."
   )
+end
+
+# Waits for a NAMED build to appear, then for Apple to finish processing it.
+#
+# Apple indexes an upload some minutes after it arrives, and in that window the newest build App
+# Store Connect knows about is the PREVIOUS one — already processed, so a recency-based lookup
+# returns it, nothing waits, nothing errors, and the release attaches its own predecessor while
+# reporting success. Recency is a proxy for identity that fails in exactly the window this lane
+# runs in. The build number is known to the workflow that stamped it, so identity is available and
+# is what gets used.
+def await_build(app:, version:, platform:, number:, name:)
+  deadline = Time.now + BUILD_PROCESSING_TIMEOUT
+  loop do
+    build = Spaceship::ConnectAPI::Build.all(app_id: app.id, limit: 200).find do |candidate|
+      candidate.pre_release_version&.version == version &&
+        candidate.pre_release_version&.platform == platform &&
+        candidate.version.to_i == number.to_i
+    end
+    return await_processing(build, name: name) if build
+
+    if Time.now >= deadline
+      UI.user_error!("#{name} build #{number} never appeared for #{version} after " \
+                     "#{BUILD_PROCESSING_TIMEOUT / 60} minutes. It was uploaded — App Store " \
+                     "Connect has not indexed it. Attach it by hand once it shows up.")
+    end
+    UI.message("#{name} build #{number} has not been indexed yet; asking again in " \
+               "#{BUILD_POLL_INTERVAL}s.")
+    sleep(BUILD_POLL_INTERVAL)
+  end
 end
 
 # Waits for Apple to finish processing an upload. A version cannot hold a build that is still
@@ -416,6 +446,7 @@ platform :ios do
   desc "Write the release notes and attach the build to its version (CI)"
   lane :ci_finish_release do |options|
     version = options.fetch(:version)
+    number = options[:build]
     ensure_api_key
     app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
 
@@ -431,13 +462,20 @@ platform :ios do
 
     store_versions.each do |name, store_version|
       platform = PLATFORMS.fetch(name)
-      build = newest_build(app: app, version: version, platform: platform.fetch(:connect))
-      UI.user_error!("App Store Connect has no #{name} build for #{version}.") if build.nil?
+      build = if number
+                await_build(app: app, version: version, platform: platform.fetch(:connect),
+                            number: number, name: name)
+              else
+                # No number to wait for, so the newest build has to stand in for the right one.
+                # Only a hand-run release reaches this: the workflow always knows what it built.
+                UI.important("No build number given, so #{name} will attach whichever build is " \
+                             "newest. If a release is still uploading, that is the one before it.")
+                newest = newest_build(app: app, version: version, platform: platform.fetch(:connect))
+                UI.user_error!("App Store Connect has no #{name} build for #{version}.") if newest.nil?
+                await_processing(newest, name: name)
+              end
 
-      # Checked before the wait, not after: there is no sense spending forty-five minutes on a
-      # build that will not be attached when it arrives.
       refuse_unsafe_attach(store_version, name: name, version: version, build: build)
-      build = await_processing(build, name: name)
       store_version.select_build(build_id: build.id)
       UI.success("#{name} #{version} now ships build #{build.version}.")
     end
