@@ -1,8 +1,15 @@
 name: Release
 
-# Pushing a version tag archives the app and uploads it to App Store Connect, where it waits to be
-# attached to a version and submitted by hand. Nothing here re-runs the tests: tag a commit CI has
-# already passed.
+# Pushing a version tag builds the release and finishes it: the app is archived for every platform
+# and uploaded to App Store Connect, the version's release notes are written from CHANGELOG.md, and
+# the build is attached to the version once Apple has processed it. Submitting for review is the
+# only step left by hand.
+#
+# Re-tagging a version is how its build is replaced. The tag push runs all of this again and the
+# version ends up pointing at the newer build; the older one stays on App Store Connect, since a
+# build can be expired but never deleted. A tag push is a deploy, not bookkeeping.
+#
+# Nothing here re-runs the tests: tag a commit CI has already passed.
 on:
   push:
     tags: ["[0-9]+.[0-9]+*"]
@@ -25,6 +32,8 @@ jobs:
       platforms: '["iOS","macOS"]'
       version: ${{ inputs.version || github.ref_name }}
       certificates-repo: RISCfuture/certificates
+      verify-lane: ci_verify_release_notes
+      finish-lane: ci_finish_release
     secrets:
       certificates-token: ${{ secrets.CERTIFICATES_TOKEN }}
       match-password: ${{ secrets.MATCH_PASSWORD }}

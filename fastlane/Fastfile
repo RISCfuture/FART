@@ -14,6 +14,7 @@
 
 require "fileutils"
 require "json"
+require "open3"
 require "shellwords"
 require "tmpdir"
 require "xcodeproj"
@@ -45,11 +46,13 @@ OUTPUT_DIRECTORY = "build"
 # another. The app target also builds for visionOS, but there is no visionOS App Store listing, so it
 # is not released here.
 PLATFORMS = {
-  "iOS"   => { destination: "generic/platform=iOS",   deliver: "ios", match: "ios" },
+  "iOS"   => { destination: "generic/platform=iOS",   deliver: "ios", match: "ios",
+               connect: "IOS" },
   # A Mac App Store submission ships as a .pkg, which the Apple Distribution certificate cannot
   # sign — that takes the separate Mac Installer Distribution certificate.
   "macOS" => { destination: "generic/platform=macOS", deliver: "osx", match: "macos",
-               sdk: "macosx", additional_cert_types: ["mac_installer_distribution"] }
+               sdk: "macosx", additional_cert_types: ["mac_installer_distribution"],
+               connect: "MAC_OS" }
 }.freeze
 
 # The Sentry project the release lanes upload dSYMs and sources to. `sentry-cli` reads
@@ -143,6 +146,129 @@ def purge_remote_screenshots(platform)
 
   UI.user_error!("#{remaining} screenshot(s) are still on App Store Connect after being deleted. " \
                  "Uploading now would leave the set a mix of old and new.")
+end
+
+
+# App Store Connect's ceiling on a "What's New" entry.
+RELEASE_NOTES_LIMIT = 4000
+
+# One version's release notes, rendered as App Store Connect wants them — the store field shows
+# whatever it is given verbatim, so the script strips the Markdown the changelog is written in.
+# Raises when the changelog has no section for the version, which is the failure `ci_verify_release
+# _notes` exists to reach before anything is built.
+def release_notes(version, locale: nil)
+  script = File.expand_path("../Scripts/release-notes.sh", __dir__)
+  # Not fastlane's `sh`: it reports a failure by printing the Ruby line that called it, so a missing
+  # changelog section arrives on CI as a source excerpt rather than as the sentence the script wrote
+  # explaining what to add. Capturing lets the script's own message be the error.
+  output, status = Open3.capture2e(script, *["--plain", version, locale].compact)
+  UI.user_error!(output.strip) unless status.success?
+  output.strip
+end
+
+# The version record to release into, created if App Store Connect has not got one. `ensure_version!`
+# renames a version already in preparation rather than failing beside it: a re-run after a rejected
+# build finds the last attempt's version still open, and App Store Connect will not hold a second.
+def ensure_store_version(app:, version:, platform:, name:)
+  app.ensure_version!(version, platform: platform)
+  store_version = app.get_edit_app_store_version(platform: platform)
+  UI.user_error!("No editable #{name} version to release #{version} into.") if store_version.nil?
+  store_version
+end
+
+# Writes the notes onto every locale the listing actually carries, each falling back to the version's
+# default section when the changelog has nothing specific to it. Locales are read from App Store
+# Connect rather than from the changelog so a mistyped heading cannot publish the app into a
+# territory it does not sell in — it just goes unused.
+#
+# An empty rendering is never written. `ci_verify_release_notes` should have caught that before the
+# build, but replacing a release's notes with blankness is bad enough to be worth refusing twice.
+def write_release_notes(store_version, version:, name:)
+  written = store_version.get_app_store_version_localizations.filter_map do |localization|
+    text = release_notes(version, locale: localization.locale)
+    if text.empty?
+      UI.important("#{name} #{version} rendered no notes for #{localization.locale}; leaving them alone.")
+      next nil
+    end
+    localization.update(attributes: { whats_new: text })
+    localization.locale
+  end
+
+  UI.success("#{name} #{version} notes written for #{written.join(', ')}.")
+end
+
+# How long to wait for App Store Connect to finish processing an upload, and how often to ask.
+# Processing usually takes a few minutes and occasionally far longer; the wait is capped so a stuck
+# build fails the job rather than holding a runner indefinitely.
+BUILD_PROCESSING_TIMEOUT = 45 * 60
+BUILD_POLL_INTERVAL = 60
+
+# The version states in which attaching a build is still the developer's to do. Anything further
+# along — submitted, in review, accepted, awaiting release, or on sale — belongs to Apple or to the
+# store, and swapping the binary underneath it is not something a tag push should do unattended.
+#
+# An allowlist rather than a denylist, so a state Apple adds later is refused rather than assumed
+# safe. Note that `get_edit_app_store_version` returns WAITING_FOR_REVIEW among its "editable"
+# states, so without this the attach would reach a version already in Apple's queue.
+ATTACHABLE_VERSION_STATES = %w[
+  PREPARE_FOR_SUBMISSION
+  READY_FOR_REVIEW
+  DEVELOPER_REJECTED
+  REJECTED
+  METADATA_REJECTED
+  INVALID_BINARY
+].freeze
+
+# The highest-numbered build App Store Connect holds for this version of this platform. Compared as
+# integers: build numbers are strings on the API, where "10" sorts below "9".
+def newest_build(app:, version:, platform:)
+  Spaceship::ConnectAPI::Build.all(app_id: app.id, limit: 200)
+                              .select do |build|
+                                build.pre_release_version&.version == version &&
+                                  build.pre_release_version&.platform == platform
+                              end
+                              .max_by { |build| build.version.to_i }
+end
+
+# Stops a release from changing which binary a version points at once that version has left the
+# developer's hands. Attaching is otherwise unattended, so a tag moved while a version sits in
+# review would silently swap the build under a submission Apple is already looking at.
+def refuse_unsafe_attach(store_version, name:, version:, build:)
+  state = store_version.app_version_state || store_version.app_store_state
+  return if ATTACHABLE_VERSION_STATES.include?(state)
+
+  UI.user_error!(
+    "#{name} #{version} is #{state}, so this run will not attach build #{build.version} to it. " \
+    "The version has been submitted, and swapping its build now would change what Apple is " \
+    "reviewing without anyone saying so.\n\n" \
+    "Build #{build.version} is uploaded and will stay there. If it is the one that should ship, " \
+    "withdraw the submission and attach it by hand, then resubmit."
+  )
+end
+
+# Waits for Apple to finish processing an upload. A version cannot hold a build that is still
+# processing, which is why attaching is the one step of a release that cannot run when the upload
+# does — the archive job is long finished before Apple is.
+def await_processing(build, name:)
+  deadline = Time.now + BUILD_PROCESSING_TIMEOUT
+  loop do
+    case build.processing_state
+      when "VALID" then return build
+      when "PROCESSING"
+        if Time.now >= deadline
+          UI.user_error!("#{name} build #{build.version} was still processing after " \
+                         "#{BUILD_PROCESSING_TIMEOUT / 60} minutes. It may yet succeed — re-run " \
+                         "this job once App Store Connect shows the build as valid.")
+        end
+        UI.message("#{name} build #{build.version} is still processing; asking again in " \
+                   "#{BUILD_POLL_INTERVAL}s.")
+        sleep(BUILD_POLL_INTERVAL)
+      else
+        UI.user_error!("#{name} build #{build.version} is #{build.processing_state}, so there is " \
+                       "nothing to attach. Apple reports why by email.")
+    end
+    build = Spaceship::ConnectAPI::Build.get(build_id: build.id)
+  end
 end
 
 platform :ios do
@@ -267,6 +393,54 @@ platform :ios do
     )
 
     upload_debug_symbols
+  end
+
+  desc "Refuse to start a release whose notes are missing, empty, or too long (CI)"
+  lane :ci_verify_release_notes do |options|
+    version = options.fetch(:version)
+
+    # Only the default section is checked. Every locale falls back to it, so if it is present and
+    # fits, no locale can be empty — which lets this run with no App Store Connect credentials, and
+    # therefore before the build rather than after it.
+    notes = release_notes(version)
+    UI.user_error!("CHANGELOG.md's #{version} section is empty.") if notes.empty?
+
+    if notes.length > RELEASE_NOTES_LIMIT
+      UI.user_error!("The #{version} release notes are #{notes.length} characters; App Store " \
+                     "Connect takes at most #{RELEASE_NOTES_LIMIT}.")
+    end
+
+    UI.success("#{version} has #{notes.length} characters of release notes.")
+  end
+
+  desc "Write the release notes and attach the build to its version (CI)"
+  lane :ci_finish_release do |options|
+    version = options.fetch(:version)
+    ensure_api_key
+    app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
+
+    store_versions = PLATFORMS.to_h do |name, platform|
+      [name, ensure_store_version(app: app, version: version, platform: platform.fetch(:connect),
+                                  name: name)]
+    end
+
+    # Every platform's notes first, then the attaching. Attaching waits on Apple and can fail on a
+    # build Apple rejects, and notes that landed are worth more than notes withheld because a
+    # binary went bad.
+    store_versions.each { |name, store_version| write_release_notes(store_version, version: version, name: name) }
+
+    store_versions.each do |name, store_version|
+      platform = PLATFORMS.fetch(name)
+      build = newest_build(app: app, version: version, platform: platform.fetch(:connect))
+      UI.user_error!("App Store Connect has no #{name} build for #{version}.") if build.nil?
+
+      # Checked before the wait, not after: there is no sense spending forty-five minutes on a
+      # build that will not be attached when it arrives.
+      refuse_unsafe_attach(store_version, name: name, version: version, build: build)
+      build = await_processing(build, name: name)
+      store_version.select_build(build_id: build.id)
+      UI.success("#{name} #{version} now ships build #{build.version}.")
+    end
   end
 
   # Loads the App Store Connect API key. Kept out of `before_all` so `screenshots`, which runs

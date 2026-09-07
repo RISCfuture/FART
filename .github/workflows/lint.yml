@@ -19,6 +19,9 @@ jobs:
       - uses: SwiftyLab/setup-swift@latest
         with:
           swift-version: "6.3"
+      # .swiftlint.yml's parent_config is a gist URL that SwiftLint fetches itself, and a slow or
+      # unreachable gist fails the run. Fetching it here with retries, then pointing the config at
+      # the local copy, takes the network out of the linter's path.
       - name: Pre-fetch parent SwiftLint config
         run: |
           curl -fsSL --retry 3 --retry-delay 2 -o .swiftlint-parent.yml \

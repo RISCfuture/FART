@@ -71,6 +71,22 @@ Resolve the next build number and write it where CI can read it
 
 Archive one platform and upload it to App Store Connect (CI)
 
+### ios ci_verify_release_notes
+
+```sh
+[bundle exec] fastlane ios ci_verify_release_notes
+```
+
+Refuse to start a release whose notes are missing, empty, or too long (CI)
+
+### ios ci_finish_release
+
+```sh
+[bundle exec] fastlane ios ci_finish_release
+```
+
+Write the release notes and attach the build to its version (CI)
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
