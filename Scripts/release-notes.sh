@@ -1,14 +1,16 @@
 #!/bin/bash
 #
-# release-notes.sh — shared release-notes renderer, revision 4 (2026-09-07).
-# Copies live in six app repositories; a copy that does not say revision 4 is stale.
+# release-notes.sh — shared release-notes renderer, revision 5 (2026-09-09).
+# Copies live in seven app repositories; a copy that does not say revision 5 is stale.
 #
 # Prints one version's section of CHANGELOG.md, for whatever wants the release notes.
 #
 #   Scripts/release-notes.sh [--plain] <version> [locale]
 #
-# The release workflow feeds `--plain` into App Store Connect's "What's New". One source, so the
-# changelog and the store cannot drift into describing the same build differently.
+# `--plain` feeds App Store Connect's "What's New". Where the release also reaches users outside
+# the store, the Markdown form feeds `gh release create --notes-file`. One source for every
+# destination, so the changelog, the store and a GitHub release cannot drift into describing the
+# same build differently.
 #
 # `--plain` renders the section as App Store Connect wants it: no Markdown, since that field shows
 # the text verbatim, and no hard wrapping, since it reflows to whatever width the reader's App Store
