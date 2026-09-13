@@ -14,6 +14,9 @@ jobs:
   periphery:
     name: Run Periphery
     runs-on: macos-26
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -56,15 +59,13 @@ jobs:
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: derived-periphery-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
-      # The runner image freezes Homebrew's formula index at the image's build date, so a bare
-      # `brew install` can resolve to a Periphery old enough to analyze this project differently
-      # than a current one does. Refresh the index first so every run agrees on the version.
       - name: Install Periphery
         run: |
           brew update
-          brew install periphery
+          brew install periphery-pro/tap/periphery-cli
       - name: Run Periphery
         env:
+          PERIPHERY_TOKEN: ${{ secrets.PERIPHERY_TOKEN }}
           SIM_UDID: ${{ steps.sim.outputs.udid }}
         run: |
           periphery scan \

@@ -89,7 +89,6 @@ class Questionnaire {
     observeProfileDefaults()
   }
 
-  // periphery:ignore - invoked only by the macOS "Reset FRAT" menu command
   /// Clears every answer back to its default, returning the score to baseline. The
   /// `Observations` pipeline coalesces these writes into a single recompute.
   func reset() { apply(QuestionnaireData()) }

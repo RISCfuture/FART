@@ -3,7 +3,6 @@ import Foundation
 import MeasurementKitDefaults
 
 extension Defaults.Keys {
-  // periphery:ignore - used only in the macOS welcome flow, invisible to the iOS scan
   static let hasCompletedWelcome = Key<Bool>("hasCompletedWelcome", default: false)
 
   static let rating = Key<Rating>("rating", default: .VFR)
