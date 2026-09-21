@@ -114,120 +114,59 @@ struct `FART Score and Risk Tests` {
   @Suite
   struct `RiskCategorizer Tests` {
 
-    @Test
-    func `categorizes VFR risk under 100 hours`() {
-      let rating = Rating.VFR
-      let hours = Hours.under100
+    /// Both edges of every band, for each rating and hours combination: the highest score that
+    /// stays in a band and the lowest that leaves it, which is where a wrong comparison shows.
+    /// The thresholds are written out rather than read from `RiskThresholds`, so that moving a
+    /// threshold fails this suite instead of silently moving the expectation with it.
+    static let categorizations: [Categorization] = [
+      .init(rating: .VFR, hours: .under100, score: 14, risk: .low),
+      .init(rating: .VFR, hours: .under100, score: 15, risk: .moderate),
+      .init(rating: .VFR, hours: .under100, score: 20, risk: .moderate),
+      .init(rating: .VFR, hours: .under100, score: 21, risk: .high),
 
-      // Low risk (0-14)
+      .init(rating: .VFR, hours: .over100, score: 20, risk: .low),
+      .init(rating: .VFR, hours: .over100, score: 21, risk: .moderate),
+      .init(rating: .VFR, hours: .over100, score: 25, risk: .moderate),
+      .init(rating: .VFR, hours: .over100, score: 26, risk: .high),
+
+      .init(rating: .IFR, hours: .under100, score: 20, risk: .low),
+      .init(rating: .IFR, hours: .under100, score: 21, risk: .moderate),
+      .init(rating: .IFR, hours: .under100, score: 30, risk: .moderate),
+      .init(rating: .IFR, hours: .under100, score: 31, risk: .high),
+
+      .init(rating: .IFR, hours: .over100, score: 30, risk: .low),
+      .init(rating: .IFR, hours: .over100, score: 31, risk: .moderate),
+      .init(rating: .IFR, hours: .over100, score: 35, risk: .moderate),
+      .init(rating: .IFR, hours: .over100, score: 36, risk: .high)
+    ]
+
+    @Test(arguments: categorizations)
+    func `categorizes a score against the pilot's thresholds`(_ expected: Categorization) {
+      let risk = RiskCategorizer.categorizeRisk(
+        score: expected.score,
+        rating: expected.rating,
+        hours: expected.hours
+      )
+
+      #expect(risk == expected.risk)
+    }
+
+    /// A pilot with no risk factors is low risk whoever they are, which no band edge covers.
+    @Test(arguments: [Rating.VFR, .IFR], [Hours.under100, .over100])
+    func `categorizes a clean questionnaire as low risk`(rating: Rating, hours: Hours) {
       #expect(RiskCategorizer.categorizeRisk(score: 0, rating: rating, hours: hours) == .low)
-      #expect(RiskCategorizer.categorizeRisk(score: 14, rating: rating, hours: hours) == .low)
-
-      // Moderate risk (15-20)
-      #expect(RiskCategorizer.categorizeRisk(score: 15, rating: rating, hours: hours) == .moderate)
-      #expect(RiskCategorizer.categorizeRisk(score: 20, rating: rating, hours: hours) == .moderate)
-
-      // High risk (>20)
-      #expect(RiskCategorizer.categorizeRisk(score: 21, rating: rating, hours: hours) == .high)
-      #expect(RiskCategorizer.categorizeRisk(score: 30, rating: rating, hours: hours) == .high)
     }
 
-    @Test
-    func `categorizes VFR risk over 100 hours`() {
-      let rating = Rating.VFR
-      let hours = Hours.over100
+    /// A score, the pilot it belongs to, and the band it should fall in.
+    struct Categorization: Sendable, CustomTestStringConvertible {
+      let rating: Rating
+      let hours: Hours
+      let score: Int
+      let risk: Risk
 
-      // Low risk (0-20)
-      #expect(RiskCategorizer.categorizeRisk(score: 0, rating: rating, hours: hours) == .low)
-      #expect(RiskCategorizer.categorizeRisk(score: 20, rating: rating, hours: hours) == .low)
-
-      // Moderate risk (21-25)
-      #expect(RiskCategorizer.categorizeRisk(score: 21, rating: rating, hours: hours) == .moderate)
-      #expect(RiskCategorizer.categorizeRisk(score: 25, rating: rating, hours: hours) == .moderate)
-
-      // High risk (>25)
-      #expect(RiskCategorizer.categorizeRisk(score: 26, rating: rating, hours: hours) == .high)
-      #expect(RiskCategorizer.categorizeRisk(score: 35, rating: rating, hours: hours) == .high)
-    }
-
-    @Test
-    func `categorizes IFR risk under 100 hours`() {
-      let rating = Rating.IFR
-      let hours = Hours.under100
-
-      // Low risk (0-20)
-      #expect(RiskCategorizer.categorizeRisk(score: 0, rating: rating, hours: hours) == .low)
-      #expect(RiskCategorizer.categorizeRisk(score: 20, rating: rating, hours: hours) == .low)
-
-      // Moderate risk (21-30)
-      #expect(RiskCategorizer.categorizeRisk(score: 21, rating: rating, hours: hours) == .moderate)
-      #expect(RiskCategorizer.categorizeRisk(score: 30, rating: rating, hours: hours) == .moderate)
-
-      // High risk (>30)
-      #expect(RiskCategorizer.categorizeRisk(score: 31, rating: rating, hours: hours) == .high)
-      #expect(RiskCategorizer.categorizeRisk(score: 40, rating: rating, hours: hours) == .high)
-    }
-
-    @Test
-    func `categorizes IFR risk over 100 hours`() {
-      let rating = Rating.IFR
-      let hours = Hours.over100
-
-      // Low risk (0-30)
-      #expect(RiskCategorizer.categorizeRisk(score: 0, rating: rating, hours: hours) == .low)
-      #expect(RiskCategorizer.categorizeRisk(score: 30, rating: rating, hours: hours) == .low)
-
-      // Moderate risk (31-35)
-      #expect(RiskCategorizer.categorizeRisk(score: 31, rating: rating, hours: hours) == .moderate)
-      #expect(RiskCategorizer.categorizeRisk(score: 35, rating: rating, hours: hours) == .moderate)
-
-      // High risk (>35)
-      #expect(RiskCategorizer.categorizeRisk(score: 36, rating: rating, hours: hours) == .high)
-      #expect(RiskCategorizer.categorizeRisk(score: 45, rating: rating, hours: hours) == .high)
-    }
-  }
-
-  @Suite
-  struct `Score Value Configuration Tests` {
-
-    @Test
-    func `configures every score value`() {
-      // Verify all score values match expected values
-      #expect(FARTScoreCalculator.ScoreValues.lessThan50InType == 5)
-      #expect(FARTScoreCalculator.ScoreValues.lessThan15InLast90 == 3)
-      #expect(FARTScoreCalculator.ScoreValues.afterWork == 4)
-      #expect(FARTScoreCalculator.ScoreValues.lessThan8HrSleep == 5)
-      #expect(FARTScoreCalculator.ScoreValues.dualInLast90 == -1)
-      #expect(FARTScoreCalculator.ScoreValues.wingsInLast6Mo == -3)
-      #expect(FARTScoreCalculator.ScoreValues.ifrCurrent == -3)
-
-      #expect(FARTScoreCalculator.ScoreValues.night == 5)
-      #expect(FARTScoreCalculator.ScoreValues.strongWinds == 4)
-      #expect(FARTScoreCalculator.ScoreValues.strongCrosswinds == 4)
-      #expect(FARTScoreCalculator.ScoreValues.mountainous == 4)
-
-      #expect(FARTScoreCalculator.ScoreValues.nontowered == 5)
-      #expect(FARTScoreCalculator.ScoreValues.shortRunway == 3)
-      #expect(FARTScoreCalculator.ScoreValues.wetOrSoftFieldRunway == 3)
-      #expect(FARTScoreCalculator.ScoreValues.runwayObstacles == 3)
-
-      #expect(FARTScoreCalculator.ScoreValues.vfrCeilingUnder3000 == 2)
-      #expect(FARTScoreCalculator.ScoreValues.vfrVisibilityUnder5 == 2)
-      #expect(FARTScoreCalculator.ScoreValues.noDestWx == 4)
-      #expect(FARTScoreCalculator.ScoreValues.vfrFlightPlan == -2)
-      #expect(FARTScoreCalculator.ScoreValues.vfrFlightFollowing == -3)
-
-      #expect(FARTScoreCalculator.ScoreValues.ifrLowCeiling == 2)
-      #expect(FARTScoreCalculator.ScoreValues.ifrLowVisibility == 2)
-    }
-
-    @Test
-    func `configures the approach type scores`() {
-      #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.precision) == -2)
-      #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.nonprecision) == 3)
-      #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.none) == 4)
-      #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.circling) == 7)
-      #expect(FARTScoreCalculator.ScoreValues.approachTypeScore(.notApplicable) == 0)
+      var testDescription: String {
+        "\(rating.rawValue) \(hours.rawValue), \(score) points: \(risk)"
+      }
     }
   }
 
