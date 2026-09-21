@@ -19,7 +19,7 @@ jobs:
           "include": [
             {
               "ios-label": "latest",
-              "runner": "macos-26",
+              "runner": "xcode-27",
               "device": "iPhone 17 Pro",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
               "os-version": "",
@@ -32,7 +32,7 @@ jobs:
           "include": [
             {
               "ios-label": "latest",
-              "runner": "macos-26",
+              "runner": "xcode-27",
               "device": "iPhone 17 Pro",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
               "os-version": "",
@@ -40,7 +40,7 @@ jobs:
             },
             {
               "ios-label": "latest",
-              "runner": "macos-26",
+              "runner": "xcode-27",
               "device": "iPad Pro 13-inch (M5)",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB",
               "os-version": "",
@@ -51,16 +51,8 @@ jobs:
 
   macos:
     name: macOS Build and Test
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
-      # required to open project file format 100.
-      - uses: SwiftyLab/setup-swift@latest
-        with:
-          swift-version: "6.3"
       - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
@@ -78,7 +70,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: DerivedData
-          key: derived-macos-test-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
+          key: derived-macos-test-xcode-27-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
       - name: Build and test (macOS)
         run: |
           xcodebuild test \
@@ -91,16 +83,8 @@ jobs:
 
   visionos:
     name: visionOS Build
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
-      # required to open project file format 100.
-      - uses: SwiftyLab/setup-swift@latest
-        with:
-          swift-version: "6.3"
       - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
@@ -118,7 +102,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: DerivedData
-          key: derived-visionos-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
+          key: derived-visionos-xcode-27-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
       # The app target supports visionOS, but nothing ships there and no test
       # plan runs against it, so this compiles the slice rather than testing it.
       # Without this the visionOS build can break while every other job stays
@@ -134,16 +118,8 @@ jobs:
 
   docs:
     name: Documentation Build
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-      # setup-swift xcode-selects /Applications/Xcode_26.5.app, which is
-      # required to open project file format 100.
-      - uses: SwiftyLab/setup-swift@latest
-        with:
-          swift-version: "6.3"
       - uses: actions/checkout@v6
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
@@ -161,7 +137,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/docs
-          key: derived-docs-macos-26-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
+          key: derived-docs-xcode-27-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}
       - name: Build documentation (macOS)
         # docbuild documents the package dependencies too, and their DocC
         # warnings are upstream's to fix, so the strict flag is looked up by

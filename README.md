@@ -36,7 +36,7 @@ the simulator.
 
 ## Development
 
-Xcode 26.6 or newer, for Swift 6.3; every platform deploys to 26.0. Dependencies
+Xcode 27.0 or newer, for Swift 6.4; every platform deploys to 27.0. Dependencies
 resolve through Swift Package Manager, so the project builds and tests straight
 from a checkout.
 

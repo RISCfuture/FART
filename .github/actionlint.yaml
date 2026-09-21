@@ -1,0 +1,8 @@
+---
+# GitHub names its newest macOS images by major Xcode version rather than by OS
+# release, so there is no `macos-27`. actionlint's built-in label list predates
+# `xcode-27` and rejects it; naming it here is how actionlint is told about a
+# label it does not yet know.
+self-hosted-runner:
+  labels:
+    - xcode-27
