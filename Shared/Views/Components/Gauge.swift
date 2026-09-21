@@ -52,12 +52,12 @@ struct Gauge<Content: View>: View {
   }
 }
 
-#Preview {
-  @Previewable @State var value: Float = 0.5
-
+#Preview(arguments: [Float(0), 0.25, 0.5, 0.75, 1]) { value in
   Gauge(value: value) {
     HStack(alignment: .firstTextBaseline) {
-      Text("24")
+      // The dial is driven by a fraction but reads as a score, so the number follows the
+      // sweep rather than sitting at a constant that contradicts it.
+      Text(Int(value * 64), format: .number)
         .font(.system(size: 75))
         .bold()
         .foregroundStyle(Color(.moderateRisk))
