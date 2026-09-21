@@ -1,5 +1,8 @@
 git_url("git@github.com:RISCfuture/certificates.git")
 storage_mode("git")
+# The certificates repository has only a `main` branch; match otherwise looks for `master`,
+# finds nothing to decrypt, and reports no signing identity rather than a missing branch.
+git_branch("main")
 
 type("appstore")
 team_id("2NFSK2WB24")
