@@ -10,6 +10,12 @@ sense with its formatting will read badly in one of the two places.
 
 Versions before 1.4 predate this file; their notes live only on App Store Connect.
 
+## 2.0
+
+- This version requires iOS 27, iPadOS 27, macOS 27 or visionOS 27. If you are staying on
+  version 26 of your operating system for now, keep using FART 1.5 — it remains available and
+  keeps working. Nothing about your saved pilot profile or your assessments changes.
+
 ## 1.5
 
 - VoiceOver now says what each setting on the Pilot Profile screen controls. The rating, hours,
