@@ -23,7 +23,7 @@ hazards of a flight, not for making the go/no-go decision.
 - `Shared/Models` — `Questionnaire`, an `@Observable` holding every answer, and
   the `Pilot` profile, persisted with
   [Defaults](https://github.com/sindresorhus/Defaults).
-- `Shared/Behaivor` — `FARTScoreCalculator` and `RiskCategorizer`, pure functions
+- `Shared/Behavior` — `FARTScoreCalculator` and `RiskCategorizer`, pure functions
   over a `QuestionnaireData` snapshot. This is where the scoring rules live and
   what the unit tests cover.
 - `Shared/Views` — `ContentView` chooses a `TabView` in the compact size class
