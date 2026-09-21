@@ -194,21 +194,10 @@ private extension View {
       /// `hidden`. The modifier stays applied either way so the `TabView` keeps its identity —
       /// conditionally applying it would rebuild the tab bar and snap the selection highlight
       /// back to the first tab on every crossing.
-      @ViewBuilder
       func scoreBadgeAccessory(_ questionnaire: Questionnaire, hidden: Bool) -> some View {
-        if #available(iOS 26.1, *) {
-          // `isEnabled:` collapses the accessory cleanly, leaving no vacant capsule.
-          tabViewBottomAccessory(isEnabled: !hidden) {
-            RiskScoreBadge()
-              .environment(questionnaire)
-          }
-        } else {
-          // Pre-26.1 has no `isEnabled:`, and emptying the content leaves a stray capsule, so
-          // just keep the badge visible on every tab.
-          tabViewBottomAccessory {
-            RiskScoreBadge()
-              .environment(questionnaire)
-          }
+        tabViewBottomAccessory(isEnabled: !hidden) {
+          RiskScoreBadge()
+            .environment(questionnaire)
         }
       }
     #endif
