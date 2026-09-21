@@ -130,14 +130,6 @@ extension FRATReport {
   }
 }
 
-#Preview {
-  let questionnaire: Questionnaire = {
-    let questionnaire = Questionnaire()
-    questionnaire.lessThan50InType = true
-    questionnaire.lessThan8HrSleep = true
-    questionnaire.night = true
-    questionnaire.shortRunway = true
-    return questionnaire
-  }()
-  FRATReportView(report: .init(questionnaire: questionnaire, generatedAt: Date()))
+#Preview(arguments: [Risk.low, .moderate, .high]) { risk in
+  FRATReportView(report: .init(questionnaire: .previewing(risk), generatedAt: Date()))
 }

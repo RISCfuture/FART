@@ -8,3 +8,6 @@ exclude_targets:
 report_exclude:
   - "**/Generate Screenshots/**"
 retain_public: false
+# `Questionnaire.previewing(_:)` is reachable only from `#Preview` bodies. Previews are not
+# retained by default, so without this the scan reports it — and CI runs `--strict`.
+retain_swift_ui_previews: true
