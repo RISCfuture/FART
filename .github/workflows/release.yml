@@ -30,7 +30,7 @@ jobs:
     with:
       # The app target also builds for visionOS, but there is no visionOS App Store listing.
       platforms: '["iOS","macOS"]'
-      runner: macos-26
+      runner: xcode-27
       version: ${{ inputs.version || github.ref_name }}
       certificates-repo: RISCfuture/certificates
       verify-lane: ci_verify_release_notes
