@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   ios:
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@main
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@1.0.0
     with:
       scheme: FART
       unit-test-plan: "Unit Tests"
