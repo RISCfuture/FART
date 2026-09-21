@@ -10,6 +10,12 @@ sense with its formatting will read badly in one of the two places.
 
 Versions before 1.4 predate this file; their notes live only on App Store Connect.
 
+## 1.4.1
+
+- VoiceOver now says what each setting on the Pilot Profile screen controls. The rating, hours,
+  ceiling and visibility pickers used to read out only their selected value, leaving you to work
+  out which setting you had landed on.
+
 ## 1.4
 
 - Share your finished assessment as a one-page PDF. A new Share button on the Results screen brings

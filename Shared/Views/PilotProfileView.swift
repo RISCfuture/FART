@@ -27,26 +27,20 @@ struct PilotProfileView: View {
   var body: some View {
     Form {
       Section {
-        HStack {
-          Text("Rating")
-          Picker("", selection: $rating) {
-            Text("VFR").tag(Rating.VFR)
-              .accessibilityIdentifier("ratingVFR")
-            Text("IFR").tag(Rating.IFR)
-              .accessibilityIdentifier("ratingIFR")
-          }
-          .accessibilityIdentifier("ratingPicker")
+        Picker("Rating", selection: $rating) {
+          Text("VFR").tag(Rating.VFR)
+            .accessibilityIdentifier("ratingVFR")
+          Text("IFR").tag(Rating.IFR)
+            .accessibilityIdentifier("ratingIFR")
         }
-        HStack {
-          Text("Hours")
-          Picker("", selection: $hours) {
-            Text("< 100").tag(Hours.under100)
-              .accessibilityIdentifier("hoursUnder100")
-            Text("> 100").tag(Hours.over100)
-              .accessibilityIdentifier("hoursOver100")
-          }
-          .accessibilityIdentifier("hoursPicker")
+        .accessibilityIdentifier("ratingPicker")
+        Picker("Hours", selection: $hours) {
+          Text("< 100").tag(Hours.under100)
+            .accessibilityIdentifier("hoursUnder100")
+          Text("> 100").tag(Hours.over100)
+            .accessibilityIdentifier("hoursOver100")
         }
+        .accessibilityIdentifier("hoursPicker")
       }
 
       Section {
@@ -94,25 +88,19 @@ struct PilotProfileView: View {
 
       if rating == .IFR {
         Section {
-          HStack {
-            Text("Low ceiling")
-            Picker("", selection: $lowCeiling) {
-              ForEach(Ceiling.allCases, id: \.rawValue) { value in
-                Text(value.height, format: .asFeet).tag(value)
-              }
+          Picker("Low ceiling", selection: $lowCeiling) {
+            ForEach(Ceiling.allCases, id: \.rawValue) { value in
+              Text(value.height, format: .asFeet).tag(value)
             }
-            .accessibilityIdentifier("lowCeilingPicker")
           }
+          .accessibilityIdentifier("lowCeilingPicker")
 
-          HStack {
-            Text("Low visibility")
-            Picker("", selection: $lowVisibility) {
-              ForEach(Visibility.allCases, id: \.rawValue) { value in
-                Text("\(value.stringValue) SM").tag(value)
-              }
+          Picker("Low visibility", selection: $lowVisibility) {
+            ForEach(Visibility.allCases, id: \.rawValue) { value in
+              Text("\(value.stringValue) SM").tag(value)
             }
-            .accessibilityIdentifier("lowVisibilityPicker")
           }
+          .accessibilityIdentifier("lowVisibilityPicker")
         }
       }
     }
