@@ -37,9 +37,11 @@ struct ContentView: View {
     #if os(macOS)
       macOSLayout
         .restoringAnswers(of: questionnaire)
+        .recomputingScore(for: questionnaire)
     #else
       iOSLayout
         .restoringAnswers(of: questionnaire)
+        .recomputingScore(for: questionnaire)
     #endif
   }
 
@@ -158,6 +160,12 @@ private extension View {
   /// terminated and restored.
   func restoringAnswers(of questionnaire: Questionnaire) -> some View {
     modifier(AnswerRestoration(questionnaire: questionnaire))
+  }
+
+  /// Keeps `questionnaire`'s score and risk current for as long as this scene is on screen,
+  /// and stops when it goes away.
+  func recomputingScore(for questionnaire: Questionnaire) -> some View {
+    task { await questionnaire.observeChanges() }
   }
 }
 

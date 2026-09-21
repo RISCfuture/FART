@@ -84,9 +84,18 @@ class Questionnaire {
     )
   }
 
-  init() {
-    observeInputs()
-    observeProfileDefaults()
+  /// Keeps ``score`` and ``risk`` in step with the answers and the pilot profile for as long
+  /// as the caller's task lives.
+  ///
+  /// Observation belongs to the caller rather than to an initializer: loops started in `init`
+  /// outlive every reference to the questionnaire and keep it alive by capturing it, and
+  /// `@State` builds and discards a questionnaire each time its view struct is re-evaluated.
+  /// Driving this from the view instead ties observation to the scene that can see it.
+  func observeChanges() async {
+    await withDiscardingTaskGroup { group in
+      group.addTask { await self.recomputeOnAnswerChange() }
+      group.addTask { await self.recomputeOnProfileChange() }
+    }
   }
 
   // periphery:ignore - invoked only by the macOS "Reset FRAT" menu command
@@ -137,21 +146,17 @@ class Questionnaire {
   ///
   /// `Observations` coalesces synchronous mutations into a single emission, so a burst of
   /// related answer changes (e.g. switching between VFR and IFR) recomputes only once.
-  private func observeInputs() {
-    Task {
-      for await data in Observations({ self.answers }) {
-        recompute(from: data)
-      }
+  private func recomputeOnAnswerChange() async {
+    for await data in Observations({ self.answers }) {
+      recompute(from: data)
     }
   }
 
   /// Recomputes when the pilot profile (rating / hours) changes, since those feed the risk
   /// thresholds but live in `Defaults` rather than on this model.
-  private func observeProfileDefaults() {
-    Task {
-      for await _ in Defaults.updates([.hours, .rating]) {
-        recompute(from: answers)
-      }
+  private func recomputeOnProfileChange() async {
+    for await _ in Defaults.updates([.hours, .rating]) {
+      recompute(from: answers)
     }
   }
 
