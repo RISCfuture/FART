@@ -27,14 +27,20 @@ struct ResultsView: View {
   private var riskDescription: String {
     switch displayedRisk {
       case .low:
-        return
-          "With a clear in-the-green score, you might be tempted to blast off with unabated zeal. Not so fast. A FART is not meant to make your go/no-go decision for you. It is merely a tool to help you plan your flight and think through a more complete range of hazards and risks. When using a FART, it’s a good idea to create numerical thresholds that trigger additional levels of scrutiny prior to a go/no-go decision for the flight. For example, a score that’s on the high end of the green scale may still warrant further analysis. The pilot should discuss what the highest scoring risks are and attempt to mitigate those risks."
+        String(
+          localized:
+            "With a clear in-the-green score, you might be tempted to blast off with unabated zeal. Not so fast. A FART is not meant to make your go/no-go decision for you. It is merely a tool to help you plan your flight and think through a more complete range of hazards and risks. When using a FART, it’s a good idea to create numerical thresholds that trigger additional levels of scrutiny prior to a go/no-go decision for the flight. For example, a score that’s on the high end of the green scale may still warrant further analysis. The pilot should discuss what the highest scoring risks are and attempt to mitigate those risks."
+        )
       case .moderate:
-        return
-          "If your score falls in the yellow, try to mitigate some of the higher scoring items. That might entail waiting for the weather to improve or switching to an aircraft you have more experience with. If the score is still in the yellow, bring in the opinion of a designated “contact” person such as a flight instructor or an FAASTeam Representative. They may be able to help think of ways to further mitigate some of the risks for your flight."
+        String(
+          localized:
+            "If your score falls in the yellow, try to mitigate some of the higher scoring items. That might entail waiting for the weather to improve or switching to an aircraft you have more experience with. If the score is still in the yellow, bring in the opinion of a designated “contact” person such as a flight instructor or an FAASTeam Representative. They may be able to help think of ways to further mitigate some of the risks for your flight."
+        )
       case .high:
-        return
-          "If your score falls in the red zone, you should seriously consider cancelling the flight unless the risks involved can be safely mitigated. It’s important to not allow the external pressures involved with carrying on with the flight (e.g., attending your son’s graduation ceremony) interfere with your go/no-go decision. You (and your passengers) may be disappointed, but it’s always better to be wishing you were in the air than wishing you were on the ground!"
+        String(
+          localized:
+            "If your score falls in the red zone, you should seriously consider cancelling the flight unless the risks involved can be safely mitigated. It’s important to not allow the external pressures involved with carrying on with the flight (e.g., attending your son’s graduation ceremony) interfere with your go/no-go decision. You (and your passengers) may be disappointed, but it’s always better to be wishing you were in the air than wishing you were on the ground!"
+        )
     }
   }
 
