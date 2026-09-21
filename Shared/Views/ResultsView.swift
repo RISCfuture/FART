@@ -220,6 +220,8 @@ extension Risk {
   }
 }
 
+// Not previewed across `Risk`: the gauge, colour and paragraph come from state this view
+// syncs from the model on appear, so every variant would render the pre-animation zero.
 #Preview {
   ResultsView().environment(Questionnaire())
 }
