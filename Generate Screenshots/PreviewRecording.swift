@@ -8,8 +8,10 @@ import XCUITestKit
 /// The script hands over a directory in `PREVIEW_MARKER_DIRECTORY`. The test touches `ready` once
 /// the opening shot is set up, waits for the script to touch `recording`, and from then on notes
 /// each stretch worth keeping (a held shot, a tap and its effect) in `segments`, as seconds since
-/// recording began. The script cuts the take down to those stretches, which leaves out the time
-/// XCUITest spends between actions. Without the variable, as in a `snapshot` run, the test skips.
+/// recording began along with the scene it belongs to. The script cuts the take down to those
+/// stretches, which leaves out the time XCUITest spends between actions, and frames each scene by
+/// the storyboard in `fastlane/captions`. Without the variable, as in a `snapshot` run, the test
+/// skips.
 ///
 /// Every toggle the camera sees is one of the first four in the questionnaire, so nothing scrolls
 /// on screen. Points are for a VFR pilot with over 100 hours: low up to 20, moderate to 25, high
@@ -36,7 +38,8 @@ final class PreviewRecording: XCTestCase {
   private var app: XCUIApplication!
   private var markers: URL!
   private var rollingSince = ContinuousClock.now
-  private var segments: [ClosedRange<Double>] = []
+  private var currentScene = ""
+  private var segments: [(scene: String, seconds: ClosedRange<Double>)] = []
 
   override func setUp() async throws {
     continueAfterFailure = false
@@ -53,21 +56,31 @@ final class PreviewRecording: XCTestCase {
     setUpOpeningShot()
     startRolling()
 
-    hold(1.5)
-    showQuestions()
-    for toggle in Self.climbToModerate { flip(toggle) }
-    showResults(expecting: "MODERATE RISK")
-    hold(1.5)
-
-    showQuestions()
-    for toggle in Self.tipIntoHigh { flip(toggle) }
-    showResults(expecting: "HIGH RISK")
-    hold(2.0)
-
-    showQuestions()
-    for toggle in (Self.climbToModerate + Self.tipIntoHigh).reversed() { flip(toggle) }
-    showResults(expecting: "LOW RISK")
-    hold(1.5)
+    scene("opening") { hold(1.5) }
+    scene("climb") {
+      showQuestions()
+      for toggle in Self.climbToModerate { flip(toggle) }
+    }
+    scene("moderate") {
+      showResults(expecting: "MODERATE RISK")
+      hold(1.5)
+    }
+    scene("tip") {
+      showQuestions()
+      for toggle in Self.tipIntoHigh { flip(toggle) }
+    }
+    scene("high") {
+      showResults(expecting: "HIGH RISK")
+      hold(2.0)
+    }
+    scene("unwind") {
+      showQuestions()
+      for toggle in (Self.climbToModerate + Self.tipIntoHigh).reversed() { flip(toggle) }
+    }
+    scene("closing") {
+      showResults(expecting: "LOW RISK")
+      hold(1.5)
+    }
 
     writeSegments()
   }
@@ -175,10 +188,16 @@ final class PreviewRecording: XCTestCase {
     rollingSince = .now
   }
 
+  /// Files the stretches kept during `steps` under a scene the storyboard knows by `name`.
+  private func scene(_ name: String, _ steps: () -> Void) {
+    currentScene = name
+    steps()
+  }
+
   private func keep(_ action: () -> Void) {
     let start = secondsRolling()
     action()
-    segments.append(start...secondsRolling())
+    segments.append((currentScene, start...secondsRolling()))
   }
 
   /// Keeps only the last moments of an action: the tap landing and what it changes, without the
@@ -186,7 +205,7 @@ final class PreviewRecording: XCTestCase {
   private func keepTail(_ settle: TimeInterval, _ action: () -> Void) {
     action()
     let end = secondsRolling()
-    segments.append(max(0, end - settle - Self.tapLanding)...end)
+    segments.append((currentScene, max(0, end - settle - Self.tapLanding)...end))
   }
 
   private func secondsRolling() -> Double {
@@ -195,7 +214,8 @@ final class PreviewRecording: XCTestCase {
   }
 
   private func writeSegments() {
-    let lines = segments.map { "\($0.lowerBound) \($0.upperBound)" }.joined(separator: "\n")
+    let lines = segments.map { "\($0.seconds.lowerBound) \($0.seconds.upperBound) \($0.scene)" }
+      .joined(separator: "\n")
     FileManager.default.createFile(atPath: marker("segments").path, contents: Data(lines.utf8))
   }
 

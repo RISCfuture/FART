@@ -1,14 +1,13 @@
 #!/bin/bash
-# Records the App Store preview on one simulator and converts it to Apple's preview spec.
+# Records the App Store preview on one simulator and edits it to Apple's preview spec.
 #
 #   Scripts/record-preview.sh [device type] [output file]
 #
-# PreviewRecording drives the app and lists the stretches of the take worth keeping; everything
-# between them (XCUITest finding elements and waiting for the app to idle) is cut, so the motion
-# plays at real speed without the dead air. The result is 886×1920 H.264 at 30 fps with a silent
-# stereo AAC track, which is what App Store Connect takes for iPhone 6.9" and 6.5" previews. Every
-# frame is a keyframe: a mostly still screen otherwise compresses well below the 10 Mbps App Store
-# Connect asks for.
+# PreviewRecording drives the app and lists the stretches of the take worth keeping, scene by
+# scene; everything between them (XCUITest finding elements and waiting for the app to idle) is
+# cut, so the motion plays at real speed without the dead air. Scripts/edit-preview.sh then frames
+# each scene by the storyboard and encodes what App Store Connect takes for iPhone 6.9" and 6.5"
+# previews.
 
 set -euo pipefail
 
@@ -18,8 +17,10 @@ REPOSITORY=$(git rev-parse --show-toplevel)
 readonly REPOSITORY
 readonly SIMULATOR_NAME="claude-${REPOSITORY##*/}-preview"
 readonly DERIVED_DATA=".build/DerivedData-preview"
-readonly WIDTH=886 HEIGHT=1920 FPS=30
-readonly MIN_SECONDS=15 MAX_SECONDS=30
+# The cut take and its scenes stay here, so the storyboard can be re-edited without a new take:
+#   Scripts/edit-preview.sh .build/preview/take.mp4 .build/preview/scenes <output file>
+readonly TAKE_DIRECTORY=".build/preview"
+readonly FPS=30
 
 simulator() {
   local udid
@@ -75,29 +76,27 @@ record_take() {
   wait "$TEST_PID"
 }
 
-# Turns the test's "start end" lines into an ffmpeg select expression.
+# Turns the test's "start end scene" lines into an ffmpeg select expression.
 selection() {
   awk '{ printf "%sbetween(t,%s,%s)", (NR > 1 ? "+" : ""), $1, $2 }' "$1"
 }
 
-convert() {
-  local raw="$1" segments="$2"
-  mkdir -p "$(dirname "$OUTPUT")"
-  ffmpeg -loglevel error -y -i "$raw" \
-    -f lavfi -i "anullsrc=channel_layout=stereo:sample_rate=44100" \
-    -vf "fps=${FPS},select='$(selection "$segments")',setpts=N/${FPS}/TB,scale=${WIDTH}:${HEIGHT}:force_original_aspect_ratio=increase,crop=${WIDTH}:${HEIGHT},format=yuv420p" \
-    -c:v libx264 -profile:v high -level:v 4.0 -g 1 -b:v 11M -minrate 10M -maxrate 12M -bufsize 12M \
-    -c:a aac -b:a 256k -shortest -movflags +faststart "$OUTPUT"
+# Places each scene on the cut's timeline, one "scene start end" line each, by adding up the
+# lengths of the stretches kept for it. Stretches can overlap, and the cut keeps their shared
+# frames once, so each counts only from where the one before it ended.
+scene_timeline() {
+  awk '
+    $3 != scene { if (scene != "") print scene, start, cut; scene = $3; start = cut + 0 }
+    { from = ($1 > kept ? $1 : kept); if ($2 > from) cut += $2 - from; if ($2 > kept) kept = $2 }
+    END { print scene, start, cut }
+  ' "$1"
 }
 
-check_length() {
-  local seconds
-  seconds=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUTPUT")
-  echo "$OUTPUT: ${seconds}s"
-  if (($(echo "$seconds < $MIN_SECONDS || $seconds > $MAX_SECONDS" | bc))); then
-    echo "Outside App Store Connect's ${MIN_SECONDS}–${MAX_SECONDS}s range — retime the test." >&2
-    exit 1
-  fi
+cut_take() {
+  local raw="$1" segments="$2" take="$3"
+  ffmpeg -nostdin -loglevel error -y -i "$raw" \
+    -vf "fps=${FPS},select='$(selection "$segments")',setpts=N/${FPS}/TB,format=yuv420p" \
+    -an -c:v libx264 -crf 10 "$take"
 }
 
 main() {
@@ -108,8 +107,11 @@ main() {
   mkdir "$WORK/markers"
 
   record_take "$udid" "$WORK/markers" "$WORK/raw.mp4"
-  convert "$WORK/raw.mp4" "$WORK/markers/segments"
-  check_length
+  mkdir -p "$TAKE_DIRECTORY"
+  cut_take "$WORK/raw.mp4" "$WORK/markers/segments" "$TAKE_DIRECTORY/take.mp4"
+  cp "$WORK/markers/segments" "$TAKE_DIRECTORY/segments"
+  scene_timeline "$TAKE_DIRECTORY/segments" >"$TAKE_DIRECTORY/scenes"
+  "$REPOSITORY/Scripts/edit-preview.sh" "$TAKE_DIRECTORY/take.mp4" "$TAKE_DIRECTORY/scenes" "$OUTPUT"
 }
 
 main "$@"

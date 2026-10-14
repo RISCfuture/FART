@@ -1,0 +1,40 @@
+[
+  {
+    "scene": "opening",
+    "caption": "Add up the risk before you add power."
+  },
+  {
+    "scene": "climb",
+    "whip": "right",
+    "caption": "Every answer is a switch.",
+    "position": "bottom"
+  },
+  {
+    "scene": "moderate",
+    "whip": "left",
+    "caption": "See which band your flight lands in."
+  },
+  {
+    "scene": "tip",
+    "whip": "right"
+  },
+  {
+    "scene": "high",
+    "whip": "left",
+    "zoom": {
+      "to": 2.5,
+      "y": 0.281,
+      "at": 1.2
+    }
+  },
+  {
+    "scene": "unwind",
+    "whip": "right",
+    "caption": "Mitigate, and watch it fall.",
+    "position": "bottom"
+  },
+  {
+    "scene": "closing",
+    "whip": "left"
+  }
+]
