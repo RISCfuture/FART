@@ -29,7 +29,7 @@ wash_for() {
 
 compose() {
   local window="$1" name="$2" output="$3"
-  magick -size "$CANVAS" "xc:$(wash_for "$name")" \
+  magick -quiet -size "$CANVAS" "xc:$(wash_for "$name")" \
     \( "$window" -resize "$WINDOW_BOUNDS" \
        \( +clone -background "#1a1712" -shadow 28x36+0+24 \) +swap \
        -background none -layers merge +repage \) \
@@ -40,21 +40,20 @@ main() {
   [[ $# -ge 1 ]] || usage
   local bundle="$1"
   local output="${2:-fastlane/screenshots_mac/en-US}"
-  local staging
-  staging="$(mktemp -d)"
-  trap 'rm -rf "$staging"' EXIT
+  STAGING="$(mktemp -d)"
+  trap 'rm -rf "$STAGING"' EXIT
 
-  xcrun xcresulttool export attachments --path "$bundle" --output-path "$staging" >/dev/null
+  xcrun xcresulttool export attachments --path "$bundle" --output-path "$STAGING" >/dev/null
   mkdir -p "$output"
 
   local exported name
   while IFS=$'\t' read -r exported name; do
-    compose "$staging/$exported" "$name" "$output"
+    compose "$STAGING/$exported" "$name" "$output"
     echo "$output/$name.png"
   done < <(jq -r '.[].attachments[]
                   | select(.suggestedHumanReadableName | test("^[0-9]+-"))
                   | [.exportedFileName, (.suggestedHumanReadableName | sub("_[0-9]+_[0-9A-F-]+\\.png$"; ""))]
-                  | @tsv' "$staging/manifest.json")
+                  | @tsv' "$STAGING/manifest.json")
 }
 
 main "$@"

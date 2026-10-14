@@ -6,12 +6,16 @@ import XCTest
 /// and composes them onto 16:10 canvases.
 @MainActor
 final class MacScreenshots: XCTestCase {
+  /// The same pilot as the iOS captures, VFR with over 100 hours, set through the argument domain
+  /// so the first-launch welcome window never opens.
+  private static let pilot = ["-hours", "over100", "-hasCompletedWelcome", "YES"]
+
   private var app: XCUIApplication!
 
   override func setUp() async throws {
     continueAfterFailure = false
     app = XCUIApplication()
-    app.launchArguments = ["UI-TESTING", "-NSRequiresAquaSystemAppearance", "YES"]
+    app.launchArguments = ["UI-TESTING", "-NSRequiresAquaSystemAppearance", "YES"] + Self.pilot
     app.launch()
   }
 
@@ -20,7 +24,6 @@ final class MacScreenshots: XCTestCase {
   }
 
   func testGenerateMacScreenshots() throws {
-    completeWelcome()
     let window = mainWindow()
 
     answerBaselineQuestions()
@@ -49,15 +52,6 @@ final class MacScreenshots: XCTestCase {
   }
 
   // MARK: - Steps
-
-  /// Sets the same pilot as the iOS captures, VFR with over 100 hours, in the first-launch
-  /// welcome window.
-  private func completeWelcome() {
-    let getStarted = app.buttons["Get Started"]
-    XCTAssert(getStarted.waitForExistence(timeout: 15), "The welcome window did not open")
-    choose("> 100", from: "hoursPicker")
-    getStarted.click()
-  }
 
   private func mainWindow() -> XCUIElement {
     let window = app.windows.containing(.staticText, identifier: "riskLevelText").firstMatch
@@ -100,12 +94,6 @@ final class MacScreenshots: XCTestCase {
       case let string as String: string == "1"
       default: false
     }
-  }
-
-  /// Picks a menu item by its title; macOS menus don't carry the options' identifiers.
-  private func choose(_ title: String, from picker: String) {
-    app.popUpButtons[picker].firstMatch.click()
-    app.menuItems[title].firstMatch.click()
   }
 
   /// Waits for the results column to agree with the questionnaire, so no capture shows a
