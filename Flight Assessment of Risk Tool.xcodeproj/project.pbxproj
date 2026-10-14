@@ -50,6 +50,27 @@
 		01BE9C3E266AEBC00026C4ED /* Flight Assessment of Risk Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flight Assessment of Risk Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		019A35D02E861E4C00F14F8C /* Exceptions for "Generate Screenshots" folder in "Generate Screenshots" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			platformFiltersByRelativePath = {
+				Generate_Screenshots.swift = (
+					ios,
+				);
+				MacScreenshots.swift = (
+					macos,
+				);
+				PreviewRecording.swift = (
+					ios,
+				);
+				SnapshotHelper.swift = (
+					ios,
+				);
+			};
+			target = 019A35BD2E861E4C00F14F8C /* Generate Screenshots */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		019A35902E85FAE100F14F8C /* FARTUnitTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -63,6 +84,9 @@
 		};
 		019A35BF2E861E4C00F14F8C /* Generate Screenshots */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				019A35D02E861E4C00F14F8C /* Exceptions for "Generate Screenshots" folder in "Generate Screenshots" target */,
+			);
 			path = "Generate Screenshots";
 			sourceTree = "<group>";
 		};
@@ -508,12 +532,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "codes.tim.Generate-Screenshots";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -536,12 +561,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "codes.tim.Generate-Screenshots";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;

@@ -331,6 +331,42 @@ platform :ios do
     )
   end
 
+  desc "Generate Mac App Store screenshots"
+  lane :mac_screenshots do
+    result_bundle = File.expand_path("screenshots_mac/test_output/MacScreenshots.xcresult", __dir__)
+    FileUtils.rm_rf(result_bundle)
+    run_tests scheme:             "Generate Screenshots",
+              destination:        "platform=macOS,arch=arm64",
+              only_testing:       ["Generate Screenshots/MacScreenshots"],
+              result_bundle_path: result_bundle,
+              derived_data_path:  ".build/DerivedData-mac",
+              output_types:       ""
+    sh(File.expand_path("../Scripts/export-mac-screenshots.sh", __dir__), result_bundle,
+       File.expand_path("screenshots_mac/en-US", __dir__))
+  end
+
+  desc "Upload Mac screenshots to App Store Connect"
+  lane :upload_mac_screenshots do
+    directory = File.expand_path("screenshots_mac", __dir__)
+    if Dir.glob(File.join(directory, "*", "*.png")).empty?
+      UI.user_error!("No screenshots under #{directory} — run the mac_screenshots lane first.")
+    end
+    ensure_api_key
+    purge_remote_screenshots(Spaceship::ConnectAPI::Platform::MAC_OS)
+    upload_to_app_store(
+      app_identifier:                       APP_IDENTIFIER,
+      platform:                             "osx",
+      screenshots_path:                     directory,
+      sync_screenshots:                     true,
+      skip_binary_upload:                   true,
+      skip_metadata:                        true,
+      languages:                            %w[en-US],
+      force:                                true,
+      run_precheck_before_submit:           false,
+      ignore_language_directory_validation: true
+    )
+  end
+
   desc "Generate screenshots and upload them"
   lane :screenshots_and_upload do
     screenshots

@@ -1,8 +1,9 @@
 # Marketing site images
 
-Regenerate the iPhone and iPad shots with `fastlane snapshot`, taking the iPhone 17 Pro Max
-and iPad Pro 13-inch captures. `snapshot` covers iOS only: capture the Mac window by hand and
-render the first page of an exported report to replace `mac-report.png`.
+Regenerate the iPhone and iPad shots with `fastlane snapshot`, taking the iPhone 18 Pro Max
+and iPad Pro 13-inch captures. `fastlane mac_screenshots` captures the Mac window, which comes out
+as an attachment in its result bundle under `fastlane/screenshots_mac/test_output`. Render the
+first page of an exported report to replace `mac-report.png`.
 
 Downscale to 660px wide, except the hero and the report (900), the iPad shots (1000), and the
 Mac window (1200).

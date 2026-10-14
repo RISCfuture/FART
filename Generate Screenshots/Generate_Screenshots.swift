@@ -4,6 +4,7 @@ import XCUITestKit
 // swiftlint:disable prefer_nimble
 @MainActor
 final class Generate_Screenshots: XCTestCase {
+  private var usesSplitView = false
 
   override func setUp() async throws {
     // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -16,13 +17,11 @@ final class Generate_Screenshots: XCTestCase {
     app.launch()
 
     XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
+    usesSplitView = !app.buttons["Results"].waitForExistence(timeout: 5)
     app.buttons["ratingPicker"].tap()
     app.buttons["ratingVFR"].tap()
     app.buttons["hoursPicker"].tap()
     app.buttons["hoursOver100"].tap()
-
-    Thread.sleep(forTimeInterval: 30)  // wait for Apple Intelligence banner to self-dismiss
-    snapshot("0-pilot")
 
     app /*@START_MENU_TOKEN@*/.buttons[
       "Questions"
@@ -35,7 +34,9 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "lessThan8HrSleepToggle", value: true)
     set(app: app, name: "dualInLast90Toggle", value: false)
     set(app: app, name: "wingsInLast6MoToggle", value: true)
-    snapshot("1-questions")
+    scrollToTop(in: app)
+    Thread.sleep(forTimeInterval: 30)  // wait for Apple Intelligence banner to self-dismiss
+    capture(.questions)
 
     set(app: app, name: "ifrCurrentToggle", value: false)
     set(app: app, name: "nightToggle", value: false)
@@ -62,7 +63,7 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "noDestWxToggle", value: false)
 
     showResults(in: app, expecting: "LOW RISK")
-    snapshot("2-results-low-risk")
+    capture(.resultsLowRisk)
 
     app /*@START_MENU_TOKEN@*/.buttons[
       "Questions"
@@ -74,7 +75,7 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "strongCrosswindsToggle", value: true)
 
     showResults(in: app, expecting: "MODERATE RISK")
-    snapshot("3-results-moderate-risk")
+    capture(.resultsModerateRisk)
 
     app /*@START_MENU_TOKEN@*/.buttons[
       "Questions"
@@ -87,7 +88,27 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "runwayObstaclesToggle", value: true)
 
     showResults(in: app, expecting: "HIGH RISK")
-    snapshot("4-results-high-risk")
+    capture(.resultsHighRisk)
+
+    showPilotProfile(in: app)
+    capture(.pilot)
+  }
+
+  /// Takes a screenshot, numbered by its place in this layout's order.
+  private func capture(_ shot: Shot) {
+    let order = usesSplitView ? Shot.splitViewOrder : Shot.tabOrder
+    guard let index = order.firstIndex(of: shot) else { return }
+    snapshot("\(index)-\(shot.rawValue)")
+  }
+
+  /// Shows the Pilot Profile, its score badge carrying the questionnaire's high-risk total.
+  private func showPilotProfile(in app: XCUIApplication) {
+    scrollToTop(in: app)
+    app.buttons["Pilot"].firstMatch.tap()
+    XCTAssert(
+      app.buttons["ratingPicker"].waitForExistence(timeout: 10),
+      "Pilot Profile is not on screen"
+    )
   }
 
   /// Sets a toggle, failing the test if it does not take. A lost tap would otherwise go unnoticed
@@ -143,6 +164,23 @@ final class Generate_Screenshots: XCTestCase {
     guard collectionView.exists else { return }
 
     for _ in 0..<5 { collectionView.swipeDown() }
+  }
+
+  /// The listing's screenshots. The split view keeps the results beside the questionnaire, so it
+  /// leaves out the questionnaire on its own.
+  private enum Shot: String {
+    case resultsModerateRisk = "results-moderate-risk"
+    case questions
+    case resultsHighRisk = "results-high-risk"
+    case resultsLowRisk = "results-low-risk"
+    case pilot
+
+    static let tabOrder: [Self] = [
+      .resultsModerateRisk, .questions, .resultsHighRisk, .resultsLowRisk, .pilot
+    ]
+    static let splitViewOrder: [Self] = [
+      .resultsModerateRisk, .resultsHighRisk, .resultsLowRisk, .pilot
+    ]
   }
 }
 // swiftlint:enable prefer_nimble

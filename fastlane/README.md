@@ -31,6 +31,22 @@ Generate new localized screenshots
 
 Upload screenshots to App Store Connect
 
+### ios mac_screenshots
+
+```sh
+[bundle exec] fastlane ios mac_screenshots
+```
+
+Generate Mac App Store screenshots
+
+### ios upload_mac_screenshots
+
+```sh
+[bundle exec] fastlane ios upload_mac_screenshots
+```
+
+Upload Mac screenshots to App Store Connect
+
 ### ios screenshots_and_upload
 
 ```sh

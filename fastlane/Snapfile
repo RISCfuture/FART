@@ -3,13 +3,9 @@
 # A list of devices you want to take the screenshots from
 # Using only devices that produce App Store Connect-compatible dimensions
 devices([
-    # iPhone categories - Required sizes for App Store Connect
-    "iPhone 17 Pro Max",              # 6.7" display (Required)
-    "iPhone 16e",                     # 6.5" display (Optional but recommended)
-
-    # iPad categories - Required sizes for App Store Connect
-    "iPad Pro 13-inch (M5)",          # 12.9" display (Required)
-    "iPad Pro 11-inch (M5)"           # 11" display (covers second tier iPad)
+    "iPhone 18 Pro Max",              # 6.9" Dynamic Island, large
+    "iPhone 18 Pro",                  # 6.3" Dynamic Island, medium (required)
+    "iPad Pro 13-inch (M5)"           # 13" (required; smaller iPads scale from it)
 ])
 
 languages %w[
@@ -32,7 +28,7 @@ reinstall_app true
 erase_simulator true
 
 # Set the status bar to 9:41 AM, and show full battery and reception
-override_status_bar false
+override_status_bar true
 
 # Stop after first error
 stop_after_first_error false
