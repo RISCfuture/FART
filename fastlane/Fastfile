@@ -118,6 +118,12 @@ def verify_screenshots_present
                  "empty set would clear the screenshots already on the App Store.")
 end
 
+# Writes a captioned `_framed` copy of every capture in a folder, from fastlane/captions. deliver
+# uploads those in place of the raw captures.
+def caption_screenshots(folder)
+  sh(File.expand_path("../Scripts/caption-screenshots.sh", __dir__), folder)
+end
+
 # Every screenshot set on the version currently open for editing.
 def editable_screenshot_sets(platform)
   app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
@@ -307,6 +313,7 @@ platform :ios do
   lane :screenshots do
     capture_screenshots scheme:           "Generate Screenshots",
                         output_directory: "./fastlane/screenshots"
+    caption_screenshots(File.expand_path("screenshots/en-US", __dir__))
   end
 
   desc "Upload screenshots to App Store Connect"
@@ -343,6 +350,7 @@ platform :ios do
               output_types:       ""
     sh(File.expand_path("../Scripts/export-mac-screenshots.sh", __dir__), result_bundle,
        File.expand_path("screenshots_mac/en-US", __dir__))
+    caption_screenshots(File.expand_path("screenshots_mac/en-US", __dir__))
   end
 
   desc "Upload Mac screenshots to App Store Connect"

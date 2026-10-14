@@ -1,6 +1,7 @@
 #!/bin/bash
 # Pulls the window captures that MacScreenshots attached to a result bundle and composes each onto
-# a 2880×1800 (16:10) canvas tinted with the risk band it shows, as the Mac App Store expects.
+# a 2880×1800 (16:10) canvas tinted with the risk band it shows, as the Mac App Store expects. The
+# window sits low on the canvas, leaving the top for Scripts/caption-screenshots.sh.
 #
 #   Scripts/export-mac-screenshots.sh <result bundle> [output directory]
 #
@@ -9,7 +10,8 @@
 set -euo pipefail
 
 readonly CANVAS="2880x1800"
-readonly WINDOW_BOUNDS="2560x1520>"
+readonly WINDOW_BOUNDS="2400x1290>"
+readonly WINDOW_OFFSET="+0+110"
 readonly LOW_WASH="#eef5ea"
 readonly MODERATE_WASH="#fbf7e8"
 readonly HIGH_WASH="#faf0ef"
@@ -49,7 +51,7 @@ compose() {
     \( "$STAGING/$name-rounded.png" -resize "$WINDOW_BOUNDS" \
        \( +clone -background "#1a1712" -shadow 28x36+0+24 \) +swap \
        -background none -layers merge +repage \) \
-    -gravity center -composite -alpha off "$output/$name.png"
+    -gravity south -geometry "$WINDOW_OFFSET" -composite -alpha off "$output/$name.png"
 }
 
 main() {
