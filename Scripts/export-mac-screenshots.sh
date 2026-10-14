@@ -13,6 +13,11 @@ readonly WINDOW_BOUNDS="2560x1520>"
 readonly LOW_WASH="#eef5ea"
 readonly MODERATE_WASH="#fbf7e8"
 readonly HIGH_WASH="#faf0ef"
+# A window's corner radius in a Retina capture (16 pt at 2×). The capture is the window's bounding
+# rectangle, so whatever sits behind the rounded corners comes with it until they are cut away,
+# along with the outermost pixel, which blends the window's edge into the desktop.
+readonly CORNER_RADIUS=32
+readonly EDGE=1
 
 usage() {
   echo "usage: $0 <result bundle> [output directory]" >&2
@@ -27,10 +32,21 @@ wash_for() {
   esac
 }
 
+# Cuts the capture to the window's own rounded shape.
+round_corners() {
+  local window="$1" rounded="$2" width height
+  read -r width height < <(magick -quiet "$window" -shave "${EDGE}x${EDGE}" -format '%w %h\n' info:)
+  magick -quiet "$window" -shave "${EDGE}x${EDGE}" -alpha set \
+    \( -size "${width}x${height}" xc:none -fill white \
+       -draw "roundrectangle 0,0,$((width - 1)),$((height - 1)),$CORNER_RADIUS,$CORNER_RADIUS" \) \
+    -compose DstIn -composite "$rounded"
+}
+
 compose() {
   local window="$1" name="$2" output="$3"
+  round_corners "$window" "$STAGING/$name-rounded.png"
   magick -quiet -size "$CANVAS" "xc:$(wash_for "$name")" \
-    \( "$window" -resize "$WINDOW_BOUNDS" \
+    \( "$STAGING/$name-rounded.png" -resize "$WINDOW_BOUNDS" \
        \( +clone -background "#1a1712" -shadow 28x36+0+24 \) +swap \
        -background none -layers merge +repage \) \
     -gravity center -composite -alpha off "$output/$name.png"
