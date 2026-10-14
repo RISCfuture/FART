@@ -11,6 +11,7 @@
 		019DB8472E8780D8002E7411 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 019DB8462E8780D8002E7411 /* Defaults */; };
 		01D2507C266B436F009BECAA /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 01D2507B266B436F009BECAA /* Defaults */; };
 		01EB02DC2FCA2CEF007C3D1E /* XCUITestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */; };
+		0A7E10012FD00001C0FFEE03 /* XCUIPromoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A7E10012FD00001C0FFEE02 /* XCUIPromoKit */; };
 		489E73ACAF6A83C0CF4EDAAF /* MeasurementKit in Frameworks */ = {isa = PBXBuildFile; productRef = ACFF4DA931C4F35421B18B9B /* MeasurementKit */; };
 		48D0B190341B9A5BBFE75B51 /* MeasurementKitDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 37592CB9D7DE5CE212F1AB3C /* MeasurementKitDefaults */; };
 		5F2A9C41B0E7364D8A15C2E9 /* MeasurementKit in Frameworks */ = {isa = PBXBuildFile; productRef = B31D7A8E4C60F19D25AB6034 /* MeasurementKit */; };
@@ -61,9 +62,6 @@
 					macos,
 				);
 				PreviewRecording.swift = (
-					ios,
-				);
-				SnapshotHelper.swift = (
 					ios,
 				);
 			};
@@ -121,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				01EB02DC2FCA2CEF007C3D1E /* XCUITestKit in Frameworks */,
+				0A7E10012FD00001C0FFEE03 /* XCUIPromoKit in Frameworks */,
 			);
 		};
 		01BE9C3B266AEBC00026C4ED /* Frameworks */ = {
@@ -239,6 +238,7 @@
 			name = "Generate Screenshots";
 			packageProductDependencies = (
 				01EB02DB2FCA2CEF007C3D1E /* XCUITestKit */,
+				0A7E10012FD00001C0FFEE02 /* XCUIPromoKit */,
 			);
 			productName = "Generate Screenshots";
 			productReference = 019A35BE2E861E4C00F14F8C /* Generate Screenshots.xctest */;
@@ -307,6 +307,7 @@
 			);
 			mainGroup = 01BE9C31266AEBBE0026C4ED;
 			packageReferences = (
+				0A7E10012FD00001C0FFEE01 /* XCRemoteSwiftPackageReference "XCUIPromoKit" */,
 				01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */,
 				A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */,
@@ -876,6 +877,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0A7E10012FD00001C0FFEE01 /* XCRemoteSwiftPackageReference "XCUIPromoKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RISCfuture/XCUIPromoKit";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RISCfuture/XCUITestKit";
@@ -911,6 +920,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A7E10012FD00001C0FFEE02 /* XCUIPromoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A7E10012FD00001C0FFEE01 /* XCRemoteSwiftPackageReference "XCUIPromoKit" */;
+			productName = XCUIPromoKit;
+		};
 		0159225A2FCA2B45007FB6BB /* XCUITestKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 015922592FCA2B45007FB6BB /* XCRemoteSwiftPackageReference "XCUITestKit" */;

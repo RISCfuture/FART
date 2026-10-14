@@ -1,0 +1,12 @@
+{
+  "name": "fart-promo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "promokit": "promokit"
+  },
+  "dependencies": {
+    "xcuipromokit": "github:RISCfuture/XCUIPromoKit#0.1.1&path:/tooling"
+  },
+  "packageManager": "pnpm@12.4.2"
+}

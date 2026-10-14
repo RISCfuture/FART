@@ -118,10 +118,10 @@ def verify_screenshots_present
                  "empty set would clear the screenshots already on the App Store.")
 end
 
-# Writes a captioned `_framed` copy of every capture in a folder, from fastlane/captions. deliver
-# uploads those in place of the raw captures.
-def caption_screenshots(folder)
-  sh(File.expand_path("../Scripts/caption-screenshots.sh", __dir__), folder)
+# Runs promokit from promo/, which captures stills and renders them into the folders deliver
+# uploads from.
+def promokit(*arguments)
+  sh("pnpm", "--dir", File.expand_path("../promo", __dir__), "promokit", *arguments)
 end
 
 # Every screenshot set on the version currently open for editing.
@@ -311,9 +311,8 @@ end
 platform :ios do
   desc "Generate new localized screenshots"
   lane :screenshots do
-    capture_screenshots scheme:           "Generate Screenshots",
-                        output_directory: "./fastlane/screenshots"
-    caption_screenshots(File.expand_path("screenshots/en-US", __dir__))
+    promokit("stills")
+    promokit("render", "--only", "screenshots")
   end
 
   desc "Upload screenshots to App Store Connect"
@@ -340,17 +339,14 @@ platform :ios do
 
   desc "Generate Mac App Store screenshots"
   lane :mac_screenshots do
-    result_bundle = File.expand_path("screenshots_mac/test_output/MacScreenshots.xcresult", __dir__)
-    FileUtils.rm_rf(result_bundle)
-    run_tests scheme:             "Generate Screenshots",
-              destination:        "platform=macOS,arch=arm64",
-              only_testing:       ["Generate Screenshots/MacScreenshots"],
-              result_bundle_path: result_bundle,
-              derived_data_path:  ".build/DerivedData-mac",
-              output_types:       ""
-    sh(File.expand_path("../Scripts/export-mac-screenshots.sh", __dir__), result_bundle,
-       File.expand_path("screenshots_mac/en-US", __dir__))
-    caption_screenshots(File.expand_path("screenshots_mac/en-US", __dir__))
+    promokit("mac-stills")
+    promokit("render", "--only", "screenshots")
+  end
+
+  desc "Record and render the App Store preview"
+  lane :preview do
+    promokit("record", "risk-loop")
+    promokit("render", "--only", "previews")
   end
 
   desc "Upload Mac screenshots to App Store Connect"

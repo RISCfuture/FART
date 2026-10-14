@@ -1,24 +1,19 @@
 import Foundation
 import XCTest
+import XCUIPromoKit
 import XCUITestKit
 
 // swiftlint:disable prefer_nimble
-/// Plays the App Store preview's script while `Scripts/record-preview.sh` records the simulator.
+/// Plays the App Store preview's script while `promokit record risk-loop` films the simulator.
 ///
-/// The script hands over a directory in `PREVIEW_MARKER_DIRECTORY`. The test touches `ready` once
-/// the opening shot is set up, waits for the script to touch `recording`, and from then on notes
-/// each stretch worth keeping (a held shot, a tap and its effect) in `segments`, as seconds since
-/// recording began along with the scene it belongs to. The script cuts the take down to those
-/// stretches, which leaves out the time XCUITest spends between actions, and frames each scene by
-/// the storyboard in `fastlane/captions`. Without the variable, as in a `snapshot` run, the test
-/// skips.
+/// The take keeps each stretch worth showing (a held shot, a tap and its effect) and files it
+/// under the scene `promo/storyboard.json` frames. Outside `promokit record`, the test skips.
 ///
 /// Every toggle the camera sees is one of the first four in the questionnaire, so nothing scrolls
 /// on screen. Points are for a VFR pilot with over 100 hours: low up to 20, moderate to 25, high
 /// from 26.
 @MainActor
 final class PreviewRecording: XCTestCase {
-  private static let markerDirectoryKey = "PREVIEW_MARKER_DIRECTORY"
   private static let tapSettle: TimeInterval = 0.6
   private static let tabSettle: TimeInterval = 1.2
   private static let resultsSettle: TimeInterval = 1.6
@@ -36,10 +31,7 @@ final class PreviewRecording: XCTestCase {
   private static let tipIntoHigh = ["lessThan15InLast90Toggle"]
 
   private var app: XCUIApplication!
-  private var markers: URL!
-  private var rollingSince = ContinuousClock.now
-  private var currentScene = ""
-  private var segments: [(scene: String, seconds: ClosedRange<Double>)] = []
+  private var take: PromoTake!
 
   override func setUp() async throws {
     continueAfterFailure = false
@@ -48,41 +40,41 @@ final class PreviewRecording: XCTestCase {
   /// Opens and closes on the same low-risk Results screen at 9 points, so the preview loops
   /// without a seam.
   func testRecordPreview() throws {
-    markers = try markerDirectory()
     app = XCUIApplication()
-    app.launchArguments = ["UI-TESTING"]
+    take = try PromoTake(app: app, tapLanding: Self.tapLanding)
+    app.launchArguments = PromoLaunch(flags: ["UI-TESTING", "PROMO-RECORDING"]).arguments
     app.launch()
 
     setUpOpeningShot()
-    startRolling()
+    try take.startRolling()
 
-    scene("opening") { hold(1.5) }
-    scene("climb") {
+    take.scene("opening") { take.hold(1.5) }
+    take.scene("climb") {
       showQuestions()
       for toggle in Self.climbToModerate { flip(toggle) }
     }
-    scene("moderate") {
+    take.scene("moderate") {
       showResults(expecting: "MODERATE RISK")
-      hold(1.5)
+      take.hold(1.5)
     }
-    scene("tip") {
+    take.scene("tip") {
       showQuestions()
       for toggle in Self.tipIntoHigh { flip(toggle) }
     }
-    scene("high") {
+    take.scene("high") {
       showResults(expecting: "HIGH RISK")
-      hold(2.0)
+      take.hold(2.0)
     }
-    scene("unwind") {
+    take.scene("unwind") {
       showQuestions()
       for toggle in (Self.climbToModerate + Self.tipIntoHigh).reversed() { flip(toggle) }
     }
-    scene("closing") {
+    take.scene("closing") {
       showResults(expecting: "LOW RISK")
-      hold(1.5)
+      take.hold(1.5)
     }
 
-    writeSegments()
+    try take.finish()
   }
 
   // MARK: - Steps
@@ -94,47 +86,36 @@ final class PreviewRecording: XCTestCase {
     app.buttons["hoursPicker"].tap()
     app.buttons["hoursOver100"].tap()
 
-    tapTab("Questions")
+    app.buttons["Questions"].firstMatch.tap()
     for toggle in Self.openingAnswers {
       let control = app.collectionViews.firstMatch.makeVisible(element: app.switches[toggle])
       XCTAssertNotNil(control, "\(toggle) is not in the questionnaire")
       XCTAssert(control!.setSwitch(to: true, in: app), "\(toggle) did not switch on")
     }
     scrollToTop()
-    tapTab("Results")
+    app.buttons["Results"].firstMatch.tap()
     waitForRisk("LOW RISK")
     Thread.sleep(forTimeInterval: 30)  // wait for the Apple Intelligence banner to self-dismiss
   }
 
   private func showQuestions() {
     restoreTabBar(showing: "Questions")
-    keepTail(Self.tabSettle) {
-      tapTab("Questions")
-      Thread.sleep(forTimeInterval: Self.tabSettle)
-    }
+    take.tap(app.buttons["Questions"].firstMatch, settle: Self.tabSettle)
   }
 
   private func showResults(expecting riskLevel: String) {
     restoreTabBar(showing: "Results")
-    keepTail(Self.resultsSettle) {
-      tapTab("Results")
-      Thread.sleep(forTimeInterval: Self.resultsSettle)
-    }
+    take.tap(app.buttons["Results"].firstMatch, settle: Self.resultsSettle)
     waitForRisk(riskLevel)
   }
 
   private func flip(_ identifier: String) {
     let toggle = app.switches[identifier]
     XCTAssert(toggle.isHittable, "\(identifier) is not on screen without scrolling")
-    let target = !isOn(toggle)
-    keepTail(Self.tapSettle) {
-      XCTAssert(toggle.setSwitch(to: target, in: app), "\(identifier) did not switch")
-      Thread.sleep(forTimeInterval: Self.tapSettle)
-    }
-  }
-
-  private func hold(_ seconds: TimeInterval) {
-    keep { Thread.sleep(forTimeInterval: seconds) }
+    XCTAssert(
+      take.setSwitch(toggle, to: !toggle.isOn, settle: Self.tapSettle),
+      "\(identifier) did not switch"
+    )
   }
 
   // MARK: - Helpers
@@ -146,10 +127,6 @@ final class PreviewRecording: XCTestCase {
     scrollToTop()
   }
 
-  private func tapTab(_ tab: String) {
-    app.buttons[tab].firstMatch.tap()
-  }
-
   private func waitForRisk(_ riskLevel: String) {
     let settled = expectation(
       for: NSPredicate(format: "label == %@", riskLevel),
@@ -158,69 +135,11 @@ final class PreviewRecording: XCTestCase {
     wait(for: [settled], timeout: 10)
   }
 
-  private func isOn(_ toggle: XCUIElement) -> Bool {
-    (toggle.value as? String) == "1"
-  }
-
   private func scrollToTop() {
     let collectionView = app.collectionViews.firstMatch
     guard collectionView.exists else { return }
 
     for _ in 0..<5 { collectionView.swipeDown() }
-  }
-
-  // MARK: - Recording handshake
-
-  private func markerDirectory() throws -> URL {
-    let path = ProcessInfo.processInfo.environment[Self.markerDirectoryKey]
-    try XCTSkipIf(path == nil, "Run through Scripts/record-preview.sh to record a preview")
-    return URL(filePath: path!)
-  }
-
-  private func startRolling() {
-    FileManager.default.createFile(atPath: marker("ready").path, contents: nil)
-    let recordingPath = marker("recording").path
-    let recording = expectation(
-      for: NSPredicate { _, _ in FileManager.default.fileExists(atPath: recordingPath) },
-      evaluatedWith: nil
-    )
-    wait(for: [recording], timeout: 30)
-    rollingSince = .now
-  }
-
-  /// Files the stretches kept during `steps` under a scene the storyboard knows by `name`.
-  private func scene(_ name: String, _ steps: () -> Void) {
-    currentScene = name
-    steps()
-  }
-
-  private func keep(_ action: () -> Void) {
-    let start = secondsRolling()
-    action()
-    segments.append((currentScene, start...secondsRolling()))
-  }
-
-  /// Keeps only the last moments of an action: the tap landing and what it changes, without the
-  /// time XCUITest spends finding the element and waiting for the app to idle beforehand.
-  private func keepTail(_ settle: TimeInterval, _ action: () -> Void) {
-    action()
-    let end = secondsRolling()
-    segments.append((currentScene, max(0, end - settle - Self.tapLanding)...end))
-  }
-
-  private func secondsRolling() -> Double {
-    let elapsed = ContinuousClock.now - rollingSince
-    return Double(elapsed.components.seconds) + Double(elapsed.components.attoseconds) / 1e18
-  }
-
-  private func writeSegments() {
-    let lines = segments.map { "\($0.seconds.lowerBound) \($0.seconds.upperBound) \($0.scene)" }
-      .joined(separator: "\n")
-    FileManager.default.createFile(atPath: marker("segments").path, contents: Data(lines.utf8))
-  }
-
-  private func marker(_ name: String) -> URL {
-    markers.appending(path: name)
   }
 }
 // swiftlint:enable prefer_nimble

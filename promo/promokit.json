@@ -1,0 +1,31 @@
+{
+  "app": "FART",
+  "project": "../Flight Assessment of Risk Tool.xcodeproj",
+  "scheme": "Generate Screenshots",
+  "locales": [
+    "en-US"
+  ],
+  "brand": {
+    "css": "brand.css",
+    "assets": [
+      "../docs/fonts"
+    ]
+  },
+  "takes": {
+    "risk-loop": {
+      "test": "Generate Screenshots/PreviewRecording/testRecordPreview",
+      "device": "iPhone 18 Pro Max"
+    }
+  },
+  "stills": {
+    "test": "Generate Screenshots/Generate_Screenshots/testGenerateScreenshots",
+    "devices": [
+      "iPhone 18 Pro Max",
+      "iPhone 18 Pro",
+      "iPad Pro 13-inch (M5)"
+    ]
+  },
+  "mac": {
+    "test": "Generate Screenshots/MacScreenshots"
+  }
+}

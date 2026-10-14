@@ -1,0 +1,6 @@
+# pnpm approves dependency build scripts via `allowBuilds`; `onlyBuiltDependencies` is kept for
+# older pnpm releases.
+allowBuilds:
+  esbuild: true
+onlyBuiltDependencies:
+  - esbuild

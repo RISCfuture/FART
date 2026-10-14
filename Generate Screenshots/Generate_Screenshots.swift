@@ -1,4 +1,5 @@
 import XCTest
+import XCUIPromoKit
 import XCUITestKit
 
 // swiftlint:disable prefer_nimble
@@ -13,7 +14,7 @@ final class Generate_Screenshots: XCTestCase {
 
   func testGenerateScreenshots() throws {
     let app = XCUIApplication()
-    setupSnapshot(app)
+    app.launchArguments = PromoLaunch(flags: ["UI-TESTING"]).arguments
     app.launch()
 
     XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
@@ -36,7 +37,7 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "wingsInLast6MoToggle", value: true)
     scrollToTop(in: app)
     Thread.sleep(forTimeInterval: 30)  // wait for Apple Intelligence banner to self-dismiss
-    capture(.questions)
+    try capture(.questions)
 
     set(app: app, name: "ifrCurrentToggle", value: false)
     set(app: app, name: "nightToggle", value: false)
@@ -63,7 +64,7 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "noDestWxToggle", value: false)
 
     showResults(in: app, expecting: "LOW RISK")
-    capture(.resultsLowRisk)
+    try capture(.resultsLowRisk)
 
     app /*@START_MENU_TOKEN@*/.buttons[
       "Questions"
@@ -75,7 +76,7 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "strongCrosswindsToggle", value: true)
 
     showResults(in: app, expecting: "MODERATE RISK")
-    capture(.resultsModerateRisk)
+    try capture(.resultsModerateRisk)
 
     app /*@START_MENU_TOKEN@*/.buttons[
       "Questions"
@@ -88,17 +89,17 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "runwayObstaclesToggle", value: true)
 
     showResults(in: app, expecting: "HIGH RISK")
-    capture(.resultsHighRisk)
+    try capture(.resultsHighRisk)
 
     showPilotProfile(in: app)
-    capture(.pilot)
+    try capture(.pilot)
   }
 
-  /// Takes a screenshot, numbered by its place in this layout's order.
-  private func capture(_ shot: Shot) {
-    let order = usesSplitView ? Shot.splitViewOrder : Shot.tabOrder
-    guard let index = order.firstIndex(of: shot) else { return }
-    snapshot("\(index)-\(shot.rawValue)")
+  /// Captures a still for `promokit stills`. The split view keeps the results beside the
+  /// questionnaire, so it leaves out the questionnaire on its own.
+  private func capture(_ shot: Shot) throws {
+    guard !(usesSplitView && shot == .questions) else { return }
+    try PromoStill.capture(shot.rawValue, in: self)
   }
 
   /// Shows the Pilot Profile, its score badge carrying the questionnaire's high-risk total.
@@ -166,21 +167,13 @@ final class Generate_Screenshots: XCTestCase {
     for _ in 0..<5 { collectionView.swipeDown() }
   }
 
-  /// The listing's screenshots. The split view keeps the results beside the questionnaire, so it
-  /// leaves out the questionnaire on its own.
+  /// The stills `promo/storyboard.json` captions, which also sets their order in the listing.
   private enum Shot: String {
     case resultsModerateRisk = "results-moderate-risk"
     case questions
     case resultsHighRisk = "results-high-risk"
     case resultsLowRisk = "results-low-risk"
     case pilot
-
-    static let tabOrder: [Self] = [
-      .resultsModerateRisk, .questions, .resultsHighRisk, .resultsLowRisk, .pilot
-    ]
-    static let splitViewOrder: [Self] = [
-      .resultsModerateRisk, .resultsHighRisk, .resultsLowRisk, .pilot
-    ]
   }
 }
 // swiftlint:enable prefer_nimble
