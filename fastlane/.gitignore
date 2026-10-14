@@ -2,3 +2,9 @@ screenshots
 AuthKey_*.p8
 report.xml
 test_output
+
+# deliver download_metadata also writes these. The review contact holds personal details, and
+# CHANGELOG.md is the source of the release notes.
+metadata/review_information/
+metadata/trade_representative_contact_information/
+metadata/*/release_notes.txt
