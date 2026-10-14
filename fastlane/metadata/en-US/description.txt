@@ -1,5 +1,11 @@
-Flight Assessment of Risk Tool helps you analyze whether it is safe for you to go fly. It uses the FAASafety Team’s Flight Risk Assessment Tool (FRAT), presenting you with questions about your flight and your level of experience. After you’ve answered the questions, it will give you a risk score and a description of that score.
+Before you add power, add up the risk. Answer a short questionnaire about the flight you’re planning — your recent experience, the conditions, the airports, the weather — and FART totals the points and tells you whether it comes out low, moderate or high risk.
 
-Use FART to help you determine if it’s safe for you to go fly, or if you should cancel the flight, or bring along someone more experienced, such as a CFI.
+It’s the FAA Safety Team’s Flight Risk Assessment Tool (FRAT), written as an app. Every answer is a switch: there’s nothing to type and nothing to look up, and the score moves as you go. A full run-through takes about a minute.
 
-NOTE: This app is not a substitute for your own good judgment and decision-making ability. When in doubt, either cancel your flight or discuss with a trusted mentor first.
+• The bands depend on you. Set your rating and your total hours once, and every score is read against the thresholds the FRAT gives a pilot like you.
+• Your minimums, your numbers. Decide what counts as a short runway, a strong wind or crosswind, a low ceiling and low visibility, and the questions ask about those.
+• Share the result. Send your finished assessment as a one-page PDF report, or print it from your Mac.
+• iPhone, iPad and Mac. On iPad and Mac, the questions and the score sit side by side.
+• No account and no ads, and it works offline. Free and open source.
+
+FART is a tool for thinking through the hazards of a flight, not for making the go/no-go decision for you. It doesn’t replace your own judgment. When in doubt, don’t go, or talk it over with a CFI or a trusted mentor first.

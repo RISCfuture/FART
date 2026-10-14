@@ -1,1 +1,1 @@
-aviation,flying,frat,faa,faast,risk
+aviation,faa,faast,wings,safety,minimums,briefing,checklist,adm,cfi,solo,ifr,vfr,crosswind,go/no-go
