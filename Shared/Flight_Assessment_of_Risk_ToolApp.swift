@@ -24,6 +24,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
         PilotProfileView()
           .formStyle(.grouped)
           .frame(width: 420)
+          .navigationTitle("Pilot Profile")
       }
 
       Window("About Flight Assessment of Risk Tool", id: FARTWindowID.about) {
