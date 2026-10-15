@@ -31,6 +31,14 @@ Capture the iPhone and iPad stills and render the App Store screenshots
 
 Capture the Mac windows and render the Mac App Store screenshots
 
+### ios preview
+
+```sh
+[bundle exec] fastlane ios preview
+```
+
+Record the App Store preview and render it
+
 ### ios verify
 
 ```sh
@@ -54,6 +62,14 @@ Upload the rendered screenshots to App Store Connect
 ```
 
 Upload the rendered Mac screenshots to App Store Connect
+
+### ios upload_preview
+
+```sh
+[bundle exec] fastlane ios upload_preview
+```
+
+Upload the rendered App Store preview to App Store Connect, replacing the ones there
 
 ### ios upload_metadata
 

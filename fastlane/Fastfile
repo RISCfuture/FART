@@ -116,6 +116,7 @@ PROMO_STILLS_PATH = File.expand_path("../.build/promo/stills", __dir__)
 # The folders `promokit render` writes into and deliver uploads from, a folder per locale in each.
 SCREENSHOTS_PATH = File.expand_path("screenshots", __dir__)
 MAC_SCREENSHOTS_PATH = File.expand_path("screenshots_mac", __dir__)
+PREVIEWS_PATH = File.expand_path("previews", __dir__)
 
 # The Xcode promokit builds and tests with. The iPhone Duo simulator needs Xcode 27.1 or later.
 DUO_XCODE = ENV.fetch("DUO_XCODE", "/Applications/Xcode-27.1.0-Release.Candidate.app")
@@ -247,6 +248,15 @@ def upload_rendered_screenshots(directory, platform:, lane:)
     run_precheck_before_submit:           false,
     ignore_language_directory_validation: true
   )
+end
+
+# The App Store Connect time code (`HH:MM:SS:FF`) of the poster frame `promokit render` chose for
+# the previews, which deliver applies to every preview it uploads.
+def preview_poster_time_code
+  posters = Dir.glob(File.join(PREVIEWS_PATH, "*", "*-poster.txt")).map { File.read(it).strip }.uniq
+  UI.user_error!("The previews name #{posters.size} poster frames; deliver sets one for all.") if posters.size > 1
+
+  posters.first
 end
 
 # The listing text deliver uploads and downloads, a folder per locale.
@@ -438,6 +448,14 @@ platform :ios do
     verify
   end
 
+  desc "Record the App Store preview and render it"
+  lane :preview do
+    refuse_ci
+    promokit("record", "risk-loop")
+    promokit("render", "--only", "previews")
+    verify
+  end
+
   desc "Check the rendered media against Apple's rules and the screenshots against the storyboard"
   lane :verify do
     verify_screenshot_folder(SCREENSHOTS_PATH, promo_still_devices) if Dir.exist?(SCREENSHOTS_PATH)
@@ -453,6 +471,26 @@ platform :ios do
   desc "Upload the rendered Mac screenshots to App Store Connect"
   lane :upload_mac_screenshots do
     upload_rendered_screenshots(MAC_SCREENSHOTS_PATH, platform: "osx", lane: "mac_screenshots")
+  end
+
+  desc "Upload the rendered App Store preview to App Store Connect, replacing the ones there"
+  lane :upload_preview do
+    if Dir.glob(File.join(PREVIEWS_PATH, "*", "*.mp4")).empty?
+      UI.user_error!("No previews under #{PREVIEWS_PATH}; run the preview lane first.")
+    end
+    verify
+    ensure_api_key
+    upload_to_app_store(
+      app_identifier:             APP_IDENTIFIER,
+      app_previews_path:          PREVIEWS_PATH,
+      overwrite_preview_videos:   true,
+      preview_frame_time_code:    preview_poster_time_code,
+      skip_binary_upload:         true,
+      skip_metadata:              true,
+      skip_screenshots:           true,
+      force:                      true,
+      run_precheck_before_submit: false
+    )
   end
 
   desc "Upload fastlane/metadata to the version open for editing (platform:ios or platform:osx)"
