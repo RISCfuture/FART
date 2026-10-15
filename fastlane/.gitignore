@@ -5,6 +5,7 @@ test_output
 # promokit renders these from promo/.
 screenshots
 screenshots_mac
+previews
 
 # deliver's metadata download also writes these. CHANGELOG.md is the source of the release notes,
 # the review contact holds personal details, and the app has no Apple TV listing.

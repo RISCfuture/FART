@@ -52,6 +52,8 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
   init() {
     // Skip Sentry initialization during UI testing or unit testing
     let isUITesting = ProcessInfo.processInfo.arguments.contains("UI-TESTING")
+    // An App Store preview take films the app's animations, so it keeps them.
+    let isRecordingPromo = ProcessInfo.processInfo.arguments.contains("PROMO-RECORDING")
     let isUnitTesting = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
     if isUITesting {
@@ -59,7 +61,7 @@ struct Flight_Assessment_of_Risk_ToolApp: App {
         UserDefaults.standard.removePersistentDomain(forName: bundleID)
       }
       #if os(iOS)
-        UIView.setAnimationsEnabled(false)
+        if !isRecordingPromo { UIView.setAnimationsEnabled(false) }
       #endif
       return
     }

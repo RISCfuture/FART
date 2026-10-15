@@ -1,5 +1,202 @@
 {
   "$schema": "./node_modules/xcuipromokit/schema/storyboard.schema.json",
+  "previews": [
+    {
+      "id": "risk-loop",
+      "take": "risk-loop",
+      "device": "iphone",
+      "captionEntrance": {
+        "unit": "word",
+        "delay": 0.3,
+        "duration": 0.34,
+        "stagger": 0.055,
+        "easing": [
+          0.2,
+          0.8,
+          0.25,
+          1
+        ],
+        "keyframes": [
+          {
+            "at": 0,
+            "opacity": 0,
+            "x": -1.4,
+            "skew": -28,
+            "blur": 0.08
+          },
+          {
+            "at": 0.3,
+            "opacity": 1
+          },
+          {
+            "at": 0.7,
+            "x": 0.06,
+            "skew": 7,
+            "blur": 0
+          }
+        ]
+      },
+      "poster": {
+        "scene": "high",
+        "at": 1.0
+      },
+      "scenes": [
+        {
+          "scene": "opening",
+          "caption": {
+            "copy": "opening",
+            "y": 0.5625
+          }
+        },
+        {
+          "scene": "climb",
+          "stretches": [
+            {
+              "index": 0,
+              "trim": {
+                "end": 1.6
+              }
+            },
+            {
+              "index": 1,
+              "trim": {
+                "end": 1.0
+              }
+            },
+            {
+              "index": 2,
+              "trim": {
+                "end": 1.4
+              }
+            }
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "right",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          },
+          "caption": {
+            "copy": "climb",
+            "y": 0.807
+          }
+        },
+        {
+          "scene": "moderate",
+          "stretches": [
+            0
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "left",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          },
+          "caption": {
+            "copy": "moderate",
+            "y": 0.5625
+          }
+        },
+        {
+          "scene": "tip",
+          "stretches": [
+            {
+              "index": 0,
+              "trim": {
+                "end": 1.7
+              }
+            },
+            {
+              "index": 1,
+              "trim": {
+                "end": 1.0
+              }
+            }
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "right",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          }
+        },
+        {
+          "scene": "high",
+          "stretches": [
+            {
+              "index": 0,
+              "trim": {
+                "end": 1.1
+              }
+            }
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "left",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          },
+          "zoom": {
+            "to": 2.5,
+            "y": 0.281,
+            "at": 0.15,
+            "duration": 0.4,
+            "easing": [
+              0.33,
+              1,
+              0.68,
+              1
+            ]
+          }
+        },
+        {
+          "scene": "unwind",
+          "stretches": [
+            {
+              "index": 0,
+              "trim": {
+                "end": 1.6
+              }
+            },
+            {
+              "index": 1,
+              "trim": {
+                "end": 1.0
+              }
+            },
+            {
+              "index": 2,
+              "trim": {
+                "end": 1.4
+              }
+            }
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "right",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          },
+          "caption": {
+            "copy": "unwind",
+            "y": 0.807
+          }
+        },
+        {
+          "scene": "closing",
+          "stretches": [
+            0
+          ],
+          "transition": {
+            "type": "slide",
+            "direction": "left",
+            "duration": 0.2,
+            "motionBlur": 0.1
+          }
+        }
+      ]
+    }
+  ],
   "screenshots": [
     {
       "id": "results-moderate-risk",

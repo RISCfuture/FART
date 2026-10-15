@@ -58,6 +58,9 @@
 				MacStoreScreenshots.swift = (
 					macos,
 				);
+				PreviewRecording.swift = (
+					ios,
+				);
 				StoreScreenshots.swift = (
 					ios,
 				);

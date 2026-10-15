@@ -13,6 +13,12 @@
       "../docs/fonts"
     ]
   },
+  "takes": {
+    "risk-loop": {
+      "test": "Generate Screenshots/PreviewRecording/testRecordPreview",
+      "device": "iPhone 18 Pro Max"
+    }
+  },
   "stills": {
     "test": "Generate Screenshots/StoreScreenshots/testCaptureStills",
     "devices": [
