@@ -45,11 +45,4 @@ jobs:
           wget -O .swift-format \
             https://gist.githubusercontent.com/RISCfuture/e0c21afb7bd80a88d128a42bf40d2ecd/raw/.swift-format
       - name: Run swift-format lint
-        # SnapshotHelper.swift is fastlane's verbatim vendored helper, so it is
-        # exempt here as it already is in .swiftlint.yml. Excluding it by path
-        # rather than naming what to lint keeps every other source covered,
-        # including ones added later.
-        run: |
-          find . -name '*.swift' \
-            ! -path './Generate Screenshots/SnapshotHelper.swift' \
-            -exec swift format lint --strict {} +
+        run: swift format lint --strict -r .

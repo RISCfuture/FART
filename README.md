@@ -41,9 +41,15 @@ resolve through Swift Package Manager, so the project builds and tests straight
 from a checkout.
 
 There are three test plans: **Unit Tests** for the scoring rules, **UI Tests**
-for the major flows, and **Generate Screenshots**, which drives the App Store
-and marketing captures.
+for the major flows, and **Promo**, which drives the App Store and marketing
+captures.
 
-fastlane handles those screenshots and App Store releases. Its Ruby comes from
-RVM by way of `.ruby-version` and `.ruby-gemset`; run `bundle install` once,
-then `fastlane snapshot`.
+fastlane handles App Store releases and uploads. Its Ruby comes from RVM by way
+of `.ruby-version` and `.ruby-gemset`; run `bundle install` once.
+
+[XCUIPromoKit](https://github.com/RISCfuture/XCUIPromoKit) captures and renders
+the listing's media from `promo/`: run `pnpm install` there once, then
+`fastlane screenshots` or `fastlane mac_screenshots`. They build with Xcode 27.1
+or later, which the iPhone Duo simulator needs; set `DUO_XCODE` in
+`fastlane/.env` if it isn't the release candidate in `/Applications`.
+`promo/storyboard.json` and `promo/brand.css` set how they look.

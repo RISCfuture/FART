@@ -44,7 +44,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Generate Screenshots/Generate Screenshots.xctestplan"
+            reference = "container:Generate Screenshots/Promo.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

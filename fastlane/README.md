@@ -21,7 +21,23 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios screenshots
 ```
 
-Generate new localized screenshots
+Capture the iPhone and iPad stills and render the App Store screenshots
+
+### ios mac_screenshots
+
+```sh
+[bundle exec] fastlane ios mac_screenshots
+```
+
+Capture the Mac windows and render the Mac App Store screenshots
+
+### ios verify
+
+```sh
+[bundle exec] fastlane ios verify
+```
+
+Check the rendered media against Apple's rules and the screenshots against the storyboard
 
 ### ios upload_screenshots
 
@@ -29,7 +45,15 @@ Generate new localized screenshots
 [bundle exec] fastlane ios upload_screenshots
 ```
 
-Upload screenshots to App Store Connect
+Upload the rendered screenshots to App Store Connect
+
+### ios upload_mac_screenshots
+
+```sh
+[bundle exec] fastlane ios upload_mac_screenshots
+```
+
+Upload the rendered Mac screenshots to App Store Connect
 
 ### ios upload_metadata
 

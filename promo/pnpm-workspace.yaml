@@ -1,0 +1,3 @@
+# Remotion's bundler needs esbuild's install script.
+allowBuilds:
+  esbuild: true
