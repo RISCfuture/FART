@@ -1,0 +1,77 @@
+/* Laid out on Apple's 3840×2560 search template, whose art safe area is 2168×1030 at (836, 765). */
+.promo-creative {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--low) 14%, var(--paper)),
+    color-mix(in oklab, var(--low) 6%, var(--paper)) 60%
+  );
+  overflow: hidden;
+}
+
+.copy {
+  position: absolute;
+  left: 836px;
+  top: 765px;
+  width: 1000px;
+  height: 1030px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 136px;
+  text-wrap: balance;
+}
+
+.lede {
+  margin-top: 40px;
+  font-size: 58px;
+  line-height: 1.3;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+
+/* Each capture is cut off below its content, so the stack reads as cards rather than phones. */
+.card {
+  object-view-box: inset(0 0 38% 0);
+}
+
+.stack {
+  position: absolute;
+  left: 2580px;
+  top: 1280px;
+}
+
+.stack .screen {
+  position: absolute;
+  width: 1060px;
+  translate: -50% -50%;
+  --radius: 96px;
+}
+
+.stack .back {
+  rotate: 7deg;
+  left: 300px;
+  top: -90px;
+}
+
+.stack .middle {
+  rotate: -7deg;
+  left: -300px;
+  top: -90px;
+}
+
+.stack .front {
+  width: 1140px;
+  object-view-box: inset(0 0 50% 0);
+}
+
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 150px;
+  --track: 40px;
+  border-radius: 0;
+}

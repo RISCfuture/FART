@@ -1,0 +1,57 @@
+/* Laid out on Apple's 3840×1646 header template, whose art safe area is 1646×661 at (1097, 493). */
+.promo-creative {
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--low) 16%, var(--paper)),
+    color-mix(in oklab, var(--moderate) 18%, var(--paper)) 55%,
+    color-mix(in oklab, var(--high) 12%, var(--paper))
+  );
+}
+
+.focus {
+  position: absolute;
+  left: 1097px;
+  top: 493px;
+  width: 1646px;
+  height: 661px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  font-size: 88px;
+  text-align: center;
+  text-wrap: balance;
+  max-width: 1646px;
+}
+
+.screen.lead {
+  width: 720px;
+  --radius: 60px;
+}
+
+.flank {
+  position: absolute;
+  bottom: calc(1646px - 1154px);
+  width: 600px;
+  --radius: 52px;
+}
+
+.flank.low {
+  right: calc(1920px + 360px + 70px);
+}
+
+.flank.high {
+  left: calc(1920px + 360px + 70px);
+}
+
+.track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 120px;
+  --track: 34px;
+  border-radius: 0;
+}

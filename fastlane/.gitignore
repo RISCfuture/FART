@@ -6,6 +6,7 @@ test_output
 screenshots
 screenshots_mac
 previews
+creative_assets
 
 # deliver's metadata download also writes these. CHANGELOG.md is the source of the release notes,
 # the review contact holds personal details, and the app has no Apple TV listing.

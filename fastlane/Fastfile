@@ -456,6 +456,14 @@ platform :ios do
     verify
   end
 
+  desc "Capture the stills and render the product page header and search result assets"
+  lane :creative_assets do
+    refuse_ci
+    promokit("stills")
+    promokit("render", "--only", "creatives")
+    verify
+  end
+
   desc "Check the rendered media against Apple's rules and the screenshots against the storyboard"
   lane :verify do
     verify_screenshot_folder(SCREENSHOTS_PATH, promo_still_devices) if Dir.exist?(SCREENSHOTS_PATH)

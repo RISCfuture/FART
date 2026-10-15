@@ -228,5 +228,29 @@
       "caption": "pilot",
       "theme": "low"
     }
+  ],
+  "creatives": [
+    {
+      "id": "header-a",
+      "slot": "header",
+      "size": "3840x1646",
+      "template": "creative/header.html",
+      "css": [
+        "creative/shared.css",
+        "creative/header.css"
+      ],
+      "device": "iPhone 18 Pro Max"
+    },
+    {
+      "id": "search-b",
+      "slot": "search",
+      "size": "3840x2560",
+      "template": "creative/search.html",
+      "css": [
+        "creative/shared.css",
+        "creative/search.css"
+      ],
+      "device": "iPhone 18 Pro Max"
+    }
   ]
 }

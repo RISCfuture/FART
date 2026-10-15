@@ -7,5 +7,8 @@
   "questions": "Every answer is a switch.",
   "results-high-risk": "See which band your flight lands in.",
   "results-low-risk": "Read against your rating and your hours.",
-  "pilot": "Your minimums, your numbers."
+  "pilot": "Your minimums, your numbers.",
+  "header-headline": "Add up the risk before you add power.",
+  "search-headline": "A pre-flight risk score in about a minute.",
+  "search-lede": "The FAA Safety Team’s FRAT, read against your rating and hours."
 }
