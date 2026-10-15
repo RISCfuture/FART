@@ -15,6 +15,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios upload_creative_assets
+
+```sh
+[bundle exec] fastlane ios upload_creative_assets
+```
+
+Upload the rendered creative assets to App Store Connect, replacing the ones there
+
 ### ios screenshots
 
 ```sh
@@ -38,6 +46,14 @@ Capture the Mac windows and render the Mac App Store screenshots
 ```
 
 Record the App Store preview and render it
+
+### ios creative_assets
+
+```sh
+[bundle exec] fastlane ios creative_assets
+```
+
+Capture the stills and render the product page header and search result assets
 
 ### ios verify
 

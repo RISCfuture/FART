@@ -19,6 +19,8 @@ require "shellwords"
 require "tmpdir"
 require "xcodeproj"
 
+import "creative_assets.rb"
+
 # Xcode 26 writes a multi-line build-phase script as a list of lines, a format xcodeproj 1.28.1
 # rejects: it type-checks `shellScript` as a String and raises on an Array. gym parses the project to
 # enumerate its build configurations, so without this an archive dies before xcodebuild is ever
@@ -453,6 +455,14 @@ platform :ios do
     refuse_ci
     promokit("record", "risk-loop")
     promokit("render", "--only", "previews")
+    verify
+  end
+
+  desc "Capture the stills and render the product page header and search result assets"
+  lane :creative_assets do
+    refuse_ci
+    promokit("stills")
+    promokit("render", "--only", "creatives")
     verify
   end
 

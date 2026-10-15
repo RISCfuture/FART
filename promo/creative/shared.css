@@ -1,0 +1,68 @@
+/* FART's creative assets: the site's faces, ink and paper, and the FRAT's risk bands. */
+
+@font-face {
+  font-family: "Archivo Expanded";
+  src: url("../../docs/fonts/archivo-expanded.woff2") format("woff2-variations");
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Public Sans";
+  src: url("../../docs/fonts/public-sans.woff2") format("woff2-variations");
+  font-weight: 100 900;
+}
+
+:root {
+  --low: #369d1e;
+  --moderate: #daba2c;
+  --high: #b41834;
+  --low-ink: #22690f;
+  --moderate-ink: #7a6206;
+  --high-ink: #97122a;
+  --ink: #1a1712;
+  --ink-2: #5f584d;
+  --paper: #fcfbf8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.promo-creative {
+  font-family: "Public Sans", sans-serif;
+  color: var(--ink);
+  background: color-mix(in oklab, var(--low) 7%, var(--paper));
+}
+
+h1 {
+  font-family: "Archivo Expanded", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+.track {
+  height: var(--track, 28px);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--low) 0 46.7%,
+    var(--moderate) 46.7% 66.7%,
+    var(--high) 66.7% 100%
+  );
+}
+
+/* A real capture, shown as a screen with the device's corner radius and nothing drawn on it. */
+.screen {
+  display: block;
+  border-radius: var(--radius, 96px);
+  box-shadow:
+    0 2px 6px hsl(30deg 8% 20% / 0.12),
+    0 40px 90px -20px hsl(30deg 8% 20% / 0.35);
+}
+
+/* The Results dial: the band of a 1320×2868 capture from 500 px down, 760 px tall. */
+.dial {
+  object-view-box: inset(500px 0 1608px 0);
+}
