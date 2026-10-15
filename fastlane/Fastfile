@@ -105,16 +105,92 @@ def provisioning_authentication_args
     "-authenticationKeyIssuerID #{key[:issuer_id].shellescape}"
 end
 
-# `upload_to_app_store` clears every slot it uploads into, so an empty directory would strip the
-# screenshots from the product page rather than leave the ones already there alone. A screenshots run
-# that was interrupted, or that captured nothing, has to stop before publishing its silence.
-#
-# The path is anchored to this file so it names the same folder however the lane was invoked.
-def verify_screenshots_present
-  directory = File.expand_path("screenshots", __dir__)
-  return if Dir.glob(File.join(directory, "**", "*.png")).any?
+# promokit's folder, and the configuration and storyboard it captures and renders from.
+PROMO_PATH = File.expand_path("../promo", __dir__)
+PROMO_CONFIG = JSON.parse(File.read(File.join(PROMO_PATH, "promokit.json")))
+PROMO_STORYBOARD = JSON.parse(File.read(File.join(PROMO_PATH, "storyboard.json")))
 
-  UI.user_error!("No screenshots under #{directory} — run the screenshots lane first. Uploading an " \
+# Where promokit keeps the stills it captures, a folder per locale and device.
+PROMO_STILLS_PATH = File.expand_path("../.build/promo/stills", __dir__)
+
+# The folders `promokit render` writes into and deliver uploads from, a folder per locale in each.
+SCREENSHOTS_PATH = File.expand_path("screenshots", __dir__)
+MAC_SCREENSHOTS_PATH = File.expand_path("screenshots_mac", __dir__)
+
+# The Xcode promokit builds and tests with. The iPhone Duo simulator needs Xcode 27.1 or later.
+DUO_XCODE = ENV.fetch("DUO_XCODE", "/Applications/Xcode-27.1.0-Release.Candidate.app")
+
+# Runs the block with every tool fastlane shells out to, xcodebuild and simctl among them, taken
+# from the given Xcode rather than the selected one.
+def with_xcode(path)
+  developer_dir = File.join(path, "Contents", "Developer")
+  UI.user_error!("No Xcode at #{path}. Set DUO_XCODE in fastlane/.env.") unless Dir.exist?(developer_dir)
+
+  previous = ENV.fetch("DEVELOPER_DIR", nil)
+  ENV["DEVELOPER_DIR"] = developer_dir
+  yield
+ensure
+  ENV["DEVELOPER_DIR"] = previous
+end
+
+# Runs XCUIPromoKit's `promokit` from promo/.
+def promokit(*)
+  with_xcode(DUO_XCODE) { sh("pnpm", "--dir", PROMO_PATH, "promokit", *) }
+end
+
+# The capture lanes drive simulators and the Mac's own screen, which a CI runner can't stand in for.
+def refuse_ci
+  UI.user_error!("Capturing App Store media needs a Mac with simulators; it doesn't run on CI.") if Helper.ci?
+end
+
+# A device's folder name in promokit's stills and renders, such as `iphone-18-pro-max`.
+def promo_slug(name)
+  name.downcase.gsub(/[^a-z0-9]+/, "-").delete_prefix("-").delete_suffix("-")
+end
+
+# The device folders `promokit stills` captures into: one per device and appearance.
+def promo_still_devices
+  stills = PROMO_CONFIG.fetch("stills", {})
+  stills.fetch("devices", []).product(stills.fetch("appearances", %w[light])).map do |device, appearance|
+    (appearance == "light") ? promo_slug(device) : "#{promo_slug(device)}-#{appearance}"
+  end
+end
+
+# The screenshots `promokit render` makes for one locale and device: each of the storyboard's
+# screenshots whose still the test captured there, in order. A test may leave a still out on a
+# device it doesn't suit.
+def expected_screenshots(locale, device)
+  stills = File.join(PROMO_STILLS_PATH, locale, device)
+  UI.user_error!("No #{device} stills for #{locale} in #{stills}; run the capture lane first.") unless Dir.exist?(stills)
+
+  PROMO_STORYBOARD.fetch("screenshots", []).each_with_index.filter_map do |screenshot, index|
+    next unless screenshot["file"] || File.exist?(File.join(stills, "#{screenshot["still"]}.png"))
+
+    "#{device}-#{index.to_s.rjust(2, "0")}-#{screenshot["id"]}.png"
+  end
+end
+
+# Refuses a rendered screenshot folder that is not exactly what the storyboard makes of the
+# captured stills. An upload syncs the remote sets to it, so a missing file would clear a slot on
+# the product page and a stray one would publish whatever it happens to be.
+def verify_screenshot_folder(directory, devices)
+  PROMO_CONFIG.fetch("locales", %w[en-US]).each do |locale|
+    folder = File.join(directory, locale)
+    expected = devices.flat_map { |device| expected_screenshots(locale, device) }.sort
+    found = Dir.exist?(folder) ? Dir.children(folder).grep(/\.png\z/).sort : []
+    next if found == expected
+
+    UI.user_error!("#{folder} holds #{found.join(", ").then { it.empty? ? "nothing" : it }}, " \
+                   "not #{expected.join(", ")}. Run the capture lane again.")
+  end
+end
+
+# `upload_to_app_store` syncs every slot it uploads into, so an empty directory would strip the
+# screenshots from the product page rather than leave the ones already there alone.
+def verify_screenshots_present(directory, lane:)
+  return if Dir.glob(File.join(directory, "*", "*.png")).any?
+
+  UI.user_error!("No screenshots under #{directory}; run the #{lane} lane first. Uploading an " \
                  "empty set would clear the screenshots already on the App Store.")
 end
 
@@ -146,6 +222,31 @@ def purge_remote_screenshots(platform)
 
   UI.user_error!("#{remaining} screenshot(s) are still on App Store Connect after being deleted. " \
                  "Uploading now would leave the set a mix of old and new.")
+end
+
+# Syncs one platform's rendered screenshots to the version open for editing, after `verify` and a
+# purge.
+def upload_rendered_screenshots(directory, platform:, lane:)
+  verify_screenshots_present(directory, lane: lane)
+  verify
+  ensure_api_key
+  purge_remote_screenshots(Spaceship::ConnectAPI::Platform.map(platform))
+  # deliver ships screenshot syncing as a beta and refuses `sync_screenshots` without this opt-in.
+  ENV["FASTLANE_ENABLE_BETA_DELIVER_SYNC_SCREENSHOTS"] = "true"
+  upload_to_app_store(
+    app_identifier:                       APP_IDENTIFIER,
+    platform:                             platform,
+    screenshots_path:                     directory,
+    # `overwrite_screenshots` verifies its deletions against the objects it already held rather
+    # than App Store Connect; syncing reconciles against what is actually there.
+    sync_screenshots:                     true,
+    skip_binary_upload:                   true,
+    skip_metadata:                        true,
+    languages:                            PROMO_CONFIG.fetch("locales", %w[en-US]),
+    force:                                true,
+    run_precheck_before_submit:           false,
+    ignore_language_directory_validation: true
+  )
 end
 
 # The listing text deliver uploads and downloads, a folder per locale.
@@ -321,32 +422,37 @@ def await_processing(build, name:)
 end
 
 platform :ios do
-  desc "Generate new localized screenshots"
+  desc "Capture the iPhone and iPad stills and render the App Store screenshots"
   lane :screenshots do
-    capture_screenshots scheme:           "Generate Screenshots",
-                        output_directory: "./fastlane/screenshots"
+    refuse_ci
+    promokit("stills")
+    promokit("render", "--only", "screenshots")
+    verify
   end
 
-  desc "Upload screenshots to App Store Connect"
+  desc "Capture the Mac windows and render the Mac App Store screenshots"
+  lane :mac_screenshots do
+    refuse_ci
+    promokit("mac-stills")
+    promokit("render", "--only", "screenshots")
+    verify
+  end
+
+  desc "Check the rendered media against Apple's rules and the screenshots against the storyboard"
+  lane :verify do
+    verify_screenshot_folder(SCREENSHOTS_PATH, promo_still_devices) if Dir.exist?(SCREENSHOTS_PATH)
+    verify_screenshot_folder(MAC_SCREENSHOTS_PATH, %w[mac]) if Dir.exist?(MAC_SCREENSHOTS_PATH)
+    promokit("check")
+  end
+
+  desc "Upload the rendered screenshots to App Store Connect"
   lane :upload_screenshots do
-    verify_screenshots_present
-    ensure_api_key
-    purge_remote_screenshots(Spaceship::ConnectAPI::Platform::IOS)
-    upload_to_app_store(
-      app_identifier:                       APP_IDENTIFIER,
-      screenshots_path:                     "./fastlane/screenshots",
-      # `overwrite_screenshots` deletes the remote sets and then verifies the deletion against the
-      # objects it already held rather than App Store Connect, so it reports success while the old
-      # screenshots survive — and the new upload lands beside them until the set hits its ten-image
-      # ceiling. Syncing reconciles against what is actually there and confirms the counts agree.
-      sync_screenshots:                     true,
-      skip_binary_upload:                   true,
-      skip_metadata:                        true,
-      languages:                            %w[en-US],
-      force:                                true,
-      run_precheck_before_submit:           false,
-      ignore_language_directory_validation: true
-    )
+    upload_rendered_screenshots(SCREENSHOTS_PATH, platform: "ios", lane: "screenshots")
+  end
+
+  desc "Upload the rendered Mac screenshots to App Store Connect"
+  lane :upload_mac_screenshots do
+    upload_rendered_screenshots(MAC_SCREENSHOTS_PATH, platform: "osx", lane: "mac_screenshots")
   end
 
   desc "Upload fastlane/metadata to the version open for editing (platform:ios or platform:osx)"

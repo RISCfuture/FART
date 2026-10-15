@@ -13,6 +13,10 @@
   },
   "testTargets" : [
     {
+      "selectedTests" : [
+        "MacStoreScreenshots",
+        "StoreScreenshots"
+      ],
       "target" : {
         "containerPath" : "container:Flight Assessment of Risk Tool.xcodeproj",
         "identifier" : "019A35BD2E861E4C00F14F8C",

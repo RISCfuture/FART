@@ -1,0 +1,35 @@
+name: Promo
+
+# Checks the App Store promo copy and storyboard against Apple's rules and against each other.
+on:
+  push:
+    branches: [main]
+    paths: [promo/**]
+  pull_request:
+    paths: [promo/**]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check promo copy and storyboard
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: promo
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: promo/package.json
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: promo/.nvmrc
+          cache: pnpm
+          cache-dependency-path: promo/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Check
+        run: pnpm promokit check

@@ -1,33 +1,35 @@
 import XCTest
+import XCUIPromoKit
 import XCUITestKit
 
 // swiftlint:disable prefer_nimble
+/// Captures the stills `promo/storyboard.json` sets as App Store screenshots and cuts the
+/// creative assets from. `promokit stills` runs it; anywhere else, the test skips.
 @MainActor
-final class Generate_Screenshots: XCTestCase {
+final class StoreScreenshots: XCTestCase {
+  private var usesSplitView = false
 
   override func setUp() async throws {
-    // In UI tests it is usually best to stop immediately when a failure occurs.
     continueAfterFailure = false
+    try XCTSkipUnless(
+      ProcessInfo.processInfo.environment[PromoStill.directoryVariable] != nil,
+      "Only `promokit stills` captures the App Store stills."
+    )
   }
 
-  func testGenerateScreenshots() throws {
+  func testCaptureStills() throws {
     let app = XCUIApplication()
-    setupSnapshot(app)
+    app.launchArguments = PromoLaunch(flags: ["UI-TESTING"]).arguments
     app.launch()
 
     XCTAssert(app.buttons["ratingPicker"].waitForExistence(timeout: 10))
+    usesSplitView = !app.buttons["Results"].waitForExistence(timeout: 5)
     app.buttons["ratingPicker"].tap()
     app.buttons["ratingVFR"].tap()
     app.buttons["hoursPicker"].tap()
     app.buttons["hoursOver100"].tap()
 
-    Thread.sleep(forTimeInterval: 30)  // wait for Apple Intelligence banner to self-dismiss
-    snapshot("0-pilot")
-
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
+    app.buttons["Questions"].firstMatch.tap()
     scrollToTop(in: app)
     set(app: app, name: "lessThan50InTypeToggle", value: true)
     set(app: app, name: "lessThan15InLast90Toggle", value: false)
@@ -35,7 +37,9 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "lessThan8HrSleepToggle", value: true)
     set(app: app, name: "dualInLast90Toggle", value: false)
     set(app: app, name: "wingsInLast6MoToggle", value: true)
-    snapshot("1-questions")
+    scrollToTop(in: app)
+    Thread.sleep(forTimeInterval: 30)  // wait for Apple Intelligence banner to self-dismiss
+    try capture(.questions)
 
     set(app: app, name: "ifrCurrentToggle", value: false)
     set(app: app, name: "nightToggle", value: false)
@@ -62,24 +66,18 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "noDestWxToggle", value: false)
 
     showResults(in: app, expecting: "LOW RISK")
-    snapshot("2-results-low-risk")
+    try capture(.resultsLowRisk)
 
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
+    app.buttons["Questions"].firstMatch.tap()
     scrollToTop(in: app)
     set(app: app, name: "nightToggle", value: true)
     set(app: app, name: "strongWindsToggle", value: true)
     set(app: app, name: "strongCrosswindsToggle", value: true)
 
     showResults(in: app, expecting: "MODERATE RISK")
-    snapshot("3-results-moderate-risk")
+    try capture(.resultsModerateRisk)
 
-    app /*@START_MENU_TOKEN@*/.buttons[
-      "Questions"
-    ] /*[[".otherElements.buttons[\"Questions\"]",".buttons[\"Questions\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-      .tap()
+    app.buttons["Questions"].firstMatch.tap()
     scrollToTop(in: app)
     set(app: app, name: "nontoweredToggle", value: true)
     set(app: app, name: "shortRunwayToggle", value: true)
@@ -87,7 +85,27 @@ final class Generate_Screenshots: XCTestCase {
     set(app: app, name: "runwayObstaclesToggle", value: true)
 
     showResults(in: app, expecting: "HIGH RISK")
-    snapshot("4-results-high-risk")
+    try capture(.resultsHighRisk)
+
+    showPilotProfile(in: app)
+    try capture(.pilot)
+  }
+
+  /// Captures a still for `promokit stills`. The split view keeps the results beside the
+  /// questionnaire, so it leaves out the questionnaire on its own.
+  private func capture(_ shot: Shot) throws {
+    guard !(usesSplitView && shot == .questions) else { return }
+    try PromoStill.capture(shot.rawValue, in: self)
+  }
+
+  /// Shows the Pilot Profile, its score badge carrying the questionnaire's high-risk total.
+  private func showPilotProfile(in app: XCUIApplication) {
+    scrollToTop(in: app)
+    app.buttons["Pilot"].firstMatch.tap()
+    XCTAssert(
+      app.buttons["ratingPicker"].waitForExistence(timeout: 10),
+      "Pilot Profile is not on screen"
+    )
   }
 
   /// Sets a toggle, failing the test if it does not take. A lost tap would otherwise go unnoticed
@@ -143,6 +161,15 @@ final class Generate_Screenshots: XCTestCase {
     guard collectionView.exists else { return }
 
     for _ in 0..<5 { collectionView.swipeDown() }
+  }
+
+  /// The stills `promo/storyboard.json` captions, which also sets their order in the listing.
+  private enum Shot: String {
+    case resultsModerateRisk = "results-moderate-risk"
+    case questions
+    case resultsHighRisk = "results-high-risk"
+    case resultsLowRisk = "results-low-risk"
+    case pilot
   }
 }
 // swiftlint:enable prefer_nimble

@@ -1,0 +1,35 @@
+{
+  "$schema": "./node_modules/xcuipromokit/schema/storyboard.schema.json",
+  "screenshots": [
+    {
+      "id": "results-moderate-risk",
+      "still": "results-moderate-risk",
+      "caption": "results-moderate-risk",
+      "theme": "moderate"
+    },
+    {
+      "id": "questions",
+      "still": "questions",
+      "caption": "questions",
+      "theme": "low"
+    },
+    {
+      "id": "results-high-risk",
+      "still": "results-high-risk",
+      "caption": "results-high-risk",
+      "theme": "high"
+    },
+    {
+      "id": "results-low-risk",
+      "still": "results-low-risk",
+      "caption": "results-low-risk",
+      "theme": "low"
+    },
+    {
+      "id": "pilot",
+      "still": "pilot",
+      "caption": "pilot",
+      "theme": "low"
+    }
+  ]
+}

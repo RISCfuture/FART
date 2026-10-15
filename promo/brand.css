@@ -1,0 +1,81 @@
+/* FART's look for promokit renders: the site's display face, ink and paper, and risk bands. */
+
+@font-face {
+  font-family: "Archivo Expanded";
+  src: url("../docs/fonts/archivo-expanded.woff2") format("woff2-variations");
+  font-weight: 100 900;
+}
+
+.promo-root {
+  --low: #369d1e;
+  --moderate: #daba2c;
+  --high: #b41834;
+  --ink: #1a1712;
+  --paper: #fcfbf8;
+
+  background: var(--paper);
+}
+
+/* Screenshots: a headline over the capture, on a wash of the risk band it shows. */
+.promo-screenshot {
+  background: color-mix(in oklab, var(--band) var(--wash, 9%), var(--paper));
+}
+
+[data-theme="low"] { --band: var(--low); }
+[data-theme="moderate"] { --band: var(--moderate); --wash: 12%; }
+[data-theme="high"] { --band: var(--high); --wash: 7%; }
+
+.promo-headline {
+  font-family: "Archivo Expanded", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+[data-layout="phone"] .promo-headline,
+[data-layout="tablet"] .promo-headline {
+  margin: 11vh 7vw 0;
+  font-size: 7.6vw;
+}
+
+[data-layout="tablet"] .promo-headline {
+  margin-top: 7vh;
+  font-size: 5.4vw;
+}
+
+/* A phone or tablet capture is the whole screen: show it as one, running off the bottom edge. */
+[data-layout="phone"] .promo-screen,
+[data-layout="tablet"] .promo-screen {
+  flex: none;
+  width: 84vw;
+  max-width: none;
+  margin-top: 5vh;
+  border-radius: var(--screen-radius);
+  box-shadow:
+    0 0 0 1px hsl(30deg 8% 20% / 0.08),
+    0 3vw 8vw -2vw hsl(30deg 8% 20% / 0.3);
+}
+
+[data-layout="phone"] { --screen-radius: 11vw; }
+[data-layout="tablet"] { --screen-radius: 3.6vw; }
+
+/* A Mac capture is a window, set low under the headline. */
+[data-layout="mac"] .promo-headline {
+  margin-top: 6.5vh;
+  font-size: 3.6vw;
+}
+
+[data-layout="mac"] .promo-window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6.1vh;
+}
+
+[data-layout="mac"] .promo-screen {
+  max-width: 83.3vw;
+  max-height: 71.7vh;
+}

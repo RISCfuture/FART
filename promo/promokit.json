@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/xcuipromokit/schema/promokit.schema.json",
+  "app": "FART",
+  "project": "../Flight Assessment of Risk Tool.xcodeproj",
+  "scheme": "Generate Screenshots",
+  "testPlan": "Promo",
+  "locales": [
+    "en-US"
+  ],
+  "brand": {
+    "css": "brand.css",
+    "assets": [
+      "../docs/fonts"
+    ]
+  },
+  "stills": {
+    "test": "Generate Screenshots/StoreScreenshots/testCaptureStills",
+    "devices": [
+      "iPhone 18 Pro Max",
+      "iPad Pro 13-inch (M5)",
+      "iPhone Duo"
+    ]
+  },
+  "mac": {
+    "test": "Generate Screenshots/MacStoreScreenshots/testCaptureStills",
+    "capture": "screen"
+  }
+}
