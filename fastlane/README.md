@@ -31,6 +31,22 @@ Generate new localized screenshots
 
 Upload screenshots to App Store Connect
 
+### ios upload_metadata
+
+```sh
+[bundle exec] fastlane ios upload_metadata
+```
+
+Upload fastlane/metadata to the version open for editing (platform:ios or platform:osx)
+
+### ios download_metadata
+
+```sh
+[bundle exec] fastlane ios download_metadata
+```
+
+Download the live listing into fastlane/metadata (platform:ios or platform:osx)
+
 ### ios screenshots_and_upload
 
 ```sh

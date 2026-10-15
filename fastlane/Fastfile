@@ -148,8 +148,26 @@ def purge_remote_screenshots(platform)
                  "Uploading now would leave the set a mix of old and new.")
 end
 
+# The listing text deliver uploads and downloads, a folder per locale.
+METADATA_PATH = File.expand_path("metadata", __dir__)
 
+# Removes what deliver's metadata download writes but the repository doesn't keep: CHANGELOG.md is
+# the source of the release notes, the review contact holds personal details, and the app has no
+# Apple TV listing.
+def remove_unversioned_metadata
+  FileUtils.rm_f(Dir.glob(File.join(METADATA_PATH, "*", "{release_notes,apple_tv_privacy_policy}.txt")))
+  FileUtils.rm_rf(Dir.glob(File.join(METADATA_PATH, "{review_information,trade_representative_contact_information}")))
+end
 
+# The PLATFORMS entry a lane's `platform:` option names in deliver's spelling, `ios` by default.
+def deliver_platform(options)
+  name = options.fetch(:platform, "ios")
+  platform = PLATFORMS.values.find { |candidate| candidate[:deliver] == name }
+  return platform if platform
+
+  UI.user_error!("Unknown platform #{name.inspect}. This app ships " \
+                 "#{PLATFORMS.values.map { it[:deliver] }.join(", ")}.")
+end
 
 # App Store Connect's ceiling on a "What's New" entry.
 RELEASE_NOTES_LIMIT = 4000
@@ -329,6 +347,42 @@ platform :ios do
       run_precheck_before_submit:           false,
       ignore_language_directory_validation: true
     )
+  end
+
+  desc "Upload fastlane/metadata to the version open for editing (platform:ios or platform:osx)"
+  lane :upload_metadata do |options|
+    platform = deliver_platform(options)
+    ensure_api_key
+    remove_unversioned_metadata
+    upload_to_app_store(
+      app_identifier:             APP_IDENTIFIER,
+      platform:                   platform[:deliver],
+      metadata_path:              METADATA_PATH,
+      skip_binary_upload:         true,
+      skip_screenshots:           true,
+      skip_app_version_update:    true,
+      force:                      true,
+      run_precheck_before_submit: false
+    )
+  end
+
+  desc "Download the live listing into fastlane/metadata (platform:ios or platform:osx)"
+  lane :download_metadata do |options|
+    platform = deliver_platform(options)
+    ensure_api_key
+    require "deliver"
+    require "deliver/setup"
+
+    app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
+    version = app.get_live_app_store_version(platform: platform[:connect])
+    UI.user_error!("#{APP_IDENTIFIER} has no live #{platform[:deliver]} version to download.") unless version
+
+    deliver_options = FastlaneCore::Configuration.create(Deliver::Options.available_options,
+                                                         app_identifier:   APP_IDENTIFIER,
+                                                         platform:         platform[:deliver],
+                                                         use_live_version: true)
+    Deliver::Setup.new.generate_metadata_files(app, version, METADATA_PATH, deliver_options)
+    remove_unversioned_metadata
   end
 
   desc "Generate screenshots and upload them"

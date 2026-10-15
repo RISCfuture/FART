@@ -2,3 +2,10 @@ screenshots
 AuthKey_*.p8
 report.xml
 test_output
+
+# deliver's metadata download also writes these. CHANGELOG.md is the source of the release notes,
+# the review contact holds personal details, and the app has no Apple TV listing.
+metadata/review_information/
+metadata/trade_representative_contact_information/
+metadata/*/release_notes.txt
+metadata/*/apple_tv_privacy_policy.txt
