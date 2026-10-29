@@ -38,6 +38,7 @@ default_platform :ios
 APP_IDENTIFIER = "codes.tim.FART"
 SCHEME = "FART"
 XCODEPROJ = "Flight Assessment of Risk Tool.xcodeproj"
+REPO_ROOT = File.expand_path("..", __dir__)
 
 # Where archives and dSYMs land, so a CI run can collect them as artifacts.
 OUTPUT_DIRECTORY = "build"
@@ -57,11 +58,53 @@ PLATFORMS = {
                connect: "MAC_OS" }
 }.freeze
 
-# The Sentry project the release lanes upload dSYMs and sources to. `sentry-cli` reads
-# SENTRY_AUTH_TOKEN from the environment itself; `.sentryclirc` is committed and so holds only the
-# project's identity.
-SENTRY_ORG = "timcodes"
-SENTRY_PROJECT = "fart"
+# Which Sentry organization and project a release uploads its debug symbols to, read from the
+# committed .sentryclirc that the app target's "Upload Debug Symbols to Sentry" build phase also
+# reads, so the two cannot drift. sentry-cli would read that file itself, but only from its working
+# directory, which for `sh` is not the repository root — so the values go on the command line.
+def sentry_defaults
+  File.read(File.join(REPO_ROOT, ".sentryclirc")).scan(/^\s*(org|project)\s*=\s*(\S+)\s*$/).to_h
+rescue Errno::ENOENT
+  {}
+end
+
+# The MARKETING_VERSION the app target carries, which is the version a release ships: the release
+# lanes stamp only the build number.
+def project_marketing_version
+  project = Xcodeproj::Project.open(File.join(REPO_ROOT, XCODEPROJ))
+  target = project.targets.find { it.name == SCHEME }
+  UI.user_error!("#{XCODEPROJ} has no #{SCHEME} target.") if target.nil?
+
+  versions = target.build_configurations.map { it.build_settings["MARKETING_VERSION"] }.uniq
+  return versions.first if versions.one?
+
+  UI.user_error!("#{SCHEME}'s build configurations disagree on MARKETING_VERSION: " \
+                 "#{versions.join(", ")}.")
+end
+
+# Runs git in the repository and returns its output, failing the lane with git's own message.
+def git(*args)
+  output, status = Open3.capture2e("git", "-C", REPO_ROOT, *args)
+  UI.user_error!("git #{args.join(" ")} failed: #{output.strip}") unless status.success?
+  output
+end
+
+# The branches a release is cut from: main, or release/X.Y for a hotfix.
+RELEASE_BRANCH_REFSPECS = %w[
+  +refs/heads/main:refs/remotes/origin/main
+  +refs/heads/release/*:refs/remotes/origin/release/*
+].freeze
+
+# The first of those branches that contains HEAD, the commit being released, or nil. They are
+# fetched first, because a CI checkout holds the tagged commit and nothing else.
+def release_branch_containing_head
+  git("fetch", "--quiet", "--no-tags", "origin", *RELEASE_BRANCH_REFSPECS)
+  branches = git("for-each-ref", "--format=%(refname:short)",
+                 "refs/remotes/origin/main", "refs/remotes/origin/release").lines.map(&:strip)
+  branches.find do |branch|
+    system("git", "-C", REPO_ROOT, "merge-base", "--is-ancestor", "HEAD", branch)
+  end
+end
 
 # Signing credentials live in a private repository, everything in it encrypted under one
 # MATCH_PASSWORD: the Apple Distribution certificate (managed by _match_) and the App Store Connect
@@ -287,8 +330,8 @@ RELEASE_NOTES_LIMIT = 4000
 
 # One version's release notes, rendered as App Store Connect wants them — the store field shows
 # whatever it is given verbatim, so the script strips the Markdown the changelog is written in.
-# Raises when the changelog has no section for the version, which is the failure `ci_verify_release
-# _notes` exists to reach before anything is built.
+# Raises when the changelog has no section for the version, which is one of the failures
+# `ci_verify_release` exists to reach before anything is built.
 def release_notes(version, locale: nil)
   script = File.expand_path("../Scripts/release-notes.sh", __dir__)
   # Not fastlane's `sh`: it reports a failure by printing the Ruby line that called it, so a missing
@@ -314,8 +357,8 @@ end
 # Connect rather than from the changelog so a mistyped heading cannot publish the app into a
 # territory it does not sell in — it just goes unused.
 #
-# An empty rendering is never written. `ci_verify_release_notes` should have caught that before the
-# build, but replacing a release's notes with blankness is bad enough to be worth refusing twice.
+# An empty rendering is never written. `ci_verify_release` should have caught that before the build,
+# but replacing a release's notes with blankness is bad enough to be worth refusing twice.
 def write_release_notes(store_version, version:, name:)
   written = store_version.get_app_store_version_localizations.filter_map do |localization|
     text = release_notes(version, locale: localization.locale)
@@ -548,8 +591,8 @@ platform :ios do
   desc "Build and upload to TestFlight"
   lane :beta do
     ensure_signing
-    increment_build_number xcodeproj: XCODEPROJ
-    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY
+    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY,
+              xcargs: "CURRENT_PROJECT_VERSION=#{resolve_next_build_number}"
     upload_to_testflight
     upload_debug_symbols
   end
@@ -557,8 +600,8 @@ platform :ios do
   desc "Build and upload to App Store"
   lane :release do
     ensure_signing
-    increment_build_number xcodeproj: XCODEPROJ
-    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY
+    build_app scheme: SCHEME, export_method: "app-store", output_directory: OUTPUT_DIRECTORY,
+              xcargs: "CURRENT_PROJECT_VERSION=#{resolve_next_build_number}"
     upload_to_app_store skip_metadata:     false,
                         skip_screenshots:  false,
                         submit_for_review: false
@@ -567,17 +610,7 @@ platform :ios do
 
   desc "Resolve the next build number and write it where CI can read it"
   lane :ci_next_build_number do
-    ensure_api_key
-
-    # App Store Connect is the authority, not the project file: the checked-in build number drifts
-    # behind whatever was last uploaded, and every platform of a release shares one number.
-    latest = PLATFORMS.each_value.map do |platform|
-      latest_testflight_build_number(app_identifier:       APP_IDENTIFIER,
-                                     platform:             platform[:deliver],
-                                     initial_build_number: 0)
-    end.max
-
-    next_build_number = latest + 1
+    next_build_number = resolve_next_build_number
     UI.success("Next build number: #{next_build_number}")
 
     # Only CI needs the value in a file to hand to the next job; a local run just wants to see it.
@@ -609,16 +642,16 @@ platform :ios do
       sdk:              platform[:sdk],
       export_method:    "app-store",
       output_directory: OUTPUT_DIRECTORY,
-      # Passing the version on the command line rather than writing it into the project keeps a
-      # release from leaving a commit behind, and stamps every target in the archive alike.
+      # The marketing version is the project's own, which `ci_verify_release` has matched to the
+      # tag. The build number goes on the command line rather than into the project, so a release
+      # leaves no commit behind and every target in the archive carries the same number.
       #
       # The archive signs automatically, exactly as it does in Xcode: `-allowProvisioningUpdates`
       # plus the API key lets it resolve a profile, and the certificate comes from the certificates
       # repository. The export cannot do the same — cloud signing is refused for distribution — so it
       # consumes the stored match profiles instead, which build_app puts into its export options from
       # match's mapping. Hence automatic signing here and managed profiles there.
-      xcargs:           "MARKETING_VERSION=#{options.fetch(:version)} " \
-                        "CURRENT_PROJECT_VERSION=#{options.fetch(:build)} " \
+      xcargs:           "CURRENT_PROJECT_VERSION=#{options.fetch(:build)} " \
                         "-allowProvisioningUpdates #{authentication_args}"
     )
 
@@ -634,9 +667,25 @@ platform :ios do
     upload_debug_symbols
   end
 
-  desc "Refuse to start a release whose notes are missing, empty, or too long (CI)"
-  lane :ci_verify_release_notes do |options|
+  desc "Refuse to start a release that names the wrong version, sits off main, or lacks notes (CI)"
+  lane :ci_verify_release do |options|
     version = options.fetch(:version)
+
+    # The project is the version source: a release builds the MARKETING_VERSION it carries, and the
+    # tag only has to agree with it.
+    marketing_version = project_marketing_version
+    unless marketing_version == version
+      UI.user_error!("The release is #{version}, but #{SCHEME}'s MARKETING_VERSION is " \
+                     "#{marketing_version}. Advance MARKETING_VERSION in a release commit and tag " \
+                     "that commit.")
+    end
+
+    branch = release_branch_containing_head
+    if branch.nil?
+      UI.user_error!("#{git("rev-parse", "--short", "HEAD").strip} is on neither main nor a " \
+                     "release/* branch, so #{version} would ship a commit no branch keeps.")
+    end
+    UI.success("#{version} matches MARKETING_VERSION and is on #{branch}.")
 
     # Only the default section is checked. Every locale falls back to it, so if it is present and
     # fits, no locale can be empty — which lets this run with no App Store Connect credentials, and
@@ -671,9 +720,9 @@ platform :ios do
 
     store_versions.each do |name, store_version|
       platform = PLATFORMS.fetch(name)
-      # Before the wait, not after: there is no sense spending up to forty-five minutes waiting on
-      # a build that will be refused the moment it arrives. The check reads the version's state and
-      # needs no build object — only the message names one — so a number is enough to run it early.
+      # Checked twice, and both are needed. Here, so that a version already submitted is refused
+      # now rather than after forty-five minutes of waiting on a build it will never accept. The
+      # check reads the version's state and needs no build object, so a number is enough.
       refuse_unsafe_attach(store_version, name: name, version: version,
                            build_number: number || "the newest")
 
@@ -690,9 +739,34 @@ platform :ios do
                 await_processing(newest, name: name)
               end
 
-      store_version.select_build(build_id: build.id)
+      # And again here, against a freshly read version, because the check above is by now as old as
+      # the wait. A version submitted for review while the build was processing would otherwise
+      # have its binary swapped on the strength of a state that stopped being true long ago.
+      current = app.get_edit_app_store_version(platform: platform.fetch(:connect))
+      if current.nil?
+        UI.user_error!("#{name} #{version} stopped being editable while build #{build.version} " \
+                       "was processing, so it will not be attached. The build is uploaded and " \
+                       "will stay there.")
+      end
+      refuse_unsafe_attach(current, name: name, version: version, build_number: build.version)
+
+      current.select_build(build_id: build.id)
       UI.success("#{name} #{version} now ships build #{build.version}.")
     end
+  end
+
+  # The build number to ship next, shared by the CI release and the local `beta` and `release` lanes.
+  #
+  # App Store Connect is the authority, not the project file: the checked-in build number drifts
+  # behind whatever was last uploaded, and every platform of a release shares one number.
+  private_lane :resolve_next_build_number do
+    ensure_api_key
+
+    PLATFORMS.each_value.map do |platform|
+      latest_testflight_build_number(app_identifier:       APP_IDENTIFIER,
+                                     platform:             platform[:deliver],
+                                     initial_build_number: 0)
+    end.max + 1
   end
 
   # Loads the App Store Connect API key. Kept out of `before_all` so `screenshots`, which runs
@@ -759,10 +833,17 @@ platform :ios do
       next
     end
 
+    org, project = sentry_defaults.values_at("org", "project")
+    if org.nil? || project.nil?
+      UI.important("No .sentryclirc naming an organization and project; skipping the Sentry " \
+                   "upload of #{dsym_path}.")
+      next
+    end
+
     begin
       sh("sentry-cli", "debug-files", "upload",
-         "--org", SENTRY_ORG,
-         "--project", SENTRY_PROJECT,
+         "--org", org,
+         "--project", project,
          "--include-sources",
          dsym_path)
     rescue StandardError => error

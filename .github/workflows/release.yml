@@ -9,6 +9,10 @@ name: Release
 # version ends up pointing at the newer build; the older one stays on App Store Connect, since a
 # build can be expired but never deleted. A tag push is a deploy, not bookkeeping.
 #
+# The project is the version source. A tag names the version it releases, and the run refuses it
+# unless the app's MARKETING_VERSION matches and the commit is on main or a release/* branch; the
+# build number comes from App Store Connect.
+#
 # Nothing here re-runs the tests: tag a commit CI has already passed.
 on:
   push:
@@ -16,7 +20,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Marketing version to build and upload.
+        description: Version to release, which must match the project's MARKETING_VERSION.
         required: true
         type: string
 
@@ -33,7 +37,7 @@ jobs:
       runner: xcode-27
       version: ${{ inputs.version || github.ref_name }}
       certificates-repo: RISCfuture/certificates
-      verify-lane: ci_verify_release_notes
+      verify-lane: ci_verify_release
       finish-lane: ci_finish_release
     secrets:
       certificates-token: ${{ secrets.CERTIFICATES_TOKEN }}

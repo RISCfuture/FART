@@ -47,6 +47,12 @@ captures.
 fastlane handles App Store releases and uploads. Its Ruby comes from RVM by way
 of `.ruby-version` and `.ruby-gemset`; run `bundle install` once.
 
+A release is a commit titled "Release X.Y" that advances the app's
+`MARKETING_VERSION`, beside a `## X.Y` section in `CHANGELOG.md`, tagged `X.Y`
+on `main` or on a `release/X.Y` branch for a hotfix. Pushing the tag runs the
+Release workflow, which refuses a tag the project's version doesn't match and
+numbers the build one past App Store Connect's latest.
+
 [XCUIPromoKit](https://github.com/RISCfuture/XCUIPromoKit) captures and renders
 the listing's media from `promo/`: run `pnpm install` there once, then
 `fastlane screenshots`, `fastlane mac_screenshots`, `fastlane preview` or

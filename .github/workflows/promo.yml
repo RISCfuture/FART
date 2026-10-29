@@ -3,7 +3,7 @@ name: Promo
 # Checks the App Store promo copy and storyboard against Apple's rules and against each other.
 on:
   push:
-    branches: [main]
+    branches: [main, "release/**"]
     paths: [promo/**]
   pull_request:
     paths: [promo/**]
