@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   release:
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-release.yml@1.0.0
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-release.yml@1.2.0
     with:
       # The app target also builds for visionOS, but there is no visionOS App Store listing.
       platforms: '["iOS","macOS"]'

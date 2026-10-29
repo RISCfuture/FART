@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RISCfuture/MeasurementKit",
       "state" : {
-        "revision" : "d04642c96f5406ed3b504334593a268d698d47ca",
-        "version" : "1.0.0"
+        "revision" : "f147f2972093c0b877d0f4eac57c1da26a148f6a",
+        "version" : "1.2.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RISCfuture/XCUITestKit",
       "state" : {
-        "revision" : "b76d0fc269f04019767530b0180671738128fe7e",
-        "version" : "1.0.0"
+        "revision" : "efeb5ce59b772645279891ba83d4c8c9873c5e77",
+        "version" : "1.2.0"
       }
     }
   ],

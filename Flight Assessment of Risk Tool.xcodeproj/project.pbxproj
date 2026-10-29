@@ -18,6 +18,8 @@
 		6596F9CC75CE466A97B70D7A /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 9373A74ADA3745F38306B8B8 /* Sentry */; };
 		7DB405ABCC72E0CF299B15A7 /* MeasurementKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 648A2B1CA80B1F02065B1835 /* MeasurementKitUI */; };
 		C98296CBF439A09976EE642C /* MeasurementKitDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 68BCEFF731B735E3ADE4641F /* MeasurementKitDefaults */; };
+		0A7E20012FD00002C0FFEE01 /* MeasurementKitUI in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 648A2B1CA80B1F02065B1835 /* MeasurementKitUI */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0A7E20022FD00002C0FFEE01 /* MeasurementKitDefaults in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 37592CB9D7DE5CE212F1AB3C /* MeasurementKitDefaults */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,19 @@
 			remoteInfo = FART;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0A7E20032FD00002C0FFEE01 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = Frameworks;
+			files = (
+				0A7E20012FD00002C0FFEE01 /* MeasurementKitUI in Embed Frameworks */,
+				0A7E20022FD00002C0FFEE01 /* MeasurementKitDefaults in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		019A358F2E85FAE100F14F8C /* FARTUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FARTUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,6 +266,7 @@
 				01BE9C3A266AEBC00026C4ED /* Sources */,
 				01BE9C3B266AEBC00026C4ED /* Frameworks */,
 				01BE9C3C266AEBC00026C4ED /* Resources */,
+				0A7E20032FD00002C0FFEE01 /* Embed Frameworks */,
 				116F595D1C614012AC0E70F5 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
@@ -890,7 +906,7 @@
 			repositoryURL = "https://github.com/RISCfuture/XCUITestKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.2.0;
 			};
 		};
 		01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */ = {
@@ -913,8 +929,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RISCfuture/MeasurementKit";
 			requirement = {
-				kind = exactVersion;
-				version = 1.0.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
