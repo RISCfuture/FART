@@ -917,7 +917,7 @@
 			repositoryURL = "https://github.com/RISCfuture/XCUITestKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				minimumVersion = 1.2.1;
 			};
 		};
 		01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */ = {
@@ -925,7 +925,7 @@
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
+				minimumVersion = 9.0.9;
 			};
 		};
 		A85C1CBD8C5042C695024A73 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -933,7 +933,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
+				minimumVersion = 9.32.0;
 			};
 		};
 		D066E3FECFE0A66C45B50FF1 /* XCRemoteSwiftPackageReference "MeasurementKit" */ = {

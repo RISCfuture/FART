@@ -163,25 +163,9 @@ SCREENSHOTS_PATH = File.expand_path("screenshots", __dir__)
 MAC_SCREENSHOTS_PATH = File.expand_path("screenshots_mac", __dir__)
 PREVIEWS_PATH = File.expand_path("previews", __dir__)
 
-# The Xcode promokit builds and tests with. The iPhone Duo simulator needs Xcode 27.1 or later.
-DUO_XCODE = ENV.fetch("DUO_XCODE", "/Applications/Xcode-27.1.0-Release.Candidate.app")
-
-# Runs the block with every tool fastlane shells out to, xcodebuild and simctl among them, taken
-# from the given Xcode rather than the selected one.
-def with_xcode(path)
-  developer_dir = File.join(path, "Contents", "Developer")
-  UI.user_error!("No Xcode at #{path}. Set DUO_XCODE in fastlane/.env.") unless Dir.exist?(developer_dir)
-
-  previous = ENV.fetch("DEVELOPER_DIR", nil)
-  ENV["DEVELOPER_DIR"] = developer_dir
-  yield
-ensure
-  ENV["DEVELOPER_DIR"] = previous
-end
-
 # Runs XCUIPromoKit's `promokit` from promo/.
 def promokit(*)
-  with_xcode(DUO_XCODE) { sh("pnpm", "--dir", PROMO_PATH, "promokit", *) }
+  sh("pnpm", "--dir", PROMO_PATH, "promokit", *)
 end
 
 # The capture lanes drive simulators and the Mac's own screen, which a CI runner can't stand in for.

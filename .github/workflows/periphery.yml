@@ -33,21 +33,21 @@ jobs:
           while xcrun simctl delete "periphery-sim" 2>/dev/null; do :; done
           UDID=$(xcrun simctl create "periphery-sim" com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro)
           echo "udid=$UDID" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7.0.1
       - name: Enable macros
         run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
       - name: Record toolchain version
         id: toolchain
         run: echo "xcode=$(xcodebuild -version | tr '\n' '-')" >> "$GITHUB_OUTPUT"
       - name: Cache SwiftPM dependencies
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: ~/Library/Caches/org.swift.swiftpm
           key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             spm-${{ runner.os }}-
       - name: Cache Xcode build products
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: derived-periphery-xcode-27-${{ steps.toolchain.outputs.xcode }}-${{ hashFiles('**/Package.resolved') }}

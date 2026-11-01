@@ -6,7 +6,7 @@
     "promokit": "promokit"
   },
   "dependencies": {
-    "xcuipromokit": "github:RISCfuture/XCUIPromoKit#2.0.0&path:/tooling"
+    "xcuipromokit": "github:RISCfuture/XCUIPromoKit#semver:^2.0.0&path:/tooling"
   },
-  "packageManager": "pnpm@12.11.2"
+  "packageManager": "pnpm@12.16.1"
 }
