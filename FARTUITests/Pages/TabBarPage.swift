@@ -16,50 +16,50 @@ class TabBarPage: BasePage {
     // Restore a possibly-minimized tab bar first; otherwise a scrolled-away Results
     // button (iOS 26 tabBarMinimizeBehavior) would be misread as "no Results tab" (iPad).
     scrollToTop()
-    return !app.tabBars.buttons["Results"].waitForExistence(timeout: 3)
+    return !tabButton(.results).waitForExistence(timeout: 3)
   }()
+
+  /// The bars that hold the tab buttons. On iPhone Duo's outer display the tab bar is
+  /// vertical, and its buttons sit in a toolbar rather than in the tab bar element.
+  private var tabContainers: XCUIElementQuery {
+    app.descendants(matching: .any).matching(
+      NSPredicate(
+        format: "elementType IN %@",
+        [XCUIElement.ElementType.tabBar.rawValue, XCUIElement.ElementType.toolbar.rawValue]
+      )
+    )
+  }
+
+  private func tabButton(_ tab: Tab) -> XCUIElement {
+    tabContainers.buttons[tab.rawValue].firstMatch
+  }
 
   @discardableResult
   func goTo(tab: Tab) -> Self {
-    // Try standard tab bar button by name (works on iPhone)
-    let tabBarButton = app.tabBars.buttons[tab.rawValue]
-    if tabBarButton.waitForExistence(timeout: 2) {
-      tabBarButton.tap()
+    let button = tabButton(tab)
+    if !button.waitForExistence(timeout: 2) { reveal(tab) }
+    guard button.waitForExistence(timeout: 3) else {
+      XCTFail("No \(tab.rawValue) tab button")
       return self
     }
-
-    // iOS 26 tabBarMinimizeBehavior(.onScrollDown) collapses the iPhone tab bar after
-    // scrolling a long form, hiding its individual buttons. Scroll back to the top to
-    // restore it, then retry.
-    if app.collectionViews.firstMatch.exists {
-      scrollToTop()
-      if tabBarButton.waitForExistence(timeout: 2) {
-        tabBarButton.tap()
-        return self
-      }
+    button.tap()
+    if !button.wait(for: \.isSelected, toEqual: true, timeout: 5) {
+      XCTFail("The \(tab.rawValue) tab was not selected")
     }
-
-    if isIPad && tab != .results {
-      // Sidebar might be hidden — try showing it
-      showSidebar()
-
-      let tabBar = app.tabBars.firstMatch
-      if tabBar.waitForExistence(timeout: 3) {
-        let sidebarButton = tabBar.buttons[tab.rawValue]
-        if sidebarButton.waitForExistence(timeout: 2) {
-          sidebarButton.tap()
-          return self
-        }
-      }
-    }
-
-    // Fallback: try any button matching the tab name
-    let button = app.buttons[tab.rawValue]
-    if button.waitForExistence(timeout: 2) {
-      button.firstMatch.tap()
-    }
-
     return self
+  }
+
+  /// Brings a hidden tab button back on screen.
+  private func reveal(_ tab: Tab) {
+    // iOS 26 tabBarMinimizeBehavior(.onScrollDown) collapses the iPhone tab bar after
+    // scrolling a long form, hiding its individual buttons. Scrolling back to the top
+    // restores it.
+    if app.collectionViews.firstMatch.exists { scrollToTop() }
+
+    // On iPad the sidebar holding the tabs might be hidden.
+    if isIPad && tab != .results && !tabButton(tab).waitForExistence(timeout: 2) {
+      showSidebar()
+    }
   }
 
   func goToPilotProfile() -> PilotProfilePage {
@@ -89,7 +89,7 @@ class TabBarPage: BasePage {
       // Dismiss any open menus/popovers, wait for the Questions tab to become
       // tappable again (the overlay blocks it), then retry.
       app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
-      app.tabBars.buttons[Tab.questions.rawValue].waitUntilHittable()
+      tabButton(.questions).waitUntilHittable()
       goTo(tab: .questions)
       _ = firstToggle.waitForExistence(timeout: 10)
     }
