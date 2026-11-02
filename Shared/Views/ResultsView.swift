@@ -65,7 +65,7 @@ struct ResultsView: View {
         Text("PTS.")
           .bold()
           .foregroundStyle(displayedRisk.color)
-      }.offset(x: 0, y: -30)
+      }
     }.padding(.top, 10)
       .frame(maxWidth: 500, maxHeight: 500)
       .accessibilityElement(children: .ignore)

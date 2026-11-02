@@ -15,6 +15,8 @@ struct Gauge<Content: View>: View {
   var value: Float
   var contentView: () -> Content
 
+  @State private var readingSize = CGSize.zero
+
   private var normalizedValue: CGFloat {
     CGFloat(value / 2 + 0.5)
   }
@@ -23,9 +25,9 @@ struct Gauge<Content: View>: View {
     GeometryReader { geometry in
       ZStack {
         dial(geometry)
-        contentView()
+        reading(geometry)
       }.frame(width: width(geometry))
-        .offset(x: thickness(geometry) / 2, y: 0)
+        .offset(x: thickness(geometry) / 2 + (geometry.size.width - side(geometry)) / 2, y: 0)
     }
   }
 
@@ -43,12 +45,42 @@ struct Gauge<Content: View>: View {
     }
   }
 
+  /// The content, on the dial's baseline and scaled down where needed to stay inside the arc.
+  private func reading(_ geometry: GeometryProxy) -> some View {
+    let box = readingBox(geometry)
+    return contentView()
+      .fixedSize()
+      .onGeometryChange(for: CGSize.self, of: \.size) { readingSize = $0 }
+      .scaleEffect(readingScale(in: box), anchor: .bottom)
+      .frame(width: box.width, height: box.height, alignment: .bottom)
+      .offset(y: -box.height / 2)
+  }
+
+  /// A box on the baseline whose top corners touch the inside of the arc.
+  private func readingBox(_ geometry: GeometryProxy) -> CGSize {
+    let innerRadius = (width(geometry) - thickness(geometry)) / 2
+    return CGSize(
+      width: innerRadius * ReadingBox.halfWidth * 2,
+      height: innerRadius * ReadingBox.height
+    )
+  }
+
+  private func readingScale(in box: CGSize) -> CGFloat {
+    guard readingSize.width > 0, readingSize.height > 0 else { return 1 }
+    return min(1, box.width / readingSize.width, box.height / readingSize.height)
+  }
+
+  /// The widest dial that fits: a half circle is twice as wide as it is tall.
+  private func side(_ geometry: GeometryProxy) -> CGFloat {
+    min(geometry.size.width, geometry.size.height * 2)
+  }
+
   private func thickness(_ geometry: GeometryProxy) -> CGFloat {
-    min(geometry.size.width * 0.15, 50)
+    min(side(geometry) * 0.15, 50)
   }
 
   private func width(_ geometry: GeometryProxy) -> CGFloat {
-    geometry.size.width - thickness(geometry)
+    side(geometry) - thickness(geometry)
   }
 }
 
@@ -64,6 +96,13 @@ struct Gauge<Content: View>: View {
       Text("PTS.")
         .bold()
         .foregroundStyle(Color(.moderateRisk))
-    }.offset(x: 0, y: -30)
+    }
   }
+}
+
+/// The reading's box as fractions of the arc's inner radius. Its top corners sit on the arc,
+/// since 0.8² + 0.6² = 1.
+private enum ReadingBox {
+  static let halfWidth = 0.8
+  static let height = 0.6
 }
