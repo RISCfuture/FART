@@ -91,16 +91,32 @@ struct AboutView: View {
           .navigationTitle(link.title)
           .navigationBarTitleDisplayMode(.inline)
           .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-              Button("Done", action: onDone)
+            ToolbarItem(placement: .cancellationAction) {
+              Button(role: .close, action: onDone)
             }
           }
+          .horizontalToolbar()
       }
     }
   }
 #endif
 
 private extension View {
+  /// Keeps the toolbar horizontal where iPhone Duo's outer display would otherwise make it a
+  /// vertical bar, which would take width from the content for a single button.
+  @ViewBuilder
+  func horizontalToolbar() -> some View {
+    #if os(iOS)
+      if #available(iOS 27.1, *) {
+        toolbarVerticalBehavior(.disabled)
+      } else {
+        self
+      }
+    #else
+      self
+    #endif
+  }
+
   /// Applies the glass button style, which is unavailable on visionOS — there the platform's
   /// default (already glass-like) button style is used instead.
   @ViewBuilder
