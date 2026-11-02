@@ -18,6 +18,9 @@ Versions before 1.4 predate this file; their notes live only on App Store Connec
 - The results dial fits short screens, such as an iPhone in landscape or iPhone Duo's outer display,
   without running over the risk level, and the score stays inside the dial.
 
+- On large screens, such as iPhone Duo's inner display, the score, risk level and explanation stay
+  together in the middle of the Results screen.
+
 ## 2.0
 
 - This version requires iOS 27, iPadOS 27, macOS 27 or visionOS 27. If you are staying on

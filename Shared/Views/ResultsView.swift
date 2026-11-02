@@ -67,7 +67,8 @@ struct ResultsView: View {
           .foregroundStyle(displayedRisk.color)
       }
     }.padding(.top, 10)
-      .frame(maxWidth: 500, maxHeight: 500)
+      .aspectRatio(2, contentMode: .fit)
+      .frame(maxWidth: 500)
       .accessibilityElement(children: .ignore)
       .accessibilityLabel("Flight risk score")
       .accessibilityValue(spokenScore)
@@ -87,13 +88,14 @@ struct ResultsView: View {
   var body: some View {
     VStack {
       Spacer()
-      gauge
-      Spacer()
-      riskTitle
-        .foregroundStyle(displayedRisk.color)
-      Text(riskDescription).font(.caption)
-        .contentTransition(.opacity)
-        .accessibilityIdentifier("riskDescriptionText")
+      VStack {
+        gauge
+        riskTitle
+          .foregroundStyle(displayedRisk.color)
+        Text(riskDescription).font(.caption)
+          .contentTransition(.opacity)
+          .accessibilityIdentifier("riskDescriptionText")
+      }.frame(maxWidth: 640)
       Spacer()
     }
     .padding()
