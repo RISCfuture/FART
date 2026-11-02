@@ -113,16 +113,25 @@ struct ContentView: View {
       .iPhoneTabBarChrome(questionnaire, hideScoreBadge: selectedTab == .results)
     }
 
+    /// The sidebar's selection: `selectedTab`, with Results shown as Questions because the
+    /// detail column always shows Results.
+    private var sidebarTab: Binding<AppTab> {
+      Binding(
+        get: { selectedTab == .results ? .questions : selectedTab },
+        set: { selectedTab = $0 }
+      )
+    }
+
     private var twoColumnLayout: some View {
       NavigationSplitView(preferredCompactColumn: .constant(.detail)) {
-        TabView {
-          Tab("Pilot", image: "Pilot") {
+        TabView(selection: sidebarTab) {
+          Tab("Pilot", image: "Pilot", value: AppTab.pilot) {
             PilotProfileView().environment(questionnaire)
           }
-          Tab("Questions", systemImage: "checklist.checked") {
+          Tab("Questions", systemImage: "checklist.checked", value: AppTab.questions) {
             QuestionnaireView().environment(questionnaire)
           }
-          Tab("About", systemImage: "info.circle") {
+          Tab("About", systemImage: "info.circle", value: AppTab.about) {
             NavigationStack {
               AboutView().navigationTitle("About")
             }
@@ -170,7 +179,8 @@ private extension View {
 }
 
 #if !os(macOS)
-  /// The selectable tabs in the single-column iPhone layout.
+  /// The selectable tabs, shared by the single-column layout's tab bar and the two-column
+  /// layout's sidebar.
   private enum AppTab {
     case pilot, questions, results, about
   }
