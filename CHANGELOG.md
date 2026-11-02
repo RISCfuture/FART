@@ -24,6 +24,8 @@ Versions before 1.4 predate this file; their notes live only on App Store Connec
 - A web page you open from About stays open when you fold or unfold iPhone Duo or resize the window
   on iPad.
 
+- The score badge stays on one line once the score reaches two digits.
+
 ## 2.0
 
 - This version requires iOS 27, iPadOS 27, macOS 27 or visionOS 27. If you are staying on

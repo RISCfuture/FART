@@ -259,6 +259,8 @@ private extension View {
     var body: some View {
       Text(summary)
         .font(.subheadline)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
         .contentTransition(.numericText())
         .padding(.horizontal)
         .animation(.default, value: questionnaire.score)
