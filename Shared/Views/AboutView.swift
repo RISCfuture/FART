@@ -12,7 +12,7 @@ struct AboutView: View {
     @Environment(\.openURL)
     private var openURL
   #else
-    @State private var webLink: WebLink?
+    @Binding var webLink: WebLink?
   #endif
 
   var body: some View {
@@ -56,11 +56,6 @@ struct AboutView: View {
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding()
     }
-    #if !os(macOS)
-      .sheet(item: $webLink) { link in
-        WebLinkSheet(link: link) { webLink = nil }
-      }
-    #endif
   }
 
   private func open(_ url: URL, title: LocalizedStringKey) {
@@ -74,14 +69,14 @@ struct AboutView: View {
 
 #if !os(macOS)
   /// A web destination presented in-app rather than kicking the pilot out to the browser.
-  private struct WebLink: Identifiable {
+  struct WebLink: Identifiable {
     var id: URL { url }
 
     let title: LocalizedStringKey
     let url: URL
   }
 
-  private struct WebLinkSheet: View {
+  struct WebLinkSheet: View {
     let link: WebLink
     let onDone: () -> Void
 
@@ -188,5 +183,9 @@ enum ExternalLinks {
 }
 
 #Preview {
-  AboutView()
+  #if os(macOS)
+    AboutView()
+  #else
+    AboutView(webLink: .constant(nil))
+  #endif
 }

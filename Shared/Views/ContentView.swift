@@ -31,6 +31,7 @@ struct ContentView: View {
 
   #if !os(macOS)
     @State private var selectedTab = AppTab.pilot
+    @State private var webLink: WebLink?
   #endif
 
   var body: some View {
@@ -40,6 +41,9 @@ struct ContentView: View {
         .recomputingScore(for: questionnaire)
     #else
       iOSLayout
+        .sheet(item: $webLink) { link in
+          WebLinkSheet(link: link) { webLink = nil }
+        }
         .restoringAnswers(of: questionnaire)
         .recomputingScore(for: questionnaire)
     #endif
@@ -104,7 +108,7 @@ struct ContentView: View {
 
         Tab("About", systemImage: "info.circle", value: AppTab.about) {
           NavigationStack {
-            AboutView().navigationTitle("About")
+            AboutView(webLink: $webLink).navigationTitle("About")
           }
         }
       }
@@ -133,7 +137,7 @@ struct ContentView: View {
           }
           Tab("About", systemImage: "info.circle", value: AppTab.about) {
             NavigationStack {
-              AboutView().navigationTitle("About")
+              AboutView(webLink: $webLink).navigationTitle("About")
             }
           }
         }
