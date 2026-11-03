@@ -173,9 +173,9 @@ private struct AppIconView: View {
 
 /// External web destinations referenced across the app.
 enum ExternalLinks {
-  /// The FAA Safety Briefing article describing the Flight Risk Assessment Tool.
+  /// The FAA Safety Team's page for its Flight Risk Assessment Tool.
   static let faaFRAT = URL(
-    string: "https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf"
+    string: "https://www.faa.gov/general/flight-risk-assessment-tool-frat-faa-safety-team"
   )!
 
   /// The app's open-source repository.

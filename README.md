@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A SwiftUI app implementing the FAASafety Team's
-[Flight Risk Assessment Tool](https://www.faa.gov/news/safety_briefing/2016/media/SE_Topic_16-12.pdf).
+[Flight Risk Assessment Tool](https://www.faa.gov/general/flight-risk-assessment-tool-frat-faa-safety-team).
 More at [riscfuture.github.io/FART](https://riscfuture.github.io/FART/).
 
 ## What it does
