@@ -100,6 +100,7 @@ struct ResultsView: View {
     }
     .padding()
     .background(RiskMeshBackground(risk: displayedRisk))
+    .anchorsShareSheet(toToolbarButton: "shareReportButton")
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
         if let report {
