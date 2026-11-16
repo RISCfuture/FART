@@ -8,8 +8,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
+  route:
+    uses: RISCfuture/ci-workflows/.github/workflows/minerva-route.yml@1.1.0
+    permissions:
+      contents: read
+
   ios:
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@1.2.1
+    needs: route
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@1.3.0
     with:
       scheme: FART
       unit-test-plan: "Unit Tests"
@@ -19,7 +25,7 @@ jobs:
           "include": [
             {
               "ios-label": "latest",
-              "runner": "xcode-27",
+              "runner": ${{ needs.route.outputs.xcode-27 }},
               "device": "iPhone 17 Pro",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
               "os-version": "",
@@ -32,7 +38,7 @@ jobs:
           "include": [
             {
               "ios-label": "latest",
-              "runner": "xcode-27",
+              "runner": ${{ needs.route.outputs.xcode-27 }},
               "device": "iPhone 17 Pro",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
               "os-version": "",
@@ -40,7 +46,7 @@ jobs:
             },
             {
               "ios-label": "latest",
-              "runner": "xcode-27",
+              "runner": ${{ needs.route.outputs.xcode-27 }},
               "device": "iPad Pro 13-inch (M5)",
               "device-type": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB",
               "os-version": "",
@@ -51,7 +57,8 @@ jobs:
 
   macos:
     name: macOS Build and Test
-    runs-on: xcode-27
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.macos-27) }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Enable macros
@@ -83,7 +90,8 @@ jobs:
 
   visionos:
     name: visionOS Build
-    runs-on: xcode-27
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.xcode-27) }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Enable macros
@@ -118,7 +126,8 @@ jobs:
 
   docs:
     name: Documentation Build
-    runs-on: xcode-27
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.xcode-27) }}
     steps:
       - uses: actions/checkout@v7.0.1
       - name: Enable macros
