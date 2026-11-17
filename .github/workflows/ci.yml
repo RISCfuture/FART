@@ -15,7 +15,7 @@ jobs:
 
   ios:
     needs: route
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@1.3.0
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-ci.yml@timing/upload-xcresult
     with:
       scheme: FART
       unit-test-plan: "Unit Tests"
