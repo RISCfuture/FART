@@ -47,7 +47,7 @@ class PilotProfilePage: BasePage {
     visible.forceTap()
     // swiftlint:disable:next prefer_nimble
     XCTAssertTrue(
-      app.keyboards.firstMatch.waitForExistence(timeout: 5),
+      app.keyboards.firstMatch.wait(timeout: 5),
       "Keypad never surfaced for the threshold field"
     )
     visible.typeText(number)
@@ -58,15 +58,15 @@ class PilotProfilePage: BasePage {
   /// The number a threshold field shows, as its digits alone: the unit sits beside the field
   /// rather than in it, and the grouping separator is the locale's business.
   func enteredNumber(in field: XCUIElement) -> String {
-    guard field.waitForExistence(timeout: 5) else { return "" }
+    guard field.wait(timeout: 5) else { return "" }
     return digits(in: field.value as? String ?? "")
   }
 
   func isLowCeilingPickerVisible() -> Bool {
-    lowCeilingPicker.waitForExistence(timeout: 2)
+    lowCeilingPicker.wait(timeout: 2)
   }
 
   func isLowVisibilityPickerVisible() -> Bool {
-    lowVisibilityPicker.waitForExistence(timeout: 2)
+    lowVisibilityPicker.wait(timeout: 2)
   }
 }
