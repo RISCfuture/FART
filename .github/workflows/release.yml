@@ -29,12 +29,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  route:
+    uses: RISCfuture/ci-workflows/.github/workflows/minerva-route.yml@1.1.0
+    permissions:
+      contents: read
+
   release:
-    uses: RISCfuture/XCUITestKit/.github/workflows/ios-release.yml@1.2.1
+    needs: route
+    uses: RISCfuture/XCUITestKit/.github/workflows/ios-release.yml@1.3.0
     with:
       # The app target also builds for visionOS, but there is no visionOS App Store listing.
       platforms: '["iOS","macOS"]'
-      runner: xcode-27
+      runner: ${{ needs.route.outputs.xcode-27 }}
       version: ${{ inputs.version || github.ref_name }}
       certificates-repo: RISCfuture/certificates
       verify-lane: ci_verify_release
