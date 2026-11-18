@@ -917,7 +917,7 @@
 			repositoryURL = "https://github.com/RISCfuture/XCUITestKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.1;
+				minimumVersion = 1.4.0;
 			};
 		};
 		01D2507A266B436F009BECAA /* XCRemoteSwiftPackageReference "Defaults" */ = {
