@@ -7,8 +7,8 @@ class FARTUITestCase: XCTestCase {
   var app: XCUIApplication!
   var tabBar: TabBarPage!
 
-  /// True when running on iPad (two-column NavigationSplitView layout).
-  var isIPad: Bool { tabBar.isIPad }
+  /// True when the app shows its two-column NavigationSplitView layout, as on iPad.
+  var isTwoColumnLayout: Bool { tabBar.isTwoColumnLayout }
 
   override func setUp() async throws {
     continueAfterFailure = false

@@ -3,6 +3,8 @@ import XCUITestKit
 
 @MainActor
 class BasePage {
+  private static let maxScrollToTopSwipes = 5
+
   let app: XCUIApplication
 
   init(app: XCUIApplication) {
@@ -11,7 +13,7 @@ class BasePage {
 
   @discardableResult
   func waitForElement(_ identifier: String, timeout: TimeInterval = 10) -> Bool {
-    app.descendants(matching: .any)[identifier].waitForExistence(timeout: timeout)
+    app.descendants(matching: .any)[identifier].wait(timeout: timeout)
   }
 
   @discardableResult
@@ -24,7 +26,7 @@ class BasePage {
   @discardableResult
   func scrollTo(_ element: XCUIElement) -> XCUIElement? {
     let collectionView = app.collectionViews.firstMatch
-    guard collectionView.waitForExistence(timeout: 10) else { return nil }
+    guard collectionView.wait(timeout: 10) else { return nil }
 
     if let result = collectionView.makeVisible(element: element) {
       return result
@@ -38,8 +40,11 @@ class BasePage {
     let collectionView = app.collectionViews.firstMatch
     guard collectionView.exists else { return }
 
-    for _ in 0..<5 {
+    let reference = collectionView.cells.firstMatch
+    for _ in 0..<Self.maxScrollToTopSwipes {
+      let frameBeforeSwipe = reference.frame
       collectionView.swipeDown()
+      if reference.frame == frameBeforeSwipe { return }
     }
   }
 
@@ -48,7 +53,7 @@ class BasePage {
     let element = app.switches[identifier]
 
     // If the switch is already accessible, scroll to it and toggle
-    if element.waitForExistence(timeout: 2) {
+    if element.exists {
       let collectionView = app.collectionViews.firstMatch
       if let control = collectionView.makeVisible(element: element) {
         toggleSwitch(control, to: value, named: identifier)
@@ -86,7 +91,7 @@ class BasePage {
 
   func toggleValue(_ identifier: String) -> Bool {
     let element = app.switches[identifier]
-    guard element.waitForExistence(timeout: 3) else { return false }
+    guard element.wait(timeout: 3) else { return false }
     return element.value as? String == "1"
   }
 
@@ -105,7 +110,7 @@ class BasePage {
 
   func textLabel(_ identifier: String) -> String? {
     let element = app.staticTexts[identifier]
-    guard element.waitForExistence(timeout: 5) else { return nil }
+    guard element.wait(timeout: 5) else { return nil }
     return element.label
   }
 

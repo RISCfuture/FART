@@ -18,9 +18,9 @@ final class QuestionnaireTests: FARTUITestCase {
     weather.vfrCeilingUnder3000Toggle.assertExists()
 
     // IFR toggles not present
-    weather.ifrLowCeilingToggle.assertNeverAppears()
-    weather.ifrLowVisibilityToggle.assertNeverAppears()
-    weather.ifrApproachTypePicker.assertNeverAppears()
+    weather.ifrLowCeilingToggle.assertHidden()
+    weather.ifrLowVisibilityToggle.assertHidden()
+    weather.ifrApproachTypePicker.assertHidden()
 
     // Switch to IFR
     weather.selectIFR()
@@ -31,10 +31,10 @@ final class QuestionnaireTests: FARTUITestCase {
     weather.ifrApproachTypePicker.assertExists()
 
     // VFR toggles gone
-    weather.vfrCeilingUnder3000Toggle.assertNeverAppears()
-    weather.vfrVisibilityUnder5Toggle.assertNeverAppears()
-    weather.vfrFlightPlanToggle.assertNeverAppears()
-    weather.vfrFlightFollowingToggle.assertNeverAppears()
+    weather.vfrCeilingUnder3000Toggle.assertHidden()
+    weather.vfrVisibilityUnder5Toggle.assertHidden()
+    weather.vfrFlightPlanToggle.assertHidden()
+    weather.vfrFlightFollowingToggle.assertHidden()
 
     // Switch back to VFR
     weather.selectVFR()
@@ -46,9 +46,9 @@ final class QuestionnaireTests: FARTUITestCase {
     weather.vfrFlightFollowingToggle.assertExists()
 
     // IFR toggles gone again
-    weather.ifrLowCeilingToggle.assertNeverAppears()
-    weather.ifrLowVisibilityToggle.assertNeverAppears()
-    weather.ifrApproachTypePicker.assertNeverAppears()
+    weather.ifrLowCeilingToggle.assertHidden()
+    weather.ifrLowVisibilityToggle.assertHidden()
+    weather.ifrApproachTypePicker.assertHidden()
   }
 
   func testVFRToIFRClearsVFRFieldsAndResetsScore() throws {

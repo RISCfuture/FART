@@ -1,4 +1,5 @@
 import XCTest
+import XCUITestKit
 
 class WeatherSectionPage: BasePage {
 
@@ -18,7 +19,7 @@ class WeatherSectionPage: BasePage {
   func selectVFR() -> Self {
     selectPickerOption(picker: "flightTypePicker", option: "flightTypeVFR")
     // Wait for VFR-specific fields to render after flight type switch
-    _ = app.switches["vfrCeilingUnder3000Toggle"].waitForExistence(timeout: 5)
+    _ = app.switches["vfrCeilingUnder3000Toggle"].wait(timeout: 5)
     return self
   }
 
@@ -26,7 +27,7 @@ class WeatherSectionPage: BasePage {
   func selectIFR() -> Self {
     selectPickerOption(picker: "flightTypePicker", option: "flightTypeIFR")
     // Wait for IFR-specific fields to render after flight type switch
-    _ = app.switches["ifrLowCeilingToggle"].waitForExistence(timeout: 5)
+    _ = app.switches["ifrLowCeilingToggle"].wait(timeout: 5)
     return self
   }
 
@@ -108,14 +109,14 @@ class WeatherSectionPage: BasePage {
   // MARK: - Visibility Checks
 
   func isVFRToggleVisible() -> Bool {
-    app.switches["vfrCeilingUnder3000Toggle"].waitForExistence(timeout: 2)
+    app.switches["vfrCeilingUnder3000Toggle"].wait(timeout: 2)
   }
 
   func isIFRToggleVisible() -> Bool {
-    app.switches["ifrLowCeilingToggle"].waitForExistence(timeout: 2)
+    app.switches["ifrLowCeilingToggle"].wait(timeout: 2)
   }
 
   func isApproachPickerVisible() -> Bool {
-    app.buttons["ifrApproachTypePicker"].waitForExistence(timeout: 2)
+    app.buttons["ifrApproachTypePicker"].wait(timeout: 2)
   }
 }
